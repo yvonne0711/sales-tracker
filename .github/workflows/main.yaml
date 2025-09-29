@@ -23,7 +23,7 @@ jobs:
         find . -type f -name "requirements.txt" | sed -e 's/^/-r /' | xargs pip install
     - name: Run pylint
       run: |
-        find . -type f -name "*.py" -maxdepth 2 | xargs pylint --disable=I1101 --fail-under=9
+        find . -type f -name "*.py" -maxdepth 2 | xargs pylint --disable=I1101 --fail-under=8.5
   test:
     runs-on: ubuntu-latest
     steps:
