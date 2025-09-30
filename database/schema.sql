@@ -12,8 +12,6 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS website (
     website_id INT GENERATED ALWAYS AS IDENTITY,
     website_name VARCHAR(255) NOT NULL,
-    price_class VARCHAR(255) NOT NULL,
-    discount_class VARCHAR(255),
     PRIMARY KEY (website_id)
 );
 
