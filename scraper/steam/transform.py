@@ -12,7 +12,13 @@ from extract import (get_db_connection,
                      get_last_recorded_prices)
 
 
-def add_price_to_products(products: dict[str:str], cost_class: str, discounted_class: str, headers: dict[str:str]) -> dict[str:str]:
+def convert_string_price_to_float(price: str) -> float:
+    """Converts the price from a string to a float and returns it."""
+    float_price = float(price[1:])
+    return float_price
+
+
+def add_prices_to_products(products: dict[str:str], cost_class: str, discounted_class: str, headers: dict[str:str]) -> dict[str:str]:
     """Adds the current price to the product dict with the key price."""
     for product in products:
         product["price"] = get_current_price(product["product_url"],
@@ -38,10 +44,13 @@ if __name__ == "__main__":
 
     steam_products = get_products(db_conn)
 
-    steam_products = add_price_to_products(steam_products,
-                                           steam_cost_class,
-                                           steam_discounted_class,
-                                           user_agent)
+    last_recorded_prices = get_last_recorded_prices(db_conn)
+    print(last_recorded_prices)
+
+    steam_products = add_prices_to_products(steam_products,
+                                            steam_cost_class,
+                                            steam_discounted_class,
+                                            user_agent)
 
     print(steam_products)
 
