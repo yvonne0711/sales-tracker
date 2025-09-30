@@ -1,11 +1,20 @@
 """
-Script that gets product details from the RDS and scrapes their prices from their respective URLs.
+Script that gets Steam product details from the RDS and scrapes their prices from their respective URLs.
 """
-
-from time import sleep
 
 import requests as req
 from bs4 import BeautifulSoup
+
+
+def is_discounted(url: str, price_class: str, headers: dict[str:str]) -> bool:
+    """Checks if the product price_class is present on the webpage."""
+    res = req.get(url, headers=headers, timeout=5)
+    if res.status_code == 200:
+        soup = BeautifulSoup(res.text, "html.parser")
+        if soup.find(attrs={"class": price_class}) is None:
+            return True
+        return False
+    return res.status_code, res.reason
 
 
 def scrape_price(url: str, price_class: str, headers: dict[str:str]) -> str:
@@ -24,17 +33,17 @@ if __name__ == "__main__":
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
     }
 
-    steam_clover_pit = {
+    steam_product_discounted = {
         "url": "https://store.steampowered.com/app/3314790/CloverPit/",
         "price_class": "game_purchase_price price",
         "discount_class": "discount_final_price"
     }
 
-    steam_sonic_racing = {
+    steam_product = {
         "url": "https://store.steampowered.com/app/2486820/Sonic_Racing_CrossWorlds/?snr=1_4_4__118",
         "price_class": "game_purchase_price price",
         "discount_class": "discount_final_price"
     }
 
-    print(scrape_price(steam_clover_pit["url"],
-          steam_clover_pit["discount_class"], user_agent))
+    print(is_discounted(steam_product_discounted["url"],
+          steam_product_discounted["price_class"], user_agent))
