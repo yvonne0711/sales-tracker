@@ -61,3 +61,4 @@ if __name__ == "__main__":
     }
 
     db_conn = get_db_connection()
+    db_conn.close()
