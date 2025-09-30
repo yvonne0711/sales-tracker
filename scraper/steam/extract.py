@@ -17,10 +17,18 @@ def get_db_connection() -> connection:
     """Returns a live connection from the database."""
     return connect(user=environ["DB_USERNAME"],
                    password=environ["DB_PASSWORD"],
-                   host=environ["DB_IP"],
+                   host=environ["DB_HOST"],
                    port=environ["DB_PORT"],
                    database=environ["DB_NAME"],
                    cursor_factory=RealDictCursor)
+
+
+def query_database(conn: connection, sql: str) -> list[dict]:
+    """Returns the result of a query to the database."""
+    with conn.cursor() as cursor:
+        cursor.execute(sql)
+        result = cursor.fetchall()
+    return result
 
 
 def is_discounted(url: str, discounted_class: str, headers: dict[str:str]) -> bool:
@@ -44,11 +52,11 @@ def scrape_price(url: str, cost_class: str, headers: dict[str:str]) -> str:
     return res.status_code, res.reason
 
 
-def get_current_price(product_details: dict[str:str], headers: dict[str:str]) -> str:
+def get_current_price(url: str, cost_class: str, discounted_class: str, headers: dict[str:str]) -> str:
     """Returns the current price of a product from its details."""
-    if is_discounted(product_details["url"], product_details["discount_class"], headers):
-        return scrape_price(product_details["url"], product_details["discount_class"], headers)
-    return scrape_price(product_details["url"], product_details["price_class"], headers)
+    if is_discounted(url, discounted_class, headers):
+        return scrape_price(url, discounted_class, headers)
+    return scrape_price(url, cost_class, headers)
 
 
 if __name__ == "__main__":
@@ -59,6 +67,9 @@ if __name__ == "__main__":
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, \
             like Gecko) Chrome/140.0.0.0 Safari/537.36"
     }
+
+    steam_cost_class = "game_purchase_price price"
+    steam_discounted_class = "discount_final_price"
 
     db_conn = get_db_connection()
     db_conn.close()
