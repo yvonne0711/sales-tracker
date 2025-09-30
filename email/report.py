@@ -52,21 +52,20 @@ def generate_html_report(data, file, mode=True):
         product_name = row["product_name"]
         url = row["url"]
 
-        if new_price <= desired_price:
-            html = f"""
-            <html>
-            <head>
-                <title>New sale! - {today}</title>
-            </head>
-            <body>
-                <h2>Hi {user_name},</h2>
-                <p>Good news! The product {product_name} you're subscribed to is on sale.</p>
-                <h3><a href='{url}'>{product_name}</a></h3>
-                <p><b>£{desired_price} -> £{new_price}</b></p>
-                <p>Thank you.</p>
-            </body>
-            </html>
-            """
+        html = f"""
+        <html>
+        <head>
+            <title>New sale! - {today}</title>
+        </head>
+        <body>
+            <h2>Hi {user_name},</h2>
+            <p>Good news! The product {product_name} you're subscribed to is on sale.</p>
+            <h3><a href='{url}'>{product_name}</a></h3>
+            <p><b>£{desired_price} -> £{new_price}</b></p>
+            <p>Thank you.</p>
+        </body>
+        </html>
+        """
 
     if mode is True:
         with open(file, mode="w", encoding="utf-8") as f:
@@ -93,9 +92,3 @@ def handler(event=None, context=None):
     today = datetime.now().date()
 
     return generate_html_report(data, f"report_data_{today}.html", False)
-
-
-if __name__ == "__main__":
-    load_dotenv()
-
-    handler()
