@@ -8,6 +8,8 @@ module "phase_one" {
   DB_NAME               = var.DB_NAME
   DB_USERNAME           = var.DB_USERNAME
   DB_PASSWORD           = var.DB_PASSWORD
+  DB_PORT               = var.DB_PORT
+  DB_HOST               = var.DB_HOST
 }
 
 module "phase_two" {
@@ -20,4 +22,6 @@ module "phase_two" {
   DB_NAME               = var.DB_NAME
   DB_USERNAME           = var.DB_USERNAME
   DB_PASSWORD           = var.DB_PASSWORD
+  DB_PORT               = var.DB_PORT
+  DB_HOST               = var.DB_HOST
 }
