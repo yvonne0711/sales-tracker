@@ -73,7 +73,6 @@ def generate_html_report(data, file, mode=True):
         "body": html
     }
 
-
 def handler(event=None, context=None):
     """Handler for Lambda."""
 
@@ -83,3 +82,8 @@ def handler(event=None, context=None):
     today = datetime.now().date()
 
     return generate_html_report(data, f"report_data_{today}.html", False)
+
+if __name__ == "__main__":
+    load_dotenv()
+
+    handler()
