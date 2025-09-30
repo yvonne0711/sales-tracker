@@ -44,10 +44,10 @@ CREATE TABLE IF NOT EXISTS price_update (
 );
 
 INSERT INTO website (
-    website_name,price_class,discount_class
+    website_name
 )
 VALUES (
-    'steam','game_purchase_price price','discount_class": "discount_final_price'
+    'steam'
 );
 
 INSERT INTO USERS (
