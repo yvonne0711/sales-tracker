@@ -1,7 +1,8 @@
 """Tests for the transform script."""
 
 from transform import (convert_string_price_to_float,
-                       get_list_of_product_ids)
+                       get_list_of_product_ids,
+                       create_id_price_map)
 
 
 def test_convert_string_price_to_float_normal():
@@ -27,3 +28,18 @@ def test_get_list_of_product_ids_multiple():
 
 def test_get_list_of_product_ids_empty():
     assert get_list_of_product_ids([]) == []
+
+
+def test_create_id_price_map_one():
+    assert create_id_price_map([{"product_id": 2, "new_price": 3.99}]) == {
+        2: 3.99}
+
+
+def test_create_id_price_map_empty():
+    assert create_id_price_map([]) == {}
+
+
+def test_create_id_price_map_multiple():
+    assert create_id_price_map([{"product_id": 2, "new_price": 3.99}, {"product_id": 1, "new_price": 7.00}]) == {
+        2: 3.99,
+        1: 7.00}
