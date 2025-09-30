@@ -1,12 +1,9 @@
 """Email report for users."""
 from os import getenv
-from datetime import datetime, timedelta
-import json
+from datetime import datetime
 from dotenv import load_dotenv
 from psycopg2 import connect
 from psycopg2.extras import RealDictCursor
-import boto3
-import pandas as pd
 
 
 def get_db_connection():
@@ -81,12 +78,6 @@ def handler(event=None, context=None):
     """Handler for Lambda."""
 
     load_dotenv()
-
-    boto = boto3.Session(
-        aws_access_key_id=getenv("ACCESS_KEY"),
-        aws_secret_access_key=getenv("SECRET_ACCESS_KEY"),
-        region_name=getenv("REGION")
-    )
 
     data = get_all_data()
     today = datetime.now().date()
