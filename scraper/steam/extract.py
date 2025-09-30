@@ -6,25 +6,31 @@ import requests as req
 from bs4 import BeautifulSoup
 
 
-def is_discounted(url: str, price_class: str, headers: dict[str:str]) -> bool:
+def is_discounted(url: str, discounted_class: str, headers: dict[str:str]) -> bool:
     """Checks if the product price_class is present on the webpage."""
     res = req.get(url, headers=headers, timeout=5)
     if res.status_code == 200:
         soup = BeautifulSoup(res.text, "html.parser")
-        if soup.find(attrs={"class": price_class}) is None:
+        if soup.find(attrs={"class": discounted_class}) is not None:
             return True
         return False
     return res.status_code, res.reason
 
 
-def scrape_price(url: str, price_class: str, headers: dict[str:str]) -> str:
+def scrape_price(url: str, cost_class: str, headers: dict[str:str]) -> str:
     """Returns the price of a product for the product URL."""
     res = req.get(url, headers=headers, timeout=5)
     if res.status_code == 200:
         soup = BeautifulSoup(res.text, "html.parser")
-        price = soup.find(attrs={"class": price_class}).text.strip()
+        price = soup.find(attrs={"class": cost_class}).text.strip()
         return price
     return res.status_code, res.reason
+
+
+def get_current_price(product_details: dict[str:str], headers: dict[str:str]) -> str:
+    if is_discounted(product_details["url"], product_details["discount_class"], headers):
+        return scrape_price(product_details["url"], product_details["discount_class"], headers)
+    return scrape_price(product_details["url"], product_details["price_class"], headers)
 
 
 if __name__ == "__main__":
@@ -45,5 +51,4 @@ if __name__ == "__main__":
         "discount_class": "discount_final_price"
     }
 
-    print(is_discounted(steam_product_discounted["url"],
-          steam_product_discounted["price_class"], user_agent))
+    print(get_current_price(steam_product_discounted, user_agent))
