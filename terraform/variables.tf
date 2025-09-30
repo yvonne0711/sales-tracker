@@ -37,3 +37,13 @@ variable "DB_PASSWORD" {
   type      = string
   sensitive = true
 }
+
+variable "DB_PORT" {
+  type      = string
+  sensitive = true
+}
+
+variable "DB_HOST" {
+  type      = string
+  sensitive = true
+}
