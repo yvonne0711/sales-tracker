@@ -35,7 +35,10 @@ def create_id_price_map(rows: list[dict]) -> dict[int:float]:
 def format_products(products: dict[str:str], cost_class: str,
                     discounted_class: str, headers: dict[str:str],
                     recorded_prices: list[dict]) -> dict[str:str]:
-    """Adds the current price to the product dict with the key price."""
+    """
+    Adds the current price, price in database, and
+    time price checked to product details.
+    """
     tracked_ids = get_list_of_product_ids(recorded_prices)
     price_map = create_id_price_map(recorded_prices)
     for product in products:
