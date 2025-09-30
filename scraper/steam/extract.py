@@ -1,5 +1,6 @@
 """
-Script that gets Steam product details from the RDS and scrapes their prices from their respective URLs.
+Script that gets Steam product details from the RDS and scrapes their
+prices from their respective URLs.
 """
 
 import requests as req
@@ -18,7 +19,7 @@ def is_discounted(url: str, discounted_class: str, headers: dict[str:str]) -> bo
 
 
 def scrape_price(url: str, cost_class: str, headers: dict[str:str]) -> str:
-    """Returns the price of a product for the product URL."""
+    """Returns the price of a product for the product URL and cost class."""
     res = req.get(url, headers=headers, timeout=5)
     if res.status_code == 200:
         soup = BeautifulSoup(res.text, "html.parser")
@@ -28,6 +29,7 @@ def scrape_price(url: str, cost_class: str, headers: dict[str:str]) -> str:
 
 
 def get_current_price(product_details: dict[str:str], headers: dict[str:str]) -> str:
+    """Returns the current price of a product from its details."""
     if is_discounted(product_details["url"], product_details["discount_class"], headers):
         return scrape_price(product_details["url"], product_details["discount_class"], headers)
     return scrape_price(product_details["url"], product_details["price_class"], headers)
@@ -36,7 +38,8 @@ def get_current_price(product_details: dict[str:str], headers: dict[str:str]) ->
 if __name__ == "__main__":
     user_agent = {
         "User-Agent":
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, \
+            like Gecko) Chrome/140.0.0.0 Safari/537.36"
     }
 
     steam_product_discounted = {
@@ -46,9 +49,10 @@ if __name__ == "__main__":
     }
 
     steam_product = {
-        "url": "https://store.steampowered.com/app/2486820/Sonic_Racing_CrossWorlds/?snr=1_4_4__118",
+        "url": "https://store.steampowered.com/app/2486820/Sonic_Racing_\
+            CrossWorlds/?snr=1_4_4__118",
         "price_class": "game_purchase_price price",
         "discount_class": "discount_final_price"
     }
 
-    print(get_current_price(steam_product_discounted, user_agent))
+    print(get_current_price(steam_product, user_agent))
