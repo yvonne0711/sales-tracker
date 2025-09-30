@@ -4,11 +4,13 @@ provider "aws" {
   secret_key = var.AWS_SECRET_ACCESS_KEY
 }
 
+# S3 bucket for terraform collaboration 
 resource "aws_s3_bucket" "c19-sales-tracker-s3-state" {
   bucket        = "c19-sales-tracker-s3-state"
   force_destroy = true
 }
 
+# RDS
 resource "aws_security_group" "c19-sales-tracker-db-sg" {
   name        = "c19-sales-tracker-db-sg"
   description = "Allow inbound traffic to the RDS on port 5432"
@@ -37,4 +39,12 @@ resource "aws_db_instance" "c19-sales-tracker-rds" {
   vpc_security_group_ids = [aws_security_group.c19-sales-tracker-db-sg.id]
 }
 
+# ECR
+resource "aws_ecr_repository" "c19-sales-tracker-ecr" {
+  name                 = "c19-sales-tracker-ecr"
+  image_tag_mutability = "MUTABLE"
 
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
