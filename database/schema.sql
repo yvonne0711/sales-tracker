@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS subscription (
 CREATE TABLE IF NOT EXISTS price_update (
     price_update_id INT GENERATED ALWAYS AS IDENTITY,
     product_id INT NOT NULL,
-    new_price FLOAT NOT NULL,
+    new_price DECIMAL NOT NULL,
     change_at timestamp NOT NULL,
     PRIMARY KEY (price_update_id),
     FOREIGN KEY (product_id) REFERENCES product(product_id)
