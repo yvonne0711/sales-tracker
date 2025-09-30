@@ -73,6 +73,5 @@ if __name__ == "__main__":
                                      steam_discounted_class,
                                      user_agent,
                                      last_recorded_prices)
-    print(steam_products)
 
     db_conn.close()
