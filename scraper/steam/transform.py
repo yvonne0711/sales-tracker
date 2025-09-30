@@ -2,6 +2,8 @@
 Script that transforms the product details into the appropriate datatypes.
 """
 
+from datetime import datetime
+
 from dotenv import load_dotenv
 
 from extract import (get_db_connection,
@@ -30,9 +32,9 @@ def create_id_price_map(rows: list[dict]) -> dict[int:float]:
     return price_map
 
 
-def add_prices_to_products(products: dict[str:str], cost_class: str,
-                           discounted_class: str, headers: dict[str:str],
-                           recorded_prices: list[dict]) -> dict[str:str]:
+def format_products(products: dict[str:str], cost_class: str,
+                    discounted_class: str, headers: dict[str:str],
+                    recorded_prices: list[dict]) -> dict[str:str]:
     """Adds the current price to the product dict with the key price."""
     tracked_ids = get_list_of_product_ids(recorded_prices)
     price_map = create_id_price_map(recorded_prices)
@@ -46,6 +48,7 @@ def add_prices_to_products(products: dict[str:str], cost_class: str,
             product["db_price"] = "NEW"
         else:
             product["db_price"] = price_map[product["product_id"]]
+        product["check_at"] = datetime.now()
     return products
 
 
@@ -65,11 +68,11 @@ if __name__ == "__main__":
 
     steam_products = get_products(db_conn)
     last_recorded_prices = get_last_recorded_prices(db_conn)
-    steam_products = add_prices_to_products(steam_products,
-                                            steam_cost_class,
-                                            steam_discounted_class,
-                                            user_agent,
-                                            last_recorded_prices)
+    steam_products = format_products(steam_products,
+                                     steam_cost_class,
+                                     steam_discounted_class,
+                                     user_agent,
+                                     last_recorded_prices)
     print(steam_products)
 
     db_conn.close()
