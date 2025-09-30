@@ -115,13 +115,15 @@ if email:
             # SUBMISSION FORM
             form_data = {}
             with st.form("submission_form"):
-                product_name = st.text_input("Please enter the product name you would like to track.",
-                                            key="product_name")
+                product_name = st.text_input(
+                    "Please enter the product name you would like to track.",
+                    key="product_name")
                 url = st.text_input("Please enter the product URL you would like to track.",
                                     key="URL", icon=":material/link:")
-                desired_price = st.number_input("Please enter at what price drop you want to be notified at.",
-                                                value=0.00, placeholder="Type a price...", format="%0.2f",
-                                                icon=":material/currency_pound:", min_value=0.00)
+                desired_price = st.number_input(
+                    "Please enter at what price drop you want to be notified at.",
+                    value=0.00, placeholder="Type a price...", format="%0.2f",
+                    icon=":material/currency_pound:", min_value=0.00)
 
                 button = st.form_submit_button("Submit")
                 if button is True:
@@ -144,10 +146,12 @@ if email:
 
                         # Write success message
                         st.success(
-                            f"Now tracking {product_name} for a price drop to £{desired_price:.2f} or below!"
+                            f"Now tracking {product_name} for a price drop" \
+                                 "to £{desired_price:.2f} or below!"
                         )
 
-        # If user doesn't exist in the database give a warning, this will be updated to allow new users to sign up in future.
+        # If user doesn't exist in the database give a warning,
+        # this will be updated to allow new users to sign up in future.
         else:
             st.warning("Sorry, no user with that email exists.")
     # If invalid email format is made then warn user.
