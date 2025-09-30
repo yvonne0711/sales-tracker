@@ -23,8 +23,8 @@ def get_all_data():
     with conn.cursor(cursor_factory=RealDictCursor) as cursor:
 
         query = """SELECT
-                    u.user_name, u.user_email, p.product_name, p.url, s.desired_price, pu.new_price
-                FROM user u
+                    u.user_name, u.user_email, p.product_name, p.product_url, s.desired_price, pu.new_price
+                FROM users u
                 JOIN subscription s
                     ON u.user_id = s.user_id
                 JOIN product p
@@ -41,7 +41,7 @@ def get_all_data():
 
 def generate_html_report(data, file, mode=True):
     """Generates an HTML report from the data."""
-    today = datetime.now().date() # today's date
+    today = datetime.now().date() 
 
     # take data from each row
     for row in data:
@@ -90,7 +90,7 @@ def handler(event=None, context=None):
     )
 
     data = get_all_data()
-    today = datetime.now().date()  # today's date
+    today = datetime.now().date()
 
     return generate_html_report(data, f"report_data_{today}.html", False)
 
@@ -98,13 +98,4 @@ def handler(event=None, context=None):
 if __name__ == "__main__":
     load_dotenv()
 
-    boto = boto3.Session(
-        aws_access_key_id=getenv("ACCESS_KEY"),
-        aws_secret_access_key=getenv("SECRET_ACCESS_KEY"),
-        region_name=getenv("REGION")
-    )
-
-    data = get_all_data()
-    today = datetime.now().date()  # today's date
-
-    generate_html_report(data, f"report_data_{today}.html", False)
+    handler()
