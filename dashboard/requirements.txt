@@ -1,2 +1,5 @@
 pylint
 pytest
+streamlit
+psycopg2-binary
+python-dotenv
