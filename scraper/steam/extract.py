@@ -44,6 +44,28 @@ def get_products(conn: connection) -> list[dict]:
     return products
 
 
+def get_last_recorded_prices(conn: connection) -> list[dict]:
+    """Gets the last recorded price for all steam products."""
+    query = """
+    SELECT p.product_id,
+        pu.change_at,
+        pu.new_price
+    FROM product AS p
+    JOIN price_update AS pu
+    USING (product_id)
+    JOIN website AS w
+    USING (website_id)
+    WHERE w.website_name = 'steam'
+    AND pu.change_at = (
+        SELECT MAX(change_at)
+        FROM price_update
+        WHERE product_id = p.product_id
+            AND website_id = w.website_id);
+    """
+    prices = query_database(conn, query)
+    return prices
+
+
 def is_discounted(url: str, discounted_class: str, headers: dict[str:str]) -> bool:
     """Checks if the product price_class is present on the webpage."""
     res = req.get(url, headers=headers, timeout=5)
