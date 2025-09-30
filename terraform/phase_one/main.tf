@@ -23,7 +23,7 @@ resource "aws_security_group" "c19-sales-tracker-db-sg" {
   }
 }
 
-resource "aws_db_instance" "c19_sales_tracker_rds" {
+resource "aws_db_instance" "c19-sales-tracker-rds" {
   allocated_storage      = 20
   identifier             = "c19-sales-tracker-rds"
   engine                 = "postgres"
@@ -34,7 +34,7 @@ resource "aws_db_instance" "c19_sales_tracker_rds" {
   skip_final_snapshot    = true
   publicly_accessible    = true
   db_subnet_group_name   = "c19-public-subnet-group"
-  vpc_security_group_ids = [aws_security_group.c19_sales_tracker_db_sg.id]
+  vpc_security_group_ids = [aws_security_group.c19-sales-tracker-db-sg.id]
 }
 
 
