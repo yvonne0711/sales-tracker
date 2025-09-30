@@ -8,7 +8,18 @@ from dotenv import load_dotenv
 
 from extract import (get_db_connection,
                      get_products,
-                     add_price_to_products)
+                     get_current_price,
+                     get_last_recorded_prices)
+
+
+def add_price_to_products(products: dict[str:str], cost_class: str, discounted_class: str, headers: dict[str:str]) -> dict[str:str]:
+    """Adds the current price to the product dict with the key price."""
+    for product in products:
+        product["price"] = get_current_price(product["product_url"],
+                                             cost_class,
+                                             discounted_class,
+                                             headers)
+    return products
 
 
 if __name__ == "__main__":

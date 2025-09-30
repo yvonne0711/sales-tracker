@@ -94,16 +94,6 @@ def get_current_price(url: str, cost_class: str, discounted_class: str, headers:
     return scrape_price(url, cost_class, headers)
 
 
-def add_price_to_products(products: dict[str:str], cost_class: str, discounted_class: str, headers: dict[str:str]) -> dict[str:str]:
-    """Adds the current price to the product dict with the key price."""
-    for product in products:
-        product["price"] = get_current_price(product["product_url"],
-                                             cost_class,
-                                             discounted_class,
-                                             headers)
-    return products
-
-
 if __name__ == "__main__":
     load_dotenv()
 
@@ -119,10 +109,5 @@ if __name__ == "__main__":
     db_conn = get_db_connection()
 
     steam_products = get_products(db_conn)
-
-    steam_products = add_price_to_products(steam_products,
-                                           steam_cost_class,
-                                           steam_discounted_class,
-                                           user_agent)
 
     db_conn.close()
