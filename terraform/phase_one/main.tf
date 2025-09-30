@@ -18,8 +18,8 @@ resource "aws_security_group" "c19-sales-tracker-db-sg" {
 
   ingress {
     description = "Postgres access from the internet"
-    from_port   = 5432
-    to_port     = 5432
+    from_port   = var.DB_PORT
+    to_port     = var.DB_PORT
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
