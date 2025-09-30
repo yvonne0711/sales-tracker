@@ -31,6 +31,19 @@ def query_database(conn: connection, sql: str) -> list[dict]:
     return result
 
 
+def get_products(conn: connection) -> list[dict]:
+    """Returns all the steam products in the database."""
+    query = """
+    SELECT *
+    FROM product
+    JOIN website
+    USING(website_id)
+    WHERE website_name = 'steam';
+    """
+    products = query_database(conn, query)
+    return products
+
+
 def is_discounted(url: str, discounted_class: str, headers: dict[str:str]) -> bool:
     """Checks if the product price_class is present on the webpage."""
     res = req.get(url, headers=headers, timeout=5)
@@ -72,4 +85,14 @@ if __name__ == "__main__":
     steam_discounted_class = "discount_final_price"
 
     db_conn = get_db_connection()
+
+    steam_products = get_products(db_conn)
+
+    for product in steam_products:
+        product["price"] = get_current_price(product["product_url"],
+                                             steam_cost_class,
+                                             steam_discounted_class,
+                                             user_agent)
+    print(steam_products)
+
     db_conn.close()
