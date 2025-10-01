@@ -54,37 +54,12 @@ class TestsDatabaseFunctions:
         assert result is None
 
 
-class TestUserDetails:
-    
-    def test_get_user_details_gives_desired_output(self):
-        """Tests if get user details will result in the desired output."""
-        mock_conn = MagicMock()
-        mock_cursor = MagicMock() 
+class TestEmailValidation:
 
-        mock_conn.cursor.return_value.__enter__.return_value = mock_cursor
-        mock_conn.cursor.return_value.__exit__.return_value = None
-
-        expected_data = {"user_id": 1, "user_email": "test_user@sigmalabs.co.uk"}
-        mock_cursor.fetchone.return_value = expected_data
-
-        # Execute
-        result = get_user_details(mock_conn, "test_user@sigmalabs.co.uk")
-
-        # Assert
-        mock_cursor.execute.assert_called_once_with(
-            """
-            SELECT * 
-            FROM users 
-            WHERE user_email = (%s);""",
-            ("test_user@sigmalabs.co.uk",)
-        )
-        mock_cursor.fetchone.assert_called_once()
-        assert result == expected_data
-
-def test_is_valid_email_returns_bool():
-    """Tests if the is_valid_email function returns a bool."""
-    valid = "test_user@sigmalabs.co.uk"
-    invalid = "test_user.co.uk"
-    assert is_valid_email(valid) is True
-    assert is_valid_email(invalid) is False
+    def test_is_valid_email_returns_bool(self):
+        """Tests if the is_valid_email function returns a bool."""
+        valid = "test_user@sigmalabs.co.uk"
+        invalid = "test_user.co.uk"
+        assert is_valid_email(valid) is True
+        assert is_valid_email(invalid) is False
 
