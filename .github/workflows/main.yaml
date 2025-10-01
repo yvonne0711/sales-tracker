@@ -48,8 +48,8 @@ jobs:
         find . -type f -name "requirements.txt" | sed -e 's/^/-r /' | xargs pip install
     - name: Run tests
       run: |
-        pytest *.py
+        pytest
     
     - name: Run pytest coverage
       run: |
-        pytest --cov-fail-under=60 *.py
+        pytest --cov-fail-under=60
