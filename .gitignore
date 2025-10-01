@@ -1,0 +1,15 @@
+.venv
+.env
+__pycache__
+.DS_Store
+node_modules/
+package-lock.json
+.pytest_cache
+.terraform
+.terraform/*
+.terraform*
+*.tfvars
+*.terraform.*
+*.tfstate.backup
+*.tfstate*
+*.tfvars.json

@@ -1,2 +1,5 @@
 pylint
 pytest
+requests
+bs4
+selenium
