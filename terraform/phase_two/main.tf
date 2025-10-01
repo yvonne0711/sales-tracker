@@ -191,126 +191,126 @@ resource "aws_iam_role" "c19-sales-tracker-scheduler-role" {
 #   attach_sfn_policy = true
 # }
 
-# ECS
-resource "aws_ecs_task_definition" "c19-sales-tracker-ecs-task-definition" {
-  family                   = "c19-sales-tracker-ecs-task-definition"
-  network_mode             = "awsvpc"
-  requires_compatibilities = ["FARGATE"]
-  cpu                      = 1024
-  memory                   = 2048
-  execution_role_arn       = "arn:aws:iam::129033205317:role/ecsTaskExecutionRole"
-  task_role_arn            = aws_iam_role.c19-sales-tracker-ecs-role.arn
-  container_definitions = jsonencode([
-    {
-      name      = "c19-sales-tracker-ecs-dashboard-task",
-      image     = "",
-      cpu       = 10,
-      memory    = 512,
-      essential = true
-      portMappings = [
-        {
-          containerPort = var.SL_PORT
-          hostPort      = var.SL_PORT
-          protocol      = "tcp"
-        }
-      ]
-      environment = [
-        { name = "DB_HOST", value = var.DB_HOST },
-        { name = "DB_PORT", value = var.DB_PORT },
-        { name = "DB_NAME", value = var.DB_NAME },
-        { name = "DB_USERNAME", value = var.DB_USERNAME },
-      { name = "DB_PASSWORD", value = var.DB_PASSWORD }]
-      logConfiguration = {
-        logDriver = "awslogs"
-        "options" : {
-          awslogs-group         = "/ecs/c19-sales-tracker-logs"
-          awslogs-create-group  = "true"
-          awslogs-stream-prefix = "ecs"
-          awslogs-region        = "${var.AWS_REGION}"
-        }
-      }
-    }
-  ])
+# # ECS
+# resource "aws_ecs_task_definition" "c19-sales-tracker-ecs-task-definition" {
+#   family                   = "c19-sales-tracker-ecs-task-definition"
+#   network_mode             = "awsvpc"
+#   requires_compatibilities = ["FARGATE"]
+#   cpu                      = 1024
+#   memory                   = 2048
+#   execution_role_arn       = "arn:aws:iam::129033205317:role/ecsTaskExecutionRole"
+#   task_role_arn            = aws_iam_role.c19-sales-tracker-ecs-role.arn
+#   container_definitions = jsonencode([
+#     {
+#       name      = "c19-sales-tracker-ecs-dashboard-task",
+#       image     = "",
+#       cpu       = 10,
+#       memory    = 512,
+#       essential = true
+#       portMappings = [
+#         {
+#           containerPort = var.SL_PORT
+#           hostPort      = var.SL_PORT
+#           protocol      = "tcp"
+#         }
+#       ]
+#       environment = [
+#         { name = "DB_HOST", value = var.DB_HOST },
+#         { name = "DB_PORT", value = var.DB_PORT },
+#         { name = "DB_NAME", value = var.DB_NAME },
+#         { name = "DB_USERNAME", value = var.DB_USERNAME },
+#       { name = "DB_PASSWORD", value = var.DB_PASSWORD }]
+#       logConfiguration = {
+#         logDriver = "awslogs"
+#         "options" : {
+#           awslogs-group         = "/ecs/c19-sales-tracker-logs"
+#           awslogs-create-group  = "true"
+#           awslogs-stream-prefix = "ecs"
+#           awslogs-region        = "${var.AWS_REGION}"
+#         }
+#       }
+#     }
+#   ])
 
-  runtime_platform {
-    operating_system_family = "LINUX"
-    cpu_architecture        = "X86_64"
-  }
-}
+#   runtime_platform {
+#     operating_system_family = "LINUX"
+#     cpu_architecture        = "X86_64"
+#   }
+# }
 
-resource "aws_iam_role" "c19-sales-tracker-ecs-role" {
-  name = "c19-sales-tracker-ecs-role"
+# resource "aws_iam_role" "c19-sales-tracker-ecs-role" {
+#   name = "c19-sales-tracker-ecs-role"
 
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Action = "sts:AssumeRole",
-      Effect = "Allow",
-      Principal = {
-        Service = "ecs-tasks.amazonaws.com"
-      }
-    }]
-  })
-}
+#   assume_role_policy = jsonencode({
+#     Version = "2012-10-17"
+#     Statement = [{
+#       Action = "sts:AssumeRole",
+#       Effect = "Allow",
+#       Principal = {
+#         Service = "ecs-tasks.amazonaws.com"
+#       }
+#     }]
+#   })
+# }
 
-resource "aws_iam_role_policy_attachment" "c19-sales-tracker-ecs-rds" {
-  role       = aws_iam_role.c19-sales-tracker-ecs-role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
-}
+# resource "aws_iam_role_policy_attachment" "c19-sales-tracker-ecs-rds" {
+#   role       = aws_iam_role.c19-sales-tracker-ecs-role.name
+#   policy_arn = "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
+# }
 
-resource "aws_security_group" "c19-sales-tracker-ecs-sg" {
-  name        = "c19-sales-tracker-ecs-sg"
-  description = "Allow public to access streamlit dashboard"
-  vpc_id      = var.VPC_ID
-}
+# resource "aws_security_group" "c19-sales-tracker-ecs-sg" {
+#   name        = "c19-sales-tracker-ecs-sg"
+#   description = "Allow public to access streamlit dashboard"
+#   vpc_id      = var.VPC_ID
+# }
 
-resource "aws_vpc_security_group_ingress_rule" "c19-sales-tracker-access-to-ECS" {
-  security_group_id = aws_security_group.c19-sales-tracker-ecs-sg.id
-  description       = "Allows internet access inbound to ECS to access streamlit dashboard"
+# resource "aws_vpc_security_group_ingress_rule" "c19-sales-tracker-access-to-ECS" {
+#   security_group_id = aws_security_group.c19-sales-tracker-ecs-sg.id
+#   description       = "Allows internet access inbound to ECS to access streamlit dashboard"
 
-  ip_protocol = "tcp"
-  to_port     = var.SL_PORT
-  from_port   = var.SL_PORT
-  cidr_ipv4   = "0.0.0.0/0"
-}
+#   ip_protocol = "tcp"
+#   to_port     = var.SL_PORT
+#   from_port   = var.SL_PORT
+#   cidr_ipv4   = "0.0.0.0/0"
+# }
 
-resource "aws_vpc_security_group_egress_rule" "c19-sales-tracker-access-from-ECS" {
-  security_group_id = aws_security_group.c19-sales-tracker-ecs-sg.id
-  description       = "Allows all traffic outbound from ECS"
+# resource "aws_vpc_security_group_egress_rule" "c19-sales-tracker-access-from-ECS" {
+#   security_group_id = aws_security_group.c19-sales-tracker-ecs-sg.id
+#   description       = "Allows all traffic outbound from ECS"
 
-  ip_protocol = "-1"
-  cidr_ipv4   = "0.0.0.0/0"
-}
+#   ip_protocol = "-1"
+#   cidr_ipv4   = "0.0.0.0/0"
+# }
 
-resource "aws_ecs_service" "c19-sales-tracker-ecs-service" {
-  name            = "c19-sales-tracker-ecs-service"
-  cluster         = "arn:aws:ecs:eu-west-2:129033205317:cluster/c19-ecs-cluster"
-  task_definition = aws_ecs_task_definition.c19-sales-tracker-ecs-task-definition.arn
-  desired_count   = "1"
+# resource "aws_ecs_service" "c19-sales-tracker-ecs-service" {
+#   name            = "c19-sales-tracker-ecs-service"
+#   cluster         = "arn:aws:ecs:eu-west-2:129033205317:cluster/c19-ecs-cluster"
+#   task_definition = aws_ecs_task_definition.c19-sales-tracker-ecs-task-definition.arn
+#   desired_count   = "1"
 
-  network_configuration {
-    subnets          = [var.SUBNET_ID]
-    security_groups  = [aws_security_group.c19-sales-tracker-ecs-sg.id]
-    assign_public_ip = true
-  }
+#   network_configuration {
+#     subnets          = [var.SUBNET_ID]
+#     security_groups  = [aws_security_group.c19-sales-tracker-ecs-sg.id]
+#     assign_public_ip = true
+#   }
 
-  capacity_provider_strategy {
-    capacity_provider = "FARGATE"
-    weight            = 100
-    base              = 1
-  }
+#   capacity_provider_strategy {
+#     capacity_provider = "FARGATE"
+#     weight            = 100
+#     base              = 1
+#   }
 
-  deployment_circuit_breaker {
-    enable   = false
-    rollback = false
-  }
+#   deployment_circuit_breaker {
+#     enable   = false
+#     rollback = false
+#   }
 
-  deployment_configuration {
-    bake_time_in_minutes = "0"
-    strategy             = "ROLLING"
-  }
+#   deployment_configuration {
+#     bake_time_in_minutes = "0"
+#     strategy             = "ROLLING"
+#   }
 
-  deployment_controller {
-    type = "ECS"
-  }
-}
+#   deployment_controller {
+#     type = "ECS"
+#   }
+# }
