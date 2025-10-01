@@ -14,7 +14,7 @@ from dotenv import load_dotenv
 
 
 def get_db_connection() -> connection:
-    """Returns a live connection from the database."""
+    """Returns a live connection to the database."""
     return connect(user=environ["DB_USERNAME"],
                    password=environ["DB_PASSWORD"],
                    host=environ["DB_HOST"],
