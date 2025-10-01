@@ -1,9 +1,8 @@
 """Tests for the skeleton of the dashboard."""
-import os
+
+from unittest.mock import patch, MagicMock
 
 import pytest
-from unittest.mock import Mock, patch, MagicMock
-import psycopg2
 from psycopg2 import Error
 from psycopg2.extras import RealDictCursor
 from skeleton_dashboard import (get_db_connection,
@@ -25,6 +24,7 @@ def mock_env_file():
     }
 
 class TestsDatabaseFunctions:
+    """Class for the database connection tests."""
     # Create patch for connection and .env file
     @patch("skeleton_dashboard.psycopg2.connect")
     def test_get_db_connection_is_successful(self, mock_connect, mock_env_file):
@@ -58,6 +58,7 @@ class TestsDatabaseFunctions:
 
 
 class TestUserDetails:
+    """Class for the get user details tests."""
 
     def test_get_user_details_gives_expected_output(self):
         """Tests if the get user details function is successful."""
@@ -104,18 +105,19 @@ class TestUserDetails:
 
 
 class TestWebsiteFunctions:
+    """Class for the website functions."""
 
     def test_select_website_id_gives_expected_output(self):
         """Tests if the select website id function successfully retrieves an id."""
         mock_conn = MagicMock()
-        
+
         mock_cursor = mock_conn.cursor.return_value.__enter__.return_value
-        
+
         expected_data = {"website_id": 1}
         mock_cursor.fetchone.return_value = expected_data
 
         result = select_website_id(mock_conn, "Steam")
-        
+
         mock_cursor.execute.assert_called_once_with(
             """
                 SELECT website_id
@@ -148,6 +150,7 @@ class TestWebsiteFunctions:
 
 
 class TestProductFunctions:
+    """Class for the product functions."""
 
     def test_insert_product_details_gives_expected_output(self):
         """Tests if the insert product details function successfully retrieves an id."""
@@ -176,6 +179,7 @@ class TestProductFunctions:
 
 
 class TestEmailValidation:
+    """Class for the email functions."""
 
     def test_is_valid_email_returns_bool(self):
         """Tests if the is_valid_email function returns a bool."""
@@ -183,4 +187,3 @@ class TestEmailValidation:
         invalid = "test_user.co.uk"
         assert is_valid_email(valid) is True
         assert is_valid_email(invalid) is False
-
