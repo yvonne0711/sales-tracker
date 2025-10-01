@@ -33,9 +33,9 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: "3.13"
-      - name: Install requirements.txt and pytest
+      - name: Install requirements.txt, pytest and pytest-cov
         run: |
-          pip install pytest
+          pip install pytest pytest-cov
           find . -type f -name "requirements.txt" | sed -e 's/^/-r /' | xargs pip install
       - name: Run tests
         run: |
