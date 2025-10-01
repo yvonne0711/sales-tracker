@@ -14,6 +14,7 @@ def get_db_connection():
                    password=getenv("DB_PASSWORD"),
                    port=getenv("DB_PORT"))
 
+
 def get_all_data():
     """Gets data from database."""
     conn = get_db_connection()
@@ -31,14 +32,15 @@ def get_all_data():
                 """
 
         cursor.execute(query)
-        rows = cursor.fetchall() # list of dicts
+        rows = cursor.fetchall()  # list of dicts
 
     conn.close()
     return rows
 
+
 def generate_html_report(data, file, mode=True):
     """Generates an HTML report from the data."""
-    today = datetime.now().date() 
+    today = datetime.now().date()
 
     # take data from each row
     for row in data:
@@ -73,6 +75,7 @@ def generate_html_report(data, file, mode=True):
         "body": html
     }
 
+
 def handler(event=None, context=None):
     """Handler for Lambda."""
 
@@ -82,6 +85,7 @@ def handler(event=None, context=None):
     today = datetime.now().date()
 
     return generate_html_report(data, f"report_data_{today}.html", False)
+
 
 if __name__ == "__main__":
     load_dotenv()
