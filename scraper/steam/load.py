@@ -112,10 +112,7 @@ if __name__ == "__main__":
                                      last_recorded_prices)
     updated_products = compare_prices(db_conn, steam_products)
 
-    print(steam_products)
-    print(steam_subscribers)
-    print(updated_products)
-    print(check_price_against_required_price(
-        steam_subscribers, {9: 9.00}))
+    info_for_email = check_price_against_required_price(
+        steam_subscribers, updated_products)
 
     db_conn.close()
