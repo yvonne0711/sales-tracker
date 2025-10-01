@@ -43,8 +43,31 @@ def get_products(conn: connection) -> list[dict]:
     products = query_database(conn, query)
     return products
 
-def get_html_text(url: str, headers: dict[str:str]) -> tuple:
-    """Gets the full text response of the html"""
+
+def get_last_recorded_prices(conn: connection) -> list[dict]:
+    """Gets the last recorded price for all steam products."""
+    query = """
+    SELECT p.product_id,
+        pu.change_at,
+        pu.new_price
+    FROM product AS p
+    JOIN price_update AS pu
+    USING (product_id)
+    JOIN website AS w
+    USING (website_id)
+    WHERE w.website_name = 'steam'
+    AND pu.change_at = (
+        SELECT MAX(change_at)
+        FROM price_update
+        WHERE product_id = p.product_id
+            AND website_id = w.website_id);
+    """
+    prices = query_database(conn, query)
+    return prices
+
+
+def get_html_text(url: str, headers: dict[str:str]):
+    '''Gets the full text response of the html'''
     res = req.get(url, headers=headers, timeout=5)
     if res.status_code == 200:
         return res.status_code, res.text
