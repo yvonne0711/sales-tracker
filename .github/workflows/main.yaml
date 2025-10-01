@@ -3,8 +3,12 @@ name: Pylint and Pytest Workflow
 on:
   push:
     branches: [main]
+    paths:
+      - '**.py'
   pull_request:
     branches: [main]
+    paths:
+      - '**.py'
   workflow_dispatch:
 
 jobs:
