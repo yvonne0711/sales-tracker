@@ -4,13 +4,6 @@ provider "aws" {
   secret_key = var.AWS_SECRET_ACCESS_KEY
 }
 
-
-# S3 bucket for storing terraform.tf file (for team collaboration)  
-resource "aws_s3_bucket" "c19-sales-tracker-s3-state" {
-  bucket        = "c19-sales-tracker-s3-state"
-  force_destroy = true
-}
-
 # RDS
 resource "aws_security_group" "c19-sales-tracker-db-sg" {
   name        = "c19-sales-tracker-db-sg"
