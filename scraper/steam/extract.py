@@ -100,9 +100,6 @@ if __name__ == "__main__":
     steam_cost_class = "game_purchase_price price"
     steam_discounted_class = "discount_final_price"
 
-    print(get_current_price('https://store.steampowered.com/app/990080/Hogwarts_Legacy/', steam_cost_class,
-          steam_discounted_class, headers=user_agent))
-
     db_conn = get_db_connection()
 
     steam_products = get_products(db_conn)
