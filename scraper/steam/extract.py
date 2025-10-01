@@ -14,7 +14,7 @@ from dotenv import load_dotenv
 
 
 def get_db_connection() -> connection:
-    """Returns a live connection from the database."""
+    """Returns a live connection to the database."""
     return connect(user=environ["DB_USERNAME"],
                    password=environ["DB_PASSWORD"],
                    host=environ["DB_HOST"],
@@ -42,7 +42,6 @@ def get_products(conn: connection) -> list[dict]:
     """
     products = query_database(conn, query)
     return products
-
 
 def get_html_text(url: str, headers: dict[str:str]) -> tuple:
     """Gets the full text response of the html"""
@@ -78,16 +77,6 @@ def get_current_price(url: str, cost_class: str, discounted_class: str, headers:
     return html_text
 
 
-def add_price_to_products(products: dict[str:str], cost_class: str, discounted_class: str, headers: dict[str:str]) -> dict[str:str]:
-    """Adds the current price to the product dict with the key price."""
-    for product in products:
-        product["price"] = get_current_price(product["product_url"],
-                                             cost_class,
-                                             discounted_class,
-                                             headers)
-    return products
-
-
 if __name__ == "__main__":
     load_dotenv()
 
@@ -103,10 +92,5 @@ if __name__ == "__main__":
     db_conn = get_db_connection()
 
     steam_products = get_products(db_conn)
-
-    steam_products = add_price_to_products(steam_products,
-                                           steam_cost_class,
-                                           steam_discounted_class,
-                                           user_agent)
 
     db_conn.close()

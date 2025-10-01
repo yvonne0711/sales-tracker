@@ -99,13 +99,13 @@ website = st.selectbox("Please select the website your product is on", [
 
 st.divider()
 
-email = st.text_input("Please enter your email address", key="user_email")
-if email:
+email_input = st.text_input("Please enter your email address", key="user_email")
+if email_input:
     # Check if email is in correct format
-    if is_valid_email(email):
+    if is_valid_email(email_input):
         load_dotenv()
-        conn = get_db_connection()
-        user = get_user_details(conn, email)
+        connection = get_db_connection()
+        user = get_user_details(connection, email_input)
 
         # If the email exists in the database then allow them to see the rest of the page
         if user is not None:
@@ -140,9 +140,12 @@ if email:
 
                         # INSERT THE DATA
                         user_id = user["user_id"]
-                        website_id = select_website_id(conn, website)["website_id"]
-                        product_id = insert_product_details(conn, product_name, url, website_id)
-                        insert_subscription_details(conn, user_id, product_id, desired_price)
+                        website_id = select_website_id(connection, website)["website_id"]
+                        product_id = insert_product_details(connection,
+                                                            product_name,
+                                                            url,
+                                                            website_id)
+                        insert_subscription_details(connection, user_id, product_id, desired_price)
 
                         # Write success message
                         st.success(
