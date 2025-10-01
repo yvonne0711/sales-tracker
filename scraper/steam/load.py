@@ -1,5 +1,5 @@
 """
-Script that loads price updates into the RDS.
+Script that loads price updates into the RDS and gets a list of subscribers that should be notified.
 """
 
 from dotenv import load_dotenv
@@ -56,19 +56,19 @@ def compare_prices(conn: connection, products: list[dict]) -> dict[int:float]:
     they are different. Returns a dict of product ids and prices if there
     was a change.
     """
-    updated = []
+    updated = {}
     for product in products:
         if product["db_price"] == "NEW":
             update_price(conn, product)
-            updated.append(product["product_id"])
+            updated[product["product_id"]] = product["price"]
         elif float(product["db_price"]) != product["price"]:
             update_price(conn, product)
-            updated.append(product["product_id"])
+            updated[product["product_id"]] = product["price"]
     return updated
 
 
 def check_price_against_required_price(subs: list[dict],
-                                       updated_items: list[int]) -> list[dict]:
+                                       updated_items: dict[int: float]) -> list[dict]:
     """
     Returns a list of user/product information that will be used to generate an
     email if the price is bellow their desired price.
@@ -116,6 +116,6 @@ if __name__ == "__main__":
     print(steam_subscribers)
     print(updated_products)
     print(check_price_against_required_price(
-        steam_subscribers, updated_products))
+        steam_subscribers, {9: 9.00}))
 
     db_conn.close()
