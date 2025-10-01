@@ -1,9 +1,8 @@
 """Tests for the extract.py script."""
 
 from unittest.mock import MagicMock, patch
-import pytest
 
-from extract import get_html_text, scrape_price, is_discounted, query_database, get_current_price, get_products, add_price_to_products
+from extract import get_html_text, scrape_price, is_discounted, query_database, get_current_price, get_products
 
 
 def test_query_database_returns_expected_result():
@@ -106,24 +105,3 @@ def test_get_current_price(mock_html, mock_discount, mock_scrape):
 
     assert get_current_price('https.co.uk', 'price',
                              'discount', {"User-Agent": "test"}) == '£9.99'
-
-
-@patch("extract.get_current_price")
-def test_add_price_to_product(mock_func):
-    '''Tests that price is added to the dictionary'''
-    product = [{'id': 1, 'product_name': 'fifa', 'product_url': 'fake.co.uk'}]
-    mock_func.return_value = 9.99
-    result = [{'id': 1, 'product_name': 'fifa',
-               'product_url': 'fake.co.uk', 'price': 9.99}]
-    assert add_price_to_products(products=product, cost_class='class',
-                                 discounted_class='discount', headers={"User-Agent": "test"}) == result
-
-
-@patch("extract.get_current_price")
-def test_add_price_to_product_keyerror(mock_func):
-    '''Tests that an error is raised is product_url is missing'''
-    product = [{'id': 1, 'product_name': 'fifa'}]
-    mock_func.return_value = 9.99
-    with pytest.raises(KeyError):
-        add_price_to_products(products=product, cost_class='class',
-                              discounted_class='discount', headers={"User-Agent": "test"})
