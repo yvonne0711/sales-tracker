@@ -50,6 +50,22 @@ def get_steam_subscribers(conn: connection) -> list[dict]:
     return result
 
 
+def compare_prices(products: list[dict]) -> list[int]:
+    """
+    Compares stored price to current price and updates the price if 
+    they are different. Returns a list of product ids that had updates.
+    """
+    updated = []
+    for product in products:
+        if product["db_price"] == "NEW":
+            update_price(db_conn, product)
+            updated.append(product["product_id"])
+        elif float(product["db_price"]) != product["price"]:
+            update_price(db_conn, product)
+            updated.append(product["product_id"])
+    return updated
+
+
 if __name__ == "__main__":
     load_dotenv()
 
@@ -65,20 +81,17 @@ if __name__ == "__main__":
     db_conn = get_db_connection()
 
     steam_products = get_products(db_conn)
+    steam_subscribers = get_steam_subscribers(db_conn)
     last_recorded_prices = get_last_recorded_prices(db_conn)
     steam_products = format_products(steam_products,
                                      steam_cost_class,
                                      steam_discounted_class,
                                      user_agent,
                                      last_recorded_prices)
-
-    for game in steam_products:
-        if game["db_price"] == "NEW":
-            update_price(db_conn, game)
-        elif float(game["db_price"]) != game["price"]:
-            update_price(db_conn, game)
+    updated_products = compare_prices(steam_products)
 
     print(steam_products)
-    print(get_steam_subscribers(db_conn))
+    print(steam_subscribers)
+    print(updated_products)
 
     db_conn.close()
