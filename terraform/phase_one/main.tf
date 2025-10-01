@@ -49,7 +49,7 @@ resource "aws_db_instance" "c19-sales-tracker-rds" {
   vpc_security_group_ids = [aws_security_group.c19-sales-tracker-db-sg.id]
 }
 
-# ECR
+# Elastic container service 
 resource "aws_ecr_repository" "c19-sales-tracker-ecr" {
   name                 = "c19-sales-tracker-ecr"
   image_tag_mutability = "MUTABLE"
