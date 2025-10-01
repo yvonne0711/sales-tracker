@@ -7,7 +7,7 @@ WORKDIR ${LAMBDA_TASK_ROOT}
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy over email files
+# Copy email files
 COPY report.py .
 
 # Set the CMD to the handler file and function
