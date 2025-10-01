@@ -30,7 +30,9 @@ jobs:
 
     - name: Run pylint
       run: |
-        pylint *.py -fail-under=8.5
+          for file in $(git ls-files '*.py'); do
+            pylint --fail-under=8.5 "$file"
+          done
 
   test:
     runs-on: ubuntu-latest
