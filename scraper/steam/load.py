@@ -8,7 +8,8 @@ from psycopg2.extensions import connection
 
 from extract import (get_db_connection,
                      get_products,
-                     get_last_recorded_prices)
+                     get_last_recorded_prices,
+                     query_database)
 from transform import format_products
 
 
@@ -25,6 +26,28 @@ def update_price(conn: connection, product: dict) -> None:
                                product["price"],
                                product["check_at"]))
         conn.commit()
+
+
+def get_steam_subscribers(conn: connection) -> list[dict]:
+    """Returns a list of subscribers to steam products."""
+    query = """
+    SELECT user_name,
+    user_email,
+    desired_price,
+    product_name,
+    product_url,
+    product_id
+    FROM users
+    JOIN subscription
+    USING(user_id)
+    JOIN product
+    USING(product_id)
+    JOIN website
+    USING(website_id)
+    WHERE website_name = 'steam';
+    """
+    result = query_database(conn, query)
+    return result
 
 
 if __name__ == "__main__":
@@ -51,10 +74,11 @@ if __name__ == "__main__":
 
     for game in steam_products:
         if game["db_price"] == "NEW":
-            print("new")
             update_price(db_conn, game)
         elif float(game["db_price"]) != game["price"]:
-            print("changed")
             update_price(db_conn, game)
+
+    print(steam_products)
+    print(get_steam_subscribers(db_conn))
 
     db_conn.close()
