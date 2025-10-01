@@ -14,7 +14,7 @@ from dotenv import load_dotenv
 
 
 def get_db_connection() -> connection:
-    """Returns a live connection from the database."""
+    """Returns a live connection to the database."""
     return connect(user=environ["DB_USERNAME"],
                    password=environ["DB_PASSWORD"],
                    host=environ["DB_HOST"],
@@ -42,6 +42,28 @@ def get_products(conn: connection) -> list[dict]:
     """
     products = query_database(conn, query)
     return products
+
+
+def get_last_recorded_prices(conn: connection) -> list[dict]:
+    """Gets the last recorded price for all steam products."""
+    query = """
+    SELECT p.product_id,
+        pu.change_at,
+        pu.new_price
+    FROM product AS p
+    JOIN price_update AS pu
+    USING (product_id)
+    JOIN website AS w
+    USING (website_id)
+    WHERE w.website_name = 'steam'
+    AND pu.change_at = (
+        SELECT MAX(change_at)
+        FROM price_update
+        WHERE product_id = p.product_id
+            AND website_id = w.website_id);
+    """
+    prices = query_database(conn, query)
+    return prices
 
 
 def is_discounted(url: str, discounted_class: str, headers: dict[str:str]) -> bool:
@@ -72,16 +94,6 @@ def get_current_price(url: str, cost_class: str, discounted_class: str, headers:
     return scrape_price(url, cost_class, headers)
 
 
-def add_price_to_products(products: dict[str:str], cost_class: str, discounted_class: str, headers: dict[str:str]) -> dict[str:str]:
-    """Adds the current price to the product dict with the key price."""
-    for product in products:
-        product["price"] = get_current_price(product["product_url"],
-                                             cost_class,
-                                             discounted_class,
-                                             headers)
-    return products
-
-
 if __name__ == "__main__":
     load_dotenv()
 
@@ -97,10 +109,5 @@ if __name__ == "__main__":
     db_conn = get_db_connection()
 
     steam_products = get_products(db_conn)
-
-    steam_products = add_price_to_products(steam_products,
-                                           steam_cost_class,
-                                           steam_discounted_class,
-                                           user_agent)
 
     db_conn.close()
