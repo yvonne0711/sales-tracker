@@ -57,11 +57,9 @@ def upload_new_prices(conn: connection, products: list[dict]) -> None:
     """
     for product in products:
         if product["db_price"] == "NEW":
-            print("new")
             update_price(conn, product)
         elif float(product["db_price"]) != product["price"]:
             update_price(conn, product)
-            print("update")
 
 
 def check_price_against_required_price(subs: list[dict],
@@ -102,7 +100,6 @@ def handler(event=None, context=None) -> dict[str:str]:
                                      steam_discounted_class,
                                      user_agent,
                                      last_recorded_prices)
-    print(steam_products)
     upload_new_prices(db_conn, steam_products)
     db_conn.close()
 
