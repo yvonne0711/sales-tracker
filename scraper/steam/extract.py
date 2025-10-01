@@ -44,8 +44,8 @@ def get_products(conn: connection) -> list[dict]:
     return products
 
 
-def get_html_text(url: str, headers: dict[str:str]):
-    '''Gets the full text response of the html'''
+def get_html_text(url: str, headers: dict[str:str]) -> tuple:
+    """Gets the full text response of the html"""
     res = req.get(url, headers=headers, timeout=5)
     if res.status_code == 200:
         return res.status_code, res.text
