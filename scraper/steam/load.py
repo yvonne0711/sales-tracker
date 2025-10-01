@@ -50,7 +50,7 @@ def get_steam_subscribers(conn: connection) -> list[dict]:
     return result
 
 
-def upload_new_prices(conn: connection, products: list[dict]) -> None:
+def compare_prices(conn: connection, products: list[dict]) -> None:
     """
     Compares stored price to current price and updates the price if 
     they are different.
@@ -100,7 +100,7 @@ def handler(event=None, context=None) -> dict[str:str]:
                                      steam_discounted_class,
                                      user_agent,
                                      last_recorded_prices)
-    upload_new_prices(db_conn, steam_products)
+    compare_prices(db_conn, steam_products)
     db_conn.close()
 
     return {
