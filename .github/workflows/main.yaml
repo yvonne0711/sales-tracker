@@ -48,6 +48,8 @@ jobs:
     - name: Install requirements.txt and pytest
       run: |
         find . -type f -name "requirements.txt" | sed -e 's/^/-r /' | xargs pip install
+        pip install pytest
+        pip install pytest-cov
     - name: Run tests
       run: |
         pytest
