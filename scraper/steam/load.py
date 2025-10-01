@@ -50,16 +50,21 @@ def get_steam_subscribers(conn: connection) -> list[dict]:
     return result
 
 
-def compare_prices(conn: connection, products: list[dict]) -> None:
+def compare_prices(conn: connection, products: list[dict]) -> dict[int:float]:
     """
     Compares stored price to current price and updates the price if 
-    they are different.
+    they are different. Returns a dict of product ids and prices if there
+    was a change.
     """
+    updated = {}
     for product in products:
         if product["db_price"] == "NEW":
             update_price(conn, product)
+            updated[product["product_id"]] = product["price"]
         elif float(product["db_price"]) != product["price"]:
             update_price(conn, product)
+            updated[product["product_id"]] = product["price"]
+    return updated
 
 
 def check_price_against_required_price(subs: list[dict],
