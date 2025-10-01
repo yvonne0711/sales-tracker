@@ -8,7 +8,7 @@ This repository contains the files required to run the sales tracker dashboard
 |----------------------|-----------------------------------------------------------|
 | **`skeleton_dashboard.py`**       | Contains the code to create a skeleton dashboard.        |
 | **`navigation.py`**  | Code used for navigating through the dashboard.           |
-| **`test_...py`**| Contains pytests for the named files.|
+| **`test_*.py`**| Contains pytests for the named files.|
 | **`requirements.txt`** | Lists the required libraries for running the code.      |
 | **`README.md`**      | This file, providing an overview and instructions.        |
 
