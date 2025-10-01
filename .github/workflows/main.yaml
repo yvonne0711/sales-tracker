@@ -4,11 +4,11 @@ on:
   push:
     branches: [main]
     paths:
-      - '**.py'
+      - "**.py"
   pull_request:
     branches: [main]
     paths:
-      - '**.py'
+      - "**.py"
   workflow_dispatch:
 
 jobs:
@@ -16,22 +16,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v5
+      - name: Checkout
+        uses: actions/checkout@v5
 
-    - name: Set up Python 3.13
-      uses: actions/setup-python@v6
-      with:
-        python-version: '3.13'
-        cache: 'pip'
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        find . -type f -name "requirements.txt" | sed -e 's/^/-r /' | xargs pip install
-        pip install pylint
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: "pip"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          find . -type f -name "requirements.txt" | sed -e 's/^/-r /' | xargs pip install
+          pip install pylint
 
-    - name: Run pylint
-      run: |
+      - name: Run pylint
+        run: |
           for file in $(git ls-files '*.py'); do
             pylint --fail-under=8.5 "$file"
           done
@@ -39,23 +39,23 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v5
-    - name: Set up Python 3.13
-      uses: actions/setup-python@v6
-      with:
-        python-version: '3.13'
-        cache: 'pip'
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: "pip"
 
-    - name: Install requirements.txt and pytest
-      run: |
-        find . -type f -name "requirements.txt" | sed -e 's/^/-r /' | xargs pip install
-        pip install pytest
-        pip install pytest-cov
-    - name: Run tests
-      run: |
-        pytest
-    
-    - name: Run pytest coverage
-      run: |
-        pytest --cov=. --cov-fail-under=60
+      - name: Install requirements.txt and pytest
+        run: |
+          find . -type f -name "requirements.txt" | sed -e 's/^/-r /' | xargs pip install
+          pip install pytest
+          pip install pytest-cov
+      - name: Run tests
+        run: |
+          pytest --ignore=terraform/ --ignore-glob="**/dockerfile"
+
+      - name: Run pytest coverage
+        run: |
+          pytest --ignore=terraform/ --ignore-glob="**/dockerfile" --cov=. --cov-fail-under=60
