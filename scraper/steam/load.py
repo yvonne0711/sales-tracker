@@ -50,10 +50,11 @@ def get_steam_subscribers(conn: connection) -> list[dict]:
     return result
 
 
-def compare_prices(conn: connection, products: list[dict]) -> list[int]:
+def compare_prices(conn: connection, products: list[dict]) -> dict[int:float]:
     """
     Compares stored price to current price and updates the price if 
-    they are different. Returns a list of product ids that had updates.
+    they are different. Returns a dict of product ids and prices if there
+    was a change.
     """
     updated = []
     for product in products:
@@ -64,6 +65,27 @@ def compare_prices(conn: connection, products: list[dict]) -> list[int]:
             update_price(conn, product)
             updated.append(product["product_id"])
     return updated
+
+
+def check_price_against_required_price(subs: list[dict],
+                                       updated_items: list[int]) -> list[dict]:
+    """
+    Returns a list of user/product information that will be used to generate an
+    email if the price is bellow their desired price.
+    """
+    email_info = []
+    for sub in subs:
+        if sub["product_id"] in updated_items:
+            if sub["desired_price"] >= updated_items[sub["product_id"]]:
+                info = {}
+                info["user_name"] = sub["user_name"]
+                info["user_email"] = sub["user_email"]
+                info["desired_price"] = float(sub["desired_price"])
+                info["product_name"] = sub["product_name"]
+                info["product_url"] = sub["product_url"]
+                info["current_price"] = updated_items[sub["product_id"]]
+                email_info.append(info)
+    return email_info
 
 
 if __name__ == "__main__":
@@ -93,5 +115,7 @@ if __name__ == "__main__":
     print(steam_products)
     print(steam_subscribers)
     print(updated_products)
+    print(check_price_against_required_price(
+        steam_subscribers, updated_products))
 
     db_conn.close()
