@@ -4,6 +4,7 @@ provider "aws" {
   secret_key = var.AWS_SECRET_ACCESS_KEY
 }
 
+
 # S3 bucket for storing terraform.tf file (for team collaboration)  
 resource "aws_s3_bucket" "c19-sales-tracker-s3-state" {
   bucket        = "c19-sales-tracker-s3-state"
@@ -47,4 +48,14 @@ resource "aws_db_instance" "c19-sales-tracker-rds" {
   publicly_accessible    = true
   db_subnet_group_name   = "c19-public-subnet-group"
   vpc_security_group_ids = [aws_security_group.c19-sales-tracker-db-sg.id]
+}
+
+# Elastic container service 
+resource "aws_ecr_repository" "c19-sales-tracker-ecr" {
+  name                 = "c19-sales-tracker-ecr"
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
 }
