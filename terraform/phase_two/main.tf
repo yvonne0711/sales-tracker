@@ -6,46 +6,46 @@ provider "aws" {
 }
 
 # Lambdas 
-# resource "aws_iam_role" "c19-sales-tracker-lambda-execution-role" {
-#   name = "c19-sales-tracker-lambda-execution-role"
+resource "aws_iam_role" "c19-sales-tracker-lambda-execution-role" {
+  name = "c19-sales-tracker-lambda-execution-role"
 
-#   assume_role_policy = jsonencode({
-#     Version = "2012-10-17"
-#     Statement = [{
-#       Action = "sts:AssumeRole"
-#       Effect = "Allow"
-#       Principal = {
-#         Service = "lambda.amazonaws.com"
-#       }
-#       },
-#     ]
-#   })
-# }
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Action = "sts:AssumeRole"
+      Effect = "Allow"
+      Principal = {
+        Service = "lambda.amazonaws.com"
+      }
+      },
+    ]
+  })
+}
 
-# resource "aws_iam_role_policy_attachment" "c19-sales-tracker-lambda-basic-execution" {
-#   role       = aws_iam_role.c19-sales-tracker-lambda-execution-role.name
-#   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-# }
+resource "aws_iam_role_policy_attachment" "c19-sales-tracker-lambda-basic-execution" {
+  role       = aws_iam_role.c19-sales-tracker-lambda-execution-role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
 
-# resource "aws_lambda_function" "c19-sales-tracker-lambda-steam" {
-#   function_name = "c19-sales-tracker-lambda-steam"
-#   role          = aws_iam_role.c19-sales-tracker-lambda-execution-role.arn
-#   package_type  = "Image"
-#   #   image_uri     = ""
-#   memory_size   = 512
-#   timeout       = 30
-#   architectures = ["x86_64"]
+resource "aws_lambda_function" "c19-sales-tracker-lambda-steam" {
+  function_name = "c19-sales-tracker-lambda-steam"
+  role          = aws_iam_role.c19-sales-tracker-lambda-execution-role.arn
+  package_type  = "Image"
+  image_uri     = "129033205317.dkr.ecr.eu-west-2.amazonaws.com/c19-sales-tracker-ecr-steam:latest"
+  memory_size   = 512
+  timeout       = 30
+  architectures = ["x86_64"]
 
-#   environment {
-#     variables = {
-#       DB_HOST     = var.DB_HOST
-#       DB_PORT     = var.DB_PORT
-#       DB_NAME     = var.DB_NAME
-#       DB_USERNAME = var.DB_USERNAME
-#       DB_PASSWORD = var.DB_PASSWORD
-#     }
-#   }
-# }
+  environment {
+    variables = {
+      DB_HOST     = var.DB_HOST
+      DB_PORT     = var.DB_PORT
+      DB_NAME     = var.DB_NAME
+      DB_USERNAME = var.DB_USERNAME
+      DB_PASSWORD = var.DB_PASSWORD
+    }
+  }
+}
 
 # resource "aws_lambda_function" "c19-sales-tracker-lambda-jd" {
 #   function_name = "c19-sales-tracker-lambda-jd"
@@ -87,25 +87,25 @@ provider "aws" {
 #   }
 # }
 
-# resource "aws_lambda_function" "c19-sales-tracker-lambda-subscriptions" {
-#   function_name = "c19-sales-tracker-lambda-subscriptions"
-#   role          = aws_iam_role.c19-sales-tracker-lambda-execution-role.arn
-#   package_type  = "Image"
-#   #   image_uri     = ""
-#   memory_size   = 512
-#   timeout       = 30
-#   architectures = ["x86_64"]
+resource "aws_lambda_function" "c19-sales-tracker-lambda-subscription" {
+  function_name = "c19-sales-tracker-lambda-subscription"
+  role          = aws_iam_role.c19-sales-tracker-lambda-execution-role.arn
+  package_type  = "Image"
+  image_uri     = "129033205317.dkr.ecr.eu-west-2.amazonaws.com/c19-sales-tracker-ecr-subscription:latest"
+  memory_size   = 512
+  timeout       = 30
+  architectures = ["x86_64"]
 
-#   environment {
-#     variables = {
-#       DB_HOST     = var.DB_HOST
-#       DB_PORT     = var.DB_PORT
-#       DB_NAME     = var.DB_NAME
-#       DB_USERNAME = var.DB_USERNAME
-#       DB_PASSWORD = var.DB_PASSWORD
-#     }
-#   }
-# }
+  environment {
+    variables = {
+      DB_HOST     = var.DB_HOST
+      DB_PORT     = var.DB_PORT
+      DB_NAME     = var.DB_NAME
+      DB_USERNAME = var.DB_USERNAME
+      DB_PASSWORD = var.DB_PASSWORD
+    }
+  }
+}
 
 # resource "aws_lambda_function" "c19-sales-tracker-lambda-email" {
 #   function_name = "c19-sales-tracker-lambda-email"
@@ -149,46 +149,44 @@ provider "aws" {
 
 
 # Eventbridge 
-resource "aws_iam_role" "c19-sales-tracker-scheduler-role" {
-  name = "c19-sales-tracker-scheduler-role"
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
-        Principal = {
-          Service = "scheduler.amazonaws.com"
-        }
-      }
-    ]
-  })
-}
-
-# module "eventbridge" {
-#   source = "terraform-aws-modules/eventbridge/aws"
-
-#   create_bus = false
-
-#   rules = {
-#     crons = {
-#       description         = "Run state machine everyday 10:00 UTC"
-#       schedule_expression = "cron(0 10 * * ? *)"
-#     }
-#   }
-
-#   targets = {
-#     crons = [
+# resource "aws_iam_role" "c19-sales-tracker-scheduler-role" {
+#   name = "c19-sales-tracker-scheduler-role"
+#   assume_role_policy = jsonencode({
+#     Version = "2012-10-17"
+#     Statement = [
 #       {
-#         name            = "your-awesome-state-machine"
-#         arn             = "arn:aws:states:us-east-1:123456789012:stateMachine:your-awesome-state-machine"
-#         attach_role_arn = true
+#         Action = "sts:AssumeRole"
+#         Effect = "Allow"
+#         Principal = {
+#           Service = "scheduler.amazonaws.com"
+#         }
 #       }
 #     ]
+#   })
+# }
+
+# # eventbridge iam policy
+# resource "aws_iam_role_policy_attachment" "c19-sales-tracker-scheduler-role_attach" {
+#   role       = aws_iam_role.c19-sales-tracker-scheduler-role.name
+#   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaRole"
+# }
+
+# # eventbridge scheduler
+# resource "aws_scheduler_schedule" "c19-sales-tracker-scheduler" {
+#   name        = "c19-sales-tracker-scheduler"
+#   description = "Run web scraping job every 3 minutes."
+
+#   flexible_time_window {
+#     mode = "OFF"
 #   }
 
-#   sfn_target_arns   = ["arn:aws:states:us-east-1:123456789012:stateMachine:your-awesome-state-machine"]
-#   attach_sfn_policy = true
+#   schedule_expression          = "cron(0/3 * * * ? *)"
+#   schedule_expression_timezone = "Europe/London"
+
+#   target {
+#     arn      = aws_lambda_function.c19-sales-tracker-lambda-steam.arn
+#     role_arn = aws_iam_role.c19-sales-tracker-scheduler-role.arn
+#   }
 # }
 
 # # ECS
