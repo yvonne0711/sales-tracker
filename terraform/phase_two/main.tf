@@ -149,46 +149,44 @@ provider "aws" {
 
 
 # Eventbridge 
-resource "aws_iam_role" "c19-sales-tracker-scheduler-role" {
-  name = "c19-sales-tracker-scheduler-role"
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
-        Principal = {
-          Service = "scheduler.amazonaws.com"
-        }
-      }
-    ]
-  })
-}
-
-# module "eventbridge" {
-#   source = "terraform-aws-modules/eventbridge/aws"
-
-#   create_bus = false
-
-#   rules = {
-#     crons = {
-#       description         = "Run state machine everyday 10:00 UTC"
-#       schedule_expression = "cron(0 10 * * ? *)"
-#     }
-#   }
-
-#   targets = {
-#     crons = [
+# resource "aws_iam_role" "c19-sales-tracker-scheduler-role" {
+#   name = "c19-sales-tracker-scheduler-role"
+#   assume_role_policy = jsonencode({
+#     Version = "2012-10-17"
+#     Statement = [
 #       {
-#         name            = "your-awesome-state-machine"
-#         arn             = "arn:aws:states:us-east-1:123456789012:stateMachine:your-awesome-state-machine"
-#         attach_role_arn = true
+#         Action = "sts:AssumeRole"
+#         Effect = "Allow"
+#         Principal = {
+#           Service = "scheduler.amazonaws.com"
+#         }
 #       }
 #     ]
+#   })
+# }
+
+# # eventbridge iam policy
+# resource "aws_iam_role_policy_attachment" "c19-sales-tracker-scheduler-role_attach" {
+#   role       = aws_iam_role.c19-sales-tracker-scheduler-role.name
+#   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaRole"
+# }
+
+# # eventbridge scheduler
+# resource "aws_scheduler_schedule" "c19-sales-tracker-scheduler" {
+#   name        = "c19-sales-tracker-scheduler"
+#   description = "Run web scraping job every 3 minutes."
+
+#   flexible_time_window {
+#     mode = "OFF"
 #   }
 
-#   sfn_target_arns   = ["arn:aws:states:us-east-1:123456789012:stateMachine:your-awesome-state-machine"]
-#   attach_sfn_policy = true
+#   schedule_expression          = "cron(0/3 * * * ? *)"
+#   schedule_expression_timezone = "Europe/London"
+
+#   target {
+#     arn      = aws_lambda_function.c19-sales-tracker-lambda-steam.arn
+#     role_arn = aws_iam_role.c19-sales-tracker-scheduler-role.arn
+#   }
 # }
 
 # # ECS
