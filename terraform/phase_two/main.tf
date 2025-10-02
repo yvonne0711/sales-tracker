@@ -18,13 +18,40 @@ resource "aws_iam_role" "c19-sales-tracker-lambda-execution-role" {
         Service = "lambda.amazonaws.com"
       }
       },
-    ]
+    ],
   })
+}
+
+resource "aws_iam_policy" "c19-sales-tracker-lambda-send-email" {
+  name        = "c19-sales-tracker-lambda-send-email"
+  description = "IAM policy for email lambda"
+
+  policy = jsonencode(
+    {
+      Version = "2012-10-17",
+      Statement = [
+        {
+          Effect = "Allow",
+          Action = [
+            "ses:SendEmail",
+            "ses:SendRawEmail"
+          ]
+          Resource = "*"
+        },
+      ]
+    }
+  )
 }
 
 resource "aws_iam_role_policy_attachment" "c19-sales-tracker-lambda-basic-execution" {
   role       = aws_iam_role.c19-sales-tracker-lambda-execution-role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+resource "aws_iam_policy_attachment" "c19-sales-tracker-lambda-send-email" {
+  name       = "c19-sales-tracker-lambda-send-email"
+  roles      = [aws_iam_role.c19-sales-tracker-lambda-execution-role.name]
+  policy_arn = aws_iam_policy.c19-sales-tracker-lambda-send-email.arn
 }
 
 resource "aws_lambda_function" "c19-sales-tracker-lambda-steam" {
@@ -107,25 +134,25 @@ resource "aws_lambda_function" "c19-sales-tracker-lambda-subscription" {
   }
 }
 
-# resource "aws_lambda_function" "c19-sales-tracker-lambda-email" {
-#   function_name = "c19-sales-tracker-lambda-email"
-#   role          = aws_iam_role.c19-sales-tracker-lambda-execution-role.arn
-#   package_type  = "Image"
-#   #   image_uri     = ""
-#   memory_size   = 512
-#   timeout       = 30
-#   architectures = ["x86_64"]
+resource "aws_lambda_function" "c19-sales-tracker-lambda-email" {
+  function_name = "c19-sales-tracker-lambda-email"
+  role          = aws_iam_role.c19-sales-tracker-lambda-execution-role.arn
+  package_type  = "Image"
+  image_uri     = "129033205317.dkr.ecr.eu-west-2.amazonaws.com/c19-sales-tracker-ecr-email:latest"
+  memory_size   = 512
+  timeout       = 30
+  architectures = ["x86_64"]
 
-#   environment {
-#     variables = {
-#       DB_HOST     = var.DB_HOST
-#       DB_PORT     = var.DB_PORT
-#       DB_NAME     = var.DB_NAME
-#       DB_USERNAME = var.DB_USERNAME
-#       DB_PASSWORD = var.DB_PASSWORD
-#     }
-#   }
-# }
+  environment {
+    variables = {
+      DB_HOST     = var.DB_HOST
+      DB_PORT     = var.DB_PORT
+      DB_NAME     = var.DB_NAME
+      DB_USERNAME = var.DB_USERNAME
+      DB_PASSWORD = var.DB_PASSWORD
+    }
+  }
+}
 
 # resource "aws_lambda_function" "c19-sales-tracker-lambda-dashboard" {
 #   function_name = "c19-sales-tracker-lambda-dashboard"
