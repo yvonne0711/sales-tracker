@@ -6,28 +6,6 @@ from psycopg2 import connect
 from psycopg2.extras import RealDictCursor
 
 
-def get_all_data():
-    """Gets data from database."""
-    conn = get_db_connection()
-    with conn.cursor(cursor_factory=RealDictCursor) as cursor:
-
-        query = """SELECT
-                    u.user_name, u.user_email, p.product_name, p.product_url, s.desired_price, pu.new_price
-                FROM users u
-                JOIN subscription s
-                    ON u.user_id = s.user_id
-                JOIN product p
-                    ON s.product_id = p.product_id
-                JOIN price_update pu
-                    ON p.product_id = pu.product_id;
-                """
-
-        cursor.execute(query)
-        rows = cursor.fetchall()  # list of dicts
-
-    conn.close()
-    return rows
-
 
 def generate_html_report(data, file, mode=True):
     """Generates an HTML report from the data."""
