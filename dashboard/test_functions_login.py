@@ -5,7 +5,7 @@ from unittest.mock import patch, MagicMock
 import pytest
 from psycopg2 import Error
 from psycopg2.extras import RealDictCursor
-from skeleton_dashboard import (get_db_connection,
+from functions_dashboard import (get_db_connection,
                                 get_user_details,
                                 select_website_id,
                                 insert_product_details,
@@ -26,13 +26,13 @@ def mock_env_file():
 class TestsDatabaseFunctions:
     """Class for the database connection tests."""
     # Create patch for connection and .env file
-    @patch("skeleton_dashboard.psycopg2.connect")
+    @patch("login.psycopg2.connect")
     def test_get_db_connection_is_successful(self, mock_connect, mock_env_file):
         """Tests if database connection is successful."""
         mock_conn = MagicMock()
         mock_connect.return_value = mock_conn
 
-        with patch.dict("skeleton_dashboard.ENV", mock_env_file):
+        with patch.dict("login.ENV", mock_env_file):
             result = get_db_connection()
 
         mock_connect.assert_called_once_with(
@@ -46,12 +46,12 @@ class TestsDatabaseFunctions:
 
         assert result == mock_conn
 
-    @patch("skeleton_dashboard.psycopg2.connect")
+    @patch("login.psycopg2.connect")
     def test_get_db_connection_when_fails(self, mock_connect, mock_env_file):
         """Tests the connection returns none if unsuccessful."""
         mock_connect.side_effect = Error("Connection Failed")
 
-        with patch.dict("skeleton_dashboard.ENV", mock_env_file):
+        with patch.dict("login.ENV", mock_env_file):
             result = get_db_connection()
 
         assert result is None
@@ -174,8 +174,6 @@ class TestProductFunctions:
             ("test product", "http://test_website.co.uk", 1)
         )
         assert result == expected_data
-
-
 
 
 class TestEmailValidation:

@@ -11,64 +11,10 @@ from psycopg2 import Error
 
 from dotenv import load_dotenv
 
-def get_db_connection() -> None:
-    """Get connection to the database."""
-    try:
-        connection = psycopg2.connect(
-            user=ENV["DB_USERNAME"],
-            password=ENV["DB_PASSWORD"],
-            host=ENV["DB_HOST"],
-            port=ENV["DB_PORT"],
-            database=ENV["DB_NAME"],
-            cursor_factory=RealDictCursor
-        )
-        return connection
-    except Error as e:
-        st.error(f"Error connecting to database: {e}")
-        return None
-
-
-def get_user_details(conn, email: str) -> dict:
-    """Gets the user details from the users table 
-    in the RDS given an email address."""
-    try:
-        with conn.cursor() as cur:
-            query = """
-                    SELECT *
-                    FROM users
-                    WHERE user_email = (%s);
-                    """
-            cur.execute(query, (email,))
-            data = cur.fetchone()
-        return data
-    except Error as e:
-        st.error(f"Error fetching user details: {e}")
-        return None
-
-
-def is_valid_email(email: str) -> bool:
-    """Checks whether the email address inputted by the user is of a valid form."""
-    if re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
-        return True
-    return False
-
-
-def add_new_user_to_database(conn, user_email: str, user_name: str) -> None:
-    """Adds a new user into the user table in the database."""
-    try:
-        with conn.cursor() as cur:
-            query = """
-                    INSERT INTO users
-                        (user_email, user_name)
-                    VALUES
-                        (%s, %s);
-                    """
-            cur.execute(query, (str(user_email), str(user_name)))
-            conn.commit()
-    except Error as e:
-        st.error(f"Error adding user to database: {e}")
-        conn.rollback()
-
+from functions_dashboard import (get_db_connection,
+                                 get_user_details,
+                                 is_valid_email,
+                                 add_new_user_to_database)
 
 
 def sign_up_form() -> None:

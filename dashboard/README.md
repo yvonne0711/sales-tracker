@@ -1,16 +1,17 @@
 # Sales Tracker Dashboard
 
-This repository contains the files required to run the sales tracker dashboard
+This repository contains the files required to run the Soupy Sales dashboard.
 
 # Files
 
-| Name                 | Description                                               |
-|----------------------|-----------------------------------------------------------|
-| **`skeleton_dashboard.py`**       | Contains the code to create a skeleton dashboard.        |
-| **`navigation.py`**  | Code used for navigating through the dashboard.           |
-| **`test_*.py`**| Contains pytests for the named files.|
-| **`requirements.txt`** | Lists the required libraries for running the code.      |
-| **`README.md`**      | This file, providing an overview and instructions.        |
+| Name                     | Description                                                                     |
+|--------------------------|-----------------------------------------------------------------------          |
+| **`login.py`**           | Contains the code for the login (initial) page of the dashboard.                |
+| **`pages`**              | Contains the various pages used in the app once the user is logged in.          |
+| **`functions_dashbaord`**| Contains the functions used throughout the dashboard to perform various tasks.  |
+| **`test_*.py`**          | Contains pytests for the named files.                                           |
+| **`requirements.txt`**   | Lists the required libraries for running the code.                              |
+| **`README.md`**          | This file, providing an overview and instructions for code deployment.          |
 
 
 # Setup
@@ -20,7 +21,7 @@ The following is a rough start to these instructions.
 
 ### Install Dependencies
 
-First, ensure you have all required libraries installed. You can install them using the following command:
+First, ensure you will need to install the required libraries. You can install them using the following command:
 
 ```bash
 pip install -r requirements.txt
@@ -48,3 +49,8 @@ of the project including the following necessary variables.
 | DB_HOST             | Host address for your database                        |
 | DB_PORT             | Port number for your database                         |
 | DB_NAME             | Name of your database                                 |
+
+
+## Dockerising the Dashboard
+
+Once the dockerfile has been created, populate this with instructions.
