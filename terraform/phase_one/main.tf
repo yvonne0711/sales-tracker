@@ -44,8 +44,35 @@ resource "aws_db_instance" "c19-sales-tracker-rds" {
 }
 
 # ECR
-resource "aws_ecr_repository" "c19-sales-tracker-ecr" {
-  name                 = "c19-sales-tracker-ecr"
+resource "aws_ecr_repository" "c19-sales-tracker-ecr-dashboard" {
+  name                 = "c19-sales-tracker-ecr-dashboard"
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+
+resource "aws_ecr_repository" "c19-sales-tracker-ecr-steam" {
+  name                 = "c19-sales-tracker-ecr-steam"
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+
+resource "aws_ecr_repository" "c19-sales-tracker-subscription" {
+  name                 = "c19-sales-tracker-ecr-subscription"
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+
+resource "aws_ecr_repository" "c19-sales-tracker-email" {
+  name                 = "c19-sales-tracker-ecr-email"
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
