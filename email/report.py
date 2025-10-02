@@ -34,6 +34,27 @@ def generate_html_report(row):
     """
     return html
 
+def send_email(subject, html_body, sender, recipient):
+    client = boto3.client('ses', region_name='eu-west-2')
+    response = client.send_email(
+        Source=sender,
+        Destination={
+            'ToAddresses': [recipient]
+        },
+        Message={
+            'Subject': {
+                'Data': subject
+            },
+            'Body': {
+                'Text': {
+                    'Data': html_body
+                }
+            }
+        }
+    )
+    return response['MessageId']
+
+
 def handler(event=None, context=None):
     """Handler for Lambda."""
 
