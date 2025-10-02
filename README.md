@@ -40,6 +40,7 @@ To solve this, we created an automated price tracker pipeline that checks every 
 The `.env` file is formatted as follows:
 
 ```
+# AWS credentials
 AWS_ACCESS_KEY_ID={aws_key}
 AWS_SECRET_ACCESS_KEY={aws_secret_key}
 AWS_REGION={region}
@@ -47,6 +48,7 @@ VPC_ID={vpc_id}
 SUBNET_ID={subnet_id}
 SL_PORT={streamlit_port}
 
+# DB credentials
 DB_NAME={db_name}
 DB_USERNAME={db_username}
 DB_PASSWORD={db_password}
@@ -56,6 +58,23 @@ DB_HOST={db_host}
 
 ## Terraform
 
+The [terraform](terraform/phase_one) directory was split into the modules [phase_one](terraform/phase_one) and [phase_two](terraform/phase_two) to help distinguish what could be setup immediately and what relied on other services to be setup. The `secret.tfvars` file is functionally the same to `terraform.tfvars`, it was simply used to be explicit about the location of the secret credentials, thus when running terraform, the following flag must be used to prevent manually inputting all the credentials into the terminal, as `terraform.tfvars` is the default: `-var-file="secret.tfvars"`.
+
 ## Phase One
 
+The [phase_one](terraform/phase_one) module contains terraform resources that were not dependent on external configuration yet to be setup e.g., RDS and ECR. To run, attach this flag to your command in the root of the terraform directory: `target=module.phase_one`.
+
 ## Phase Two
+
+The [phase_two](terraform/phase_two) module contains terraform resources that were dependent on external configuration yet to be setup e.g., image URIs. The following must be completed before running this module:
+
+- ETL containers for Steam, Next, and JD pushed to the ECR.
+- Subscription container pushed to the ECR.
+- Email container pushed to the ECR.
+- Streamlit container pushed to the ECR.
+
+Once completed, to run the [phase_two](terraform/phase_two) module, attach this flag to your command in the root of the terraform directory: `target=module.phase_two`.
+
+## CI/CD
+
+To push the docker images to the ECR, simply push to the repository and the CI/CD workflow will be activated.
