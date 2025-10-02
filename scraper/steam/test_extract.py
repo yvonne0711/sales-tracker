@@ -2,11 +2,16 @@
 
 from unittest.mock import MagicMock, patch
 
-from extract import get_html_text, scrape_price, is_discounted, query_database, get_current_price, get_products
+from extract import (get_html_text,
+                     scrape_price,
+                     is_discounted,
+                     query_database,
+                     get_current_price,
+                     get_products)
 
 
 def test_query_database_returns_expected_result():
-    '''Tests the function returns the result of the query'''
+    """Tests the function returns the result of the query."""
     fake_result = [{'id': 1, 'name': 'Test'}]
     mock_cursor = MagicMock()
     mock_cursor.fetchall.return_value = fake_result
@@ -19,7 +24,7 @@ def test_query_database_returns_expected_result():
 
 @patch("extract.query_database")
 def test_get_products(mock_query):
-    '''Tests the function returns the products'''
+    """Tests the function returns the products."""
     fake_conn = MagicMock()
 
     mock_query.return_value = {'id': '1', 'product_name': 'Fifa'}
@@ -28,7 +33,7 @@ def test_get_products(mock_query):
 
 @patch("extract.req.get")
 def test_get_html_text(mock_res):
-    '''Tests that the function returns the status code and text'''
+    """Tests that the function returns the status code and text."""
     fake_res = MagicMock()
     fake_res.status_code = 200
     fake_res.text = 'fake_html'
@@ -40,7 +45,7 @@ def test_get_html_text(mock_res):
 
 @patch("extract.req.get")
 def test_get_html_text_400(mock_res):
-    '''Tests that the function returns the status code and response when a 400'''
+    """Tests that the function returns the status code and response when a 400."""
     fake_res = MagicMock()
     fake_res.status_code = 400
     fake_res.reason = 'forbidden'
@@ -52,7 +57,7 @@ def test_get_html_text_400(mock_res):
 
 @patch("extract.BeautifulSoup")
 def test_scrape_price(fake_beautiful):
-    '''Tests that the scrape function returns the price'''
+    """Tests that the scrape function returns the price."""
     fake_res = MagicMock()
     fake_res.find.return_value.text = '$9.99'
     fake_beautiful.return_value = fake_res
@@ -62,7 +67,7 @@ def test_scrape_price(fake_beautiful):
 
 @patch("extract.BeautifulSoup")
 def test_is_discounted(fake_beautiful):
-    '''Tests that the is_discount function works with non none values'''
+    """Tests that the is_discount function works with non none values."""
     fake_res = MagicMock()
     fake_res.find.return_value = '$9.99'
     fake_beautiful.return_value = fake_res
@@ -72,7 +77,7 @@ def test_is_discounted(fake_beautiful):
 
 @patch("extract.BeautifulSoup")
 def test_is_discounted_false(fake_beautiful):
-    '''Tests that the is_discount function works with none values'''
+    """Tests that the is_discount function works with none values."""
     fake_res = MagicMock()
     fake_res.find.return_value = None
     fake_beautiful.return_value = fake_res
@@ -84,8 +89,10 @@ def test_is_discounted_false(fake_beautiful):
 @patch("extract.is_discounted")
 @patch("extract.get_html_text")
 def test_get_current_price_false(mock_html, mock_discount, mock_scrape):
-    '''Tests that the functions work together to get the price of the product 
-    if discount is false'''
+    """
+    Tests that the functions work together to get the price of the product 
+    if discount is false.
+    """
     mock_html.return_value = (200, "html")
     mock_discount.return_value = False
     mock_scrape.return_value = '£9.99'
@@ -98,7 +105,7 @@ def test_get_current_price_false(mock_html, mock_discount, mock_scrape):
 @patch("extract.is_discounted")
 @patch("extract.get_html_text")
 def test_get_current_price(mock_html, mock_discount, mock_scrape):
-    '''Tests that the functions work together to get the price of the product if discount is true'''
+    """Tests that the functions work together to get the price of the product if discount is true."""
     mock_html.return_value = (200, "html")
     mock_discount.return_value = True
     mock_scrape.return_value = '£9.99'
