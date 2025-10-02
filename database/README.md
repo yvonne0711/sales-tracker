@@ -24,4 +24,4 @@ DB_HOST=your_host
 - `psql` installed and available in your PATH.
 
 ### Running the Setup
-`bash connect.zsh`sh
+```bash connect.zsh```sh
