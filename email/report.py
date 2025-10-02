@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from psycopg2 import connect
 from psycopg2.extras import RealDictCursor
 import boto3
+from botocore.exceptions import ClientError
 
 
 def generate_html_report(row):
@@ -16,7 +17,7 @@ def generate_html_report(row):
     new_price = row["new_price"]
     user_name = row["user_name"]
     product_name = row["product_name"]
-    url = row["url"]
+    product_url = row["product_url"]
 
     html = f"""
     <html>
@@ -26,7 +27,7 @@ def generate_html_report(row):
     <body>
         <h2>Hi {user_name},</h2>
         <p>Good news! The product {product_name} you're subscribed to is on sale.</p>
-        <h3><a href='{url}'>{product_name}</a></h3>
+        <h3><a href='{product_url}'>{product_name}</a></h3>
         <p><b>£{desired_price} -> £{new_price}</b></p>
         <p>Thank you.</p>
     </body>
@@ -50,15 +51,15 @@ def send_email(subject, html_body, sender, recipient):
                     'Data': subject
                 },
                 'Body': {
-                    'Text': {
+                    'Html': {
                         'Data': html_body
                     }
                 }
             }
         )
-        return response
-    except Exception as e:
-        print(e.response["MessageID"])
+        return response["MessageId"]
+    except ClientError as e:
+        return e.response["Error"]["Message"]
 
 def handler(event, context=None):
     """Handler for Lambda."""
@@ -82,4 +83,13 @@ def handler(event, context=None):
 
 
 if __name__ == "__main__":
-    handler()
+    event = {"email_data": [{
+        "user_name": "Bob",
+        "user_email": "bob12345@example.com",
+        "product_name": "Hades II",
+        "product_url": "https://store.steampowered.com/app/1145350/Hades_II/",
+        "desired_price": 10,
+        "new_price": 5
+    }]}
+
+    print(handler(event))
