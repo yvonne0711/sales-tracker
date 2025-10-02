@@ -37,24 +37,21 @@ To solve this, we created an automated price tracker pipeline that checks every 
 
 ## Requirements
 
-The `.env` file is formatted as follows:
+A `.env` file must be created in the root directory of this project, including the following necessary variables:
 
-```
-# AWS credentials
-AWS_ACCESS_KEY_ID={aws_key}
-AWS_SECRET_ACCESS_KEY={aws_secret_key}
-AWS_REGION={region}
-VPC_ID={vpc_id}
-SUBNET_ID={subnet_id}
-SL_PORT={streamlit_port}
-
-# DB credentials
-DB_NAME={db_name}
-DB_USERNAME={db_username}
-DB_PASSWORD={db_password}
-DB_PORT={db_port}
-DB_HOST={db_host}
-```
+| Variable                 | Description                        |
+| ------------------------ | ---------------------------------- |
+| DB_USER                  | Username for your database         |
+| DB_PASSWORD              | Password for your database         |
+| DB_HOST                  | Host address for your database     |
+| DB_PORT                  | Port number for your database      |
+| DB_NAME                  | Name of your database              |
+| AWS_ACCESS_KEY_ID        | Name of your AWS access key        |
+| AWS_SECRET_ACCESS_KEY_ID | Name of your AWS secret access key |
+| AWS_REGION               | Your AWS region                    |
+| VPC_ID                   | Your VPC ID                        |
+| SUBNET_ID                | Your public AWS subnet ID          |
+| SL_PORT                  | Port number for streamlit          |
 
 ## Terraform
 
@@ -77,4 +74,11 @@ Once completed, to run the [phase_two](terraform/phase_two) module, attach this 
 
 ## CI/CD
 
-To push the docker images to the ECR, simply push to the repository and the CI/CD workflow will be activated.
+# Pylint and Pytest Workflow
+
+- Pylint fails if any `.py` files are under a score of 8.5.
+- Pytest ignores dockerfiles and the terraform directory and pytest coverage fails if the coverage of the tests is under 60%.
+
+# Docker containers Workflow
+
+To push the docker containers to the ECR, simply push to the repository and the CI/CD workflow will be activated.
