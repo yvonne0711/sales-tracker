@@ -7,3 +7,13 @@ This directory contains all the files required to set up a PostgreSQL database f
 - **`connect.zsh`**  
   Uses your database credentials (stored in a `.env` file) to connect to the database and run `schema.sql`, 
   creating the database schema and generating all necessary tables.
+
+## Getting Started
+### Sample env
+```
+DB_USERNAME=
+DB_PASSWORD=
+DB_HOST=
+```
+
+### Dependencies
