@@ -1,4 +1,4 @@
-'''Returns a list of user details to email if the price of the product they are subscribed to drops below their desired price'''
+"""Returns a list of user details to email if the price of the product they are subscribed to drops below their desired price"""
 from os import environ
 from psycopg2 import connect
 from psycopg2.extensions import connection
@@ -25,8 +25,8 @@ def query_database(conn: connection, sql: str, params: tuple) -> list[dict]:
 
 
 def get_product_ids(conn: connection) -> list:
-    '''Gets all product ids'''
-    query = '''SELECT product_id from product'''
+    """Gets all product ids."""
+    query = "SELECT product_id from product"
     result = query_database(conn, query, params=())
     return result
 
@@ -65,7 +65,7 @@ def get_steam_subscribers(conn: connection, products: list[str]) -> list[dict]:
 
 
 def remove_subscriptions(conn: connection, products):
-    '''Deletes subscriptions after emails have been sent'''
+    """Deletes subscriptions after emails have been sent."""
     for product in products:
         query = '''delete FROM subscription
         where (user_id, product_id) in (SELECT user_id, product_id
@@ -90,7 +90,7 @@ def remove_subscriptions(conn: connection, products):
 
 
 def one_list_dicts(user_details: list[list[dict]]) -> list[dict]:
-    '''Changes from a list of list of dicts to one list of dicts.'''
+    """Changes from a list of list of dicts to one list of dicts."""
     list_user_details = []
     for user_detail in user_details:
         for user in user_detail:
@@ -99,7 +99,7 @@ def one_list_dicts(user_details: list[list[dict]]) -> list[dict]:
 
 
 def handler(event=None, context=None) -> list[dict]:
-    '''Handler function for lambda that returns a list of users to email.'''
+    """Handler function for lambda that returns a list of users to email."""
     load_dotenv()
     conn = get_db_connection()
     product = get_product_ids(conn)
