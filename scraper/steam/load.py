@@ -88,31 +88,31 @@ def check_price_against_required_price(subs: list[dict],
     return email_info
 
 
-if __name__ == "__main__":
-    load_dotenv()
-
+def handler(event=None, context=None) -> dict[str:str]:
+    """Handler function for Lambda that uploads price changes to the RDS."""
     user_agent = {
         "User-Agent":
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, \
             like Gecko) Chrome/140.0.0.0 Safari/537.36"
     }
-
     steam_cost_class = "game_purchase_price price"
     steam_discounted_class = "discount_final_price"
-
     db_conn = get_db_connection()
-
     steam_products = get_products(db_conn)
-    steam_subscribers = get_steam_subscribers(db_conn)
     last_recorded_prices = get_last_recorded_prices(db_conn)
     steam_products = format_products(steam_products,
                                      steam_cost_class,
                                      steam_discounted_class,
                                      user_agent,
                                      last_recorded_prices)
-    updated_products = compare_prices(db_conn, steam_products)
-
-    info_for_email = check_price_against_required_price(
-        steam_subscribers, updated_products)
-
+    compare_prices(db_conn, steam_products)
     db_conn.close()
+
+    return {
+        "message": "Success"
+    }
+
+
+if __name__ == "__main__":
+    load_dotenv()
+    handler()
