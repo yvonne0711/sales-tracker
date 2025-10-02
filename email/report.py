@@ -35,38 +35,51 @@ def generate_html_report(row):
     return html
 
 def send_email(subject, html_body, sender, recipient):
+    """Send email using AWS SES."""
+    # create ses client
     client = boto3.client('ses', region_name='eu-west-2')
-    response = client.send_email(
-        Source=sender,
-        Destination={
-            'ToAddresses': [recipient]
-        },
-        Message={
-            'Subject': {
-                'Data': subject
+    # send email
+    try:
+        response = client.send_email(
+            Source=sender,
+            Destination={
+                'ToAddresses': [recipient]
             },
-            'Body': {
-                'Text': {
-                    'Data': html_body
+            Message={
+                'Subject': {
+                    'Data': subject
+                },
+                'Body': {
+                    'Text': {
+                        'Data': html_body
+                    }
                 }
             }
-        }
-    )
-    return response['MessageId']
+        )
+        return response
+    except Exception as e:
+        print(e.response["MessageID"])
 
-
-def handler(event=None, context=None):
+def handler(event, context=None):
     """Handler for Lambda."""
 
-    load_dotenv()
+    emails = []
 
-    data = get_all_data()
-    today = datetime.now().date()
-
-    return generate_html_report(data, f"report_data_{today}.html", False)
+    for row in event["email_data"]:
+        subject = f"New sale on {row['product_name']}!"
+        html_body = generate_html_report(row)
+        sender = "sl-coaches@proton.me"
+        response = send_email(subject, html_body, sender, row["user_email"])
+        emails.append(response)
+    
+    return {
+        "statusCode": 200,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "body": emails
+    }
 
 
 if __name__ == "__main__":
-    load_dotenv()
-
     handler()
