@@ -1,0 +1,5 @@
+pylint
+pytest
+psycopg2-binary
+python-dotenv
+argon2-cffi
