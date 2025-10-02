@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
     user_id INT GENERATED ALWAYS AS IDENTITY,
     user_name VARCHAR(255) NOT NULL,
     user_email VARCHAR(255) NOT NULL,
+    password_hash TEXT NOT NULL,
     PRIMARY KEY (user_id)
 );
 
