@@ -22,9 +22,9 @@ To solve this, we created an automated price tracker pipeline that checks every 
 
 ## Team Roles
 
-- Project Manager: Tristen
-- Architect: Beth and Yacquub
-- Quality Assurance: Nikki and Yvonne
+- Project Manager: @Tristenx
+- Architect: @Zephvv and @b-yacquub
+- Quality Assurance: @nikki-w and @yvonne0711
 - Engineer and Analyst: All of the above
 
 ## Deliverables
@@ -60,11 +60,11 @@ DB_HOST={db_host}
 
 The [terraform](terraform/phase_one) directory was split into the modules [phase_one](terraform/phase_one) and [phase_two](terraform/phase_two) to help distinguish what could be setup immediately and what relied on other services to be setup. The `secret.tfvars` file is functionally the same to `terraform.tfvars`, it was simply used to be explicit about the location of the secret credentials, thus when running terraform, the following flag must be used to prevent manually inputting all the credentials into the terminal, as `terraform.tfvars` is the default: `-var-file="secret.tfvars"`.
 
-## Phase One
+### Phase One
 
-The [phase_one](terraform/phase_one) module contains terraform resources that were not dependent on external configuration yet to be setup e.g., RDS and ECR. To run, attach this flag to your command in the root of the terraform directory: `target=module.phase_one`.
+The [phase_one](terraform/phase_one) module contains terraform resources that were not dependent on external configuration yet to be setup e.g., RDS and ECR. To run, attach this flag to your command in the root of the terraform directory: `-target=module.phase_one`.
 
-## Phase Two
+### Phase Two
 
 The [phase_two](terraform/phase_two) module contains terraform resources that were dependent on external configuration yet to be setup e.g., image URIs. The following must be completed before running this module:
 
@@ -73,7 +73,7 @@ The [phase_two](terraform/phase_two) module contains terraform resources that we
 - Email container pushed to the ECR.
 - Streamlit container pushed to the ECR.
 
-Once completed, to run the [phase_two](terraform/phase_two) module, attach this flag to your command in the root of the terraform directory: `target=module.phase_two`.
+Once completed, to run the [phase_two](terraform/phase_two) module, attach this flag to your command in the root of the terraform directory: `-target=module.phase_two`.
 
 ## CI/CD
 
