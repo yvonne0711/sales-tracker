@@ -6,15 +6,6 @@ from psycopg2 import connect
 from psycopg2.extras import RealDictCursor
 
 
-def get_db_connection():
-    """Returns a live connection from the database."""
-    return connect(host=getenv("DB_HOST"),
-                   dbname=getenv("DB_NAME"),
-                   user=getenv("DB_USER"),
-                   password=getenv("DB_PASSWORD"),
-                   port=getenv("DB_PORT"))
-
-
 def get_all_data():
     """Gets data from database."""
     conn = get_db_connection()
