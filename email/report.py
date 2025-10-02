@@ -4,8 +4,8 @@ import boto3
 from botocore.exceptions import ClientError
 
 
-def generate_html_report(row):
-    """Generates an HTML report for a row of user and product."""
+def generate_html_report(row: dict) -> str:
+    """Generates a HTML report for a row of user and product."""
     today = datetime.now().date()
 
     user_email = row["user_email"]
@@ -31,7 +31,7 @@ def generate_html_report(row):
     """
     return html
 
-def send_email(subject, html_body, sender, recipient):
+def send_email(subject: str, html_body: str, sender: str, recipient: str) -> str:
     """Send email using AWS SES."""
     # create ses client
     client = boto3.client('ses', region_name='eu-west-2')
@@ -57,7 +57,7 @@ def send_email(subject, html_body, sender, recipient):
     except ClientError as e:
         return e.response["Error"]["Message"]
 
-def handler(event, context=None):
+def handler(event: dict, context: None=None) -> dict:
     """Handler for Lambda."""
 
     emails = []
