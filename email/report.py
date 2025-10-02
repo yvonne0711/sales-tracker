@@ -1,9 +1,5 @@
 """Email report for users."""
-from os import getenv
 from datetime import datetime
-from dotenv import load_dotenv
-from psycopg2 import connect
-from psycopg2.extras import RealDictCursor
 import boto3
 from botocore.exceptions import ClientError
 
