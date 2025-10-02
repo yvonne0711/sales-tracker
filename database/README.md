@@ -9,11 +9,19 @@ This directory contains all the files required to set up a PostgreSQL database f
   creating the database schema and generating all necessary tables.
 
 ## Getting Started
-### Sample env
-```
-DB_USERNAME=
-DB_PASSWORD=
-DB_HOST=
+
+### Environment Setup
+Create a `.env` file with the following variables:
+
+```env
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+DB_HOST=your_host
 ```
 
-### Dependencies
+### Requirements
+- Access to a PostgreSQL database.
+- `psql` installed and available in your PATH.
+
+### Running the Setup
+`bash connect.zsh`sh
