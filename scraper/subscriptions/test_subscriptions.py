@@ -2,7 +2,8 @@
 
 from unittest.mock import MagicMock, patch
 
-from subscription import query_database, get_product_ids, get_steam_subscribers, remove_subscriptions, one_list_dicts, handler
+from subscription import (query_database, get_product_ids, get_steam_subscribers,
+                        remove_subscriptions, one_list_dicts, handler)
 
 
 def test_query_database_returns_expected_result():
