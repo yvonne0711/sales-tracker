@@ -34,7 +34,7 @@ def verify_user(conn: connection, user_name: str, user_password: str) -> bool:
     query = """select password_hash from users where user_name = %s"""
     with conn.cursor() as cur:
         cur.execute(query, (user_name,))
-        hashed = cur.fetchone()['password_hash']
+        hashed = cur.fetchone()["password_hash"]
         try:
             return ph.verify(hashed, user_password)
         except argon2.exceptions.VerifyMismatchError:
