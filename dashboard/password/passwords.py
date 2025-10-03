@@ -20,8 +20,8 @@ def get_db_connection() -> connection:
 
 def insert_user(conn: connection, user_name: str, user_email: str, password: str) -> None:
     """This function hashes the password and adds user details to the database."""
-    ph = PasswordHasher()
-    hashed = ph.hash(password)
+    password_hasher = PasswordHasher()
+    hashed = password_hasher.hash(password)
     query = """insert into users (user_name,user_email, password_hash) values (%s,%s,%s)"""
     with conn.cursor() as cur:
         cur.execute(query, (user_name, user_email, hashed))
@@ -30,13 +30,13 @@ def insert_user(conn: connection, user_name: str, user_email: str, password: str
 
 def verify_user(conn: connection, user_name: str, user_password: str) -> bool:
     """Function to verify user."""
-    ph = PasswordHasher()
+    password_hasher = PasswordHasher()
     query = """select password_hash from users where user_name = %s"""
     with conn.cursor() as cur:
         cur.execute(query, (user_name,))
         hashed = cur.fetchone()["password_hash"]
         try:
-            return ph.verify(hashed, user_password)
+            return password_hasher.verify(hashed, user_password)
         except argon2.exceptions.VerifyMismatchError:
             return False
 
