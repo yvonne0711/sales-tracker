@@ -59,7 +59,7 @@ def get_last_recorded_prices(conn: connection) -> list[dict]:
     return prices
 
 
-def get_html_text(url: str, headers: dict[str:str]) -> tuple[int, str]:
+def get_response_text(url: str, headers: dict[str:str]) -> tuple[int, str]:
     """Gets the full text response of the html."""
     res = req.get(url, headers=headers, timeout=5)
     if res.status_code == 200:
@@ -92,12 +92,12 @@ def scrape_price_discount(html: str, cost_class: str) -> str:
 
 def get_current_price(url: str, cost_class: str, discounted_class: str, headers: dict[str:str]) -> str:
     """Returns the current price of a product from its details."""
-    html_text = get_html_text(url, headers)
-    if html_text[0] == 200:
-        if is_discounted(html_text, discounted_class):
-            return scrape_price_discount(html_text, discounted_class)
-        return scrape_price(html_text, cost_class)
-    return html_text
+    response_text = get_response_text(url, headers)
+    if response_text[0] == 200:
+        if is_discounted(response_text, discounted_class):
+            return scrape_price_discount(response_text, discounted_class)
+        return scrape_price(response_text, cost_class)
+    return response_text
 
 
 def scrape_title(html: str, title_class: str) -> str:
