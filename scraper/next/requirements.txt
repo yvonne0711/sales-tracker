@@ -1,0 +1,6 @@
+pylint
+pytest
+requests
+bs4
+psycopg2-binary
+python-dotenv
