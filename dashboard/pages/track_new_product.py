@@ -21,8 +21,8 @@ def main():
         st.stop()
 
     st.set_page_config(
-        page_title="Soupy Sales", layout="wide")
-    st.header("Soupy Sales: Track New Product")
+        page_title="Souper Sales", layout="wide")
+    st.header("Souper Sales: Track New Product")
 
     # Get user details from session state
     user = st.session_state.user

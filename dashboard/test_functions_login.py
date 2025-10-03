@@ -1,4 +1,4 @@
-"""Tests for the skeleton of the dashboard."""
+"""Tests for the Souper Sales dashboard."""
 
 from unittest.mock import patch, MagicMock
 

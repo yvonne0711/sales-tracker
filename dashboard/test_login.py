@@ -1,4 +1,4 @@
-"""Tests for the login page of Soupy Sales."""
+"""Tests for the login page of Souper Sales."""
 
 from unittest.mock import MagicMock, patch
 

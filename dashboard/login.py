@@ -1,4 +1,4 @@
-"""Login/Sign up page for Soupy Sales dashboard."""
+"""Login/Sign up page for Souper Sales dashboard."""
 
 from os import environ as ENV
 import re
@@ -19,11 +19,11 @@ from functions_dashboard import (get_db_connection,
 
 def sign_up_form() -> None:
     """Create a sign up form"""
-    st.set_page_config(page_title="Sales Tracker Login",
+    st.set_page_config(page_title="Soupe Sales Login",
                        layout="centered", initial_sidebar_state="collapsed")
 
     with st.form("Sign up", clear_on_submit=True):
-        st.subheader("Please create an account to get access to Soupy Sales!")
+        st.subheader("Please create an account to get access to Souper Sales!")
         username = st.text_input("Please create a username", key="username")
         new_email_input = st.text_input(
             "Please enter your email address", key="user_input_email")
@@ -59,10 +59,10 @@ def sign_up_form() -> None:
 
 def login_page() -> None:
     """Login page format."""
-    st.header("Soupy Sales Login")
+    st.header("Souper Sales Login")
     st.divider()
 
-    st.set_page_config(page_title="Sales Tracker Login",
+    st.set_page_config(page_title="Souper Sales Login",
                        layout="centered", initial_sidebar_state="collapsed")
 
     with st.form("Login"):
