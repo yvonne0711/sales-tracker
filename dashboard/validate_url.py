@@ -15,7 +15,7 @@ def check_response(url: str, headers: dict[str:str]) -> bool:
         return False
 
 
-def validate_steam(url: str, headers: dict[str:str]) -> bool:
+def validate_steam_product_url(url: str, headers: dict[str:str]) -> bool:
     """Checks that the price classes steam uses are present."""
     cost_class = "game_purchase_price price"
     discounted_class = "discount_final_price"
@@ -38,10 +38,16 @@ def is_valid_url(selected_site: str, url: str) -> bool:
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, \
             like Gecko) Chrome/140.0.0.0 Safari/537.36"
     }
-    if check_response(url, user_agent):
-        if selected_site == "Steam":
-            if validate_steam(url, user_agent):
-                return True
-            return False
+    if not check_response(url, user_agent):
         return False
+    if selected_site == "Steam":
+        if validate_steam_product_url(url, user_agent):
+            return True
+        return False
+    elif selected_site == "Next":
+        # Add validation for Next.
+        return True
+    elif selected_site == "JD":
+        # Add validation for JD.
+        return True
     return False

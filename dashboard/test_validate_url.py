@@ -2,7 +2,7 @@
 
 from unittest.mock import MagicMock, patch
 
-from validate_url import (validate_steam,
+from validate_url import (validate_steam_product_url,
                           is_valid_url)
 
 
@@ -13,7 +13,7 @@ def test_validate_steam_1(mock_res):
     fake_res.status_code = 200
     fake_res.text = '<div class="discount_final_price">£9.99</div>'
     mock_res.return_value = fake_res
-    result = validate_steam('test.com', {"User-Agent": "test"})
+    result = validate_steam_product_url('test.com', {"User-Agent": "test"})
     assert result is True
 
 
@@ -24,7 +24,7 @@ def test_validate_steam_2(mock_res):
     fake_res.status_code = 200
     fake_res.text = '<div class="game_purchase_price price" data-price-final="850">£8.50</div>'
     mock_res.return_value = fake_res
-    result = validate_steam('test.com', {"User-Agent": "test"})
+    result = validate_steam_product_url('test.com', {"User-Agent": "test"})
     assert result is True
 
 
@@ -35,7 +35,7 @@ def test_validate_steam_3(mock_res):
     fake_res.status_code = 200
     fake_res.text = ''
     mock_res.return_value = fake_res
-    result = validate_steam('test.com', {"User-Agent": "test"})
+    result = validate_steam_product_url('test.com', {"User-Agent": "test"})
     assert result is False
 
 
@@ -47,7 +47,7 @@ def test_validate_steam_4(mock_res):
     fake_res.text = '<div class="game_purchase_price price" data-price-final="850">£8.50</div>\
         <div class="discount_final_price">£9.99</div>'
     mock_res.return_value = fake_res
-    result = validate_steam('test.com', {"User-Agent": "test"})
+    result = validate_steam_product_url('test.com', {"User-Agent": "test"})
     assert result is True
 
 
