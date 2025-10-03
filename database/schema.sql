@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
     user_id INT GENERATED ALWAYS AS IDENTITY,
     user_name VARCHAR(255) NOT NULL,
     user_email VARCHAR(255) NOT NULL,
+    password_hash TEXT NOT NULL,
     PRIMARY KEY (user_id)
 );
 
@@ -20,8 +21,7 @@ CREATE TABLE IF NOT EXISTS product (
     product_name VARCHAR(100) NOT NULL,
     product_url VARCHAR(255) NOT NULL,
     website_id INT NOT NULL,
-    PRIMARY KEY (product_id),
-    FOREIGN KEY (website_id) REFERENCES website(website_id)
+    PRIMARY KEY (product_id)
 );
 
 CREATE TABLE IF NOT EXISTS subscription (
@@ -29,9 +29,7 @@ CREATE TABLE IF NOT EXISTS subscription (
     user_id INT NOT NULL,
     product_id INT NOT NULL,
     desired_price DECIMAL NOT NULL,
-    PRIMARY KEY (subscription_id),
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (product_id) REFERENCES product(product_id)
+    PRIMARY KEY (subscription_id)
 );
 
 CREATE TABLE IF NOT EXISTS price_update (
@@ -39,8 +37,7 @@ CREATE TABLE IF NOT EXISTS price_update (
     product_id INT NOT NULL,
     new_price DECIMAL NOT NULL,
     change_at timestamp NOT NULL,
-    PRIMARY KEY (price_update_id),
-    FOREIGN KEY (product_id) REFERENCES product(product_id)
+    PRIMARY KEY (price_update_id)
 );
 
 INSERT INTO website (

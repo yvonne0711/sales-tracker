@@ -4,25 +4,29 @@ provider "aws" {
   secret_key = var.AWS_SECRET_ACCESS_KEY
 }
 
-# S3 bucket for terraform collab
-resource "aws_s3_bucket" "c19-sales-tracker-s3-state" {
-  bucket        = "c19-sales-tracker-s3-state"
-  force_destroy = true
-}
-
 # RDS
 resource "aws_security_group" "c19-sales-tracker-db-sg" {
   name        = "c19-sales-tracker-db-sg"
-  description = "Allow inbound traffic to the RDS on port 5432"
+  description = "RDS security group"
   vpc_id      = var.VPC_ID
+}
 
-  ingress {
-    description = "Postgres access from the internet"
-    from_port   = var.DB_PORT
-    to_port     = var.DB_PORT
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+resource "aws_vpc_security_group_ingress_rule" "c19-sales-tracker-access-to-db" {
+  security_group_id = aws_security_group.c19-sales-tracker-db-sg.id
+  description       = "Allows internet access inbound to DB for team and assessors"
+
+  ip_protocol = "tcp"
+  to_port     = var.DB_PORT
+  from_port   = var.DB_PORT
+  cidr_ipv4   = "0.0.0.0/0"
+}
+
+resource "aws_vpc_security_group_egress_rule" "c19-sales-tracker-access-from-db" {
+  security_group_id = aws_security_group.c19-sales-tracker-db-sg.id
+  description       = "Allows all traffic outbound from DB"
+
+  ip_protocol = "-1"
+  cidr_ipv4   = "0.0.0.0/0"
 }
 
 resource "aws_db_instance" "c19-sales-tracker-rds" {
@@ -37,4 +41,41 @@ resource "aws_db_instance" "c19-sales-tracker-rds" {
   publicly_accessible    = true
   db_subnet_group_name   = "c19-public-subnet-group"
   vpc_security_group_ids = [aws_security_group.c19-sales-tracker-db-sg.id]
+}
+
+# ECR
+resource "aws_ecr_repository" "c19-sales-tracker-ecr-dashboard" {
+  name                 = "c19-sales-tracker-ecr-dashboard"
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+
+resource "aws_ecr_repository" "c19-sales-tracker-ecr-steam" {
+  name                 = "c19-sales-tracker-ecr-steam"
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+
+resource "aws_ecr_repository" "c19-sales-tracker-subscription" {
+  name                 = "c19-sales-tracker-ecr-subscription"
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+
+resource "aws_ecr_repository" "c19-sales-tracker-email" {
+  name                 = "c19-sales-tracker-ecr-email"
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
 }

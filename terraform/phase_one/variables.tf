@@ -47,3 +47,8 @@ variable "DB_HOST" {
   type      = string
   sensitive = true
 }
+
+variable "SL_PORT" {
+  type      = string
+  sensitive = true
+}
