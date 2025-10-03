@@ -49,3 +49,12 @@ def test_validate_steam_4(mock_res):
     mock_res.return_value = fake_res
     result = validate_steam('test.com', {"User-Agent": "test"})
     assert result is True
+
+
+@patch("validate_url.validate_steam")
+@patch("validate_url.check_response")
+def test_is_valid_url_1(mock_check, mock_validate):
+    """Tests that the function returns True if all filters are True."""
+    mock_check.return_value = True
+    mock_validate.return_value = True
+    assert is_valid_url("Steam", "test.com") is True
