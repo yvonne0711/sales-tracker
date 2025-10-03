@@ -6,8 +6,8 @@ import time
 
 import streamlit as st
 import psycopg2
-from psycopg2.extras import RealDictCursor
 from psycopg2 import Error
+from psycopg2.extras import RealDictCursor
 
 from dotenv import load_dotenv
 
@@ -18,8 +18,8 @@ from functions_dashboard import (get_db_connection,
 
 
 def sign_up_form() -> None:
-    """Create a sign up form"""
-    st.set_page_config(page_title="Soupe Sales Login",
+    """Create a sign up form."""
+    st.set_page_config(page_title="Souper Sales Login",
                        layout="centered", initial_sidebar_state="collapsed")
 
     with st.form("Sign up", clear_on_submit=True):

@@ -5,7 +5,7 @@ This repository contains the files required to run the Souper Sales dashboard.
 # Files
 
 | Name                     | Description                                                                     |
-|--------------------------|-----------------------------------------------------------------------          |
+|--------------------------|---------------------------------------------------------------------------------|
 | **`login.py`**           | Contains the code for the login (initial) page of the dashboard.                |
 | **`pages`**              | Contains the various pages used in the app once the user is logged in.          |
 | **`functions_dashbaord`**| Contains the functions used throughout the dashboard to perform various tasks.  |
@@ -41,15 +41,13 @@ streamlit run skeleton_dashboard.py
 Environment variables are required for configuration of this application. A `.env` file must be created in the root directory
 of the project including the following necessary variables.
 
-
-| Variable            | Description                                           |
-|---------------------|-------------------------------------------------------|
-| DB_USER             | Username for your database                            |
-| DB_PASSWORD         | Password for your database                            |
-| DB_HOST             | Host address for your database                        |
-| DB_PORT             | Port number for your database                         |
-| DB_NAME             | Name of your database                                 |
-
+```bash
+DB_USER=username for the database
+DB_PASSWORD=password for the database
+DB_HOST=host address for the database
+DB_PORT=port
+DB_NAME=database name
+```
 
 ## Dockerising the Dashboard
 

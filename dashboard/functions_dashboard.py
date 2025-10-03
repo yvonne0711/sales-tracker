@@ -5,12 +5,13 @@ import re
 
 import streamlit as st
 import psycopg2
-from psycopg2.extras import RealDictCursor
 from psycopg2 import Error
+from psycopg2.extras import RealDictCursor
+from psycopg2.extensions import connection
 from dotenv import load_dotenv
 
 
-def get_db_connection():
+def get_db_connection() -> connection:
     """Get connection to the database."""
     try:
         connection = psycopg2.connect(
@@ -27,7 +28,7 @@ def get_db_connection():
         return None
 
 
-def get_user_details(conn, email: str) -> RealDictCursor:
+def get_user_details(conn: connection, email: str) -> dict:
     """Gets the user details from the users table 
     in the RDS given an email address."""
     with conn.cursor() as cur:
@@ -41,7 +42,7 @@ def get_user_details(conn, email: str) -> RealDictCursor:
     return data
 
 
-def select_website_id(conn, website: str) -> dict:
+def select_website_id(conn: connection, website: str) -> dict[str:int]:
     """Returns the website id for the website chosen by the user."""
     with conn.cursor() as cur:
         query = """
@@ -54,7 +55,8 @@ def select_website_id(conn, website: str) -> dict:
     return data
 
 
-def insert_product_details(conn, product_name: str, url: str, website_id: int) -> int:
+def insert_product_details(conn: connection, product_name: str, 
+                           url: str, website_id: int) -> int:
     """Inserts the user inputted product data into the product table and returns its product_id."""
     with conn.cursor() as cur:
         query = """
@@ -72,7 +74,8 @@ def insert_product_details(conn, product_name: str, url: str, website_id: int) -
     return product_id
 
 
-def insert_subscription_details(conn, user_id: int, product_id: int, desired_price: float):
+def insert_subscription_details(conn: connection, user_id: int, 
+                                product_id: int, desired_price: float) -> None:
     """Inserts the subscription data into the subscription table."""
     with conn.cursor() as cur:
         query = """
@@ -92,7 +95,7 @@ def is_valid_email(email: str) -> bool:
     return False
 
 
-def add_new_user_to_database(conn, user_email: str, user_name: str) -> None:
+def add_new_user_to_database(conn: connection, user_email: str, user_name: str) -> None:
     """Adds a new user into the user table in the database."""
     try:
         with conn.cursor() as cur:
