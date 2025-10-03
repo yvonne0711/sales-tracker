@@ -45,28 +45,28 @@ def validate_steam(url: str, headers: dict[str:str]) -> bool:
     return False
 
 
-if __name__ == "__main__":
-    load_dotenv()
-
+def is_valid_url(conn: connection, site_id: int, url: str) -> bool:
+    """Returns True if the provided product url is valid for the website."""
     user_agent = {
         "User-Agent":
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, \
             like Gecko) Chrome/140.0.0.0 Safari/537.36"
     }
+    if check_response(url, user_agent):
+        website_name = get_website_name(conn, site_id)
+        if website_name == "steam":
+            if validate_steam(url, user_agent):
+                return True
+            else:
+                return False
+    else:
+        return False
+
+
+if __name__ == "__main__":
+    load_dotenv()
 
     db_conn = get_db_connection()
 
-    website_id = 1
-    product_name = "Test"
-    product_url = "https://www.next.co.uk/style/su079917/d49871"
-
-    if check_response(product_url, user_agent):
-        print("yes")
-        website_name = get_website_name(db_conn, 1)
-        if website_name == "steam":
-            if validate_steam(product_url, user_agent):
-                print("yes")
-            else:
-                print("no")
-    else:
-        print("no")
+    print(is_valid_url(db_conn, 1,
+          "https://store.steampowered.com/app/990080/Hogwarts_Legacy/"))
