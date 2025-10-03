@@ -1,3 +1,3 @@
-psycopg2-binary
-python-dotenv
-argon2-cffi
+argon2-cffi==25.1.0
+psycopg2-binary==2.9.10
+python-dotenv==1.1.1
