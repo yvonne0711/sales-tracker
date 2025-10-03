@@ -35,59 +35,77 @@ def get_products(conn: connection) -> list[dict]:
     products = query_database(conn, query)
     return products
 
-def is_discounted(url: str, discounted_class: str, headers: dict[str:str]) -> bool:
+
+def get_last_recorded_prices(conn: connection) -> list[dict]:
+    """Gets the last recorded price for all next products."""
+    query = """
+    SELECT p.product_id,
+        pu.change_at,
+        pu.new_price
+    FROM product AS p
+    JOIN price_update AS pu
+    USING (product_id)
+    JOIN website AS w
+    USING (website_id)
+    WHERE w.website_name = 'next'
+    AND pu.change_at = (
+        SELECT MAX(change_at)
+        FROM price_update
+        WHERE product_id = p.product_id
+            AND website_id = w.website_id);
+    """
+    prices = query_database(conn, query)
+    return prices
+
+
+def get_html_text(url: str, headers: dict[str:str]) -> tuple[int, str]:
+    """Gets the full text response of the html."""
+    res = req.get(url, headers=headers, timeout=5)
+    if res.status_code == 200:
+        return res.status_code, res.text
+    return res.status_code, res.reason
+
+
+def is_discounted(html: str, discounted_class: str) -> bool:
     """Checks if the product price_class is present on the webpage."""
-    res = req.get(url, headers=headers, timeout=5)
-    if res.status_code == 200:
-        soup = BeautifulSoup(res.text, "html.parser")
-        if soup.find(attrs={"data-testid": discounted_class}) is not None:
-            return True
-        return False
-    return res.status_code, res.reason
+    soup = BeautifulSoup(html[1], "html.parser")
+    if soup.find(attrs={"data-testid": discounted_class}) is not None:
+        return True
+    return False
 
 
-def scrape_price(url: str, cost_class: str, headers: dict[str:str]) -> str:
+def scrape_price(html: str, cost_class: str) -> str:
     """Returns the price of a product for the product URL and cost class."""
-    res = req.get(url, headers=headers, timeout=5)
-    if res.status_code == 200:
-        soup = BeautifulSoup(res.text, "html.parser")
-        price = soup.find(attrs={"class": cost_class}).text.strip()
+    soup = BeautifulSoup(html[1], "html.parser")
+    price = soup.find(attrs={"class": cost_class}).text.strip()
+    if price:
         return price
-    return res.status_code, res.reason
 
-def scrape_price_discount(url: str, cost_class: str, headers: dict[str:str]) -> str:
-    """Returns the price of a discounted product for the product URL and cost class."""
-    res = req.get(url, headers=headers, timeout=5)
-    if res.status_code == 200:
-        soup = BeautifulSoup(res.text, "html.parser")
-        price = soup.find(attrs={"data-testid": cost_class}).text.strip()
+
+def scrape_price_discount(html: str, cost_class: str) -> str:
+    """Returns the price of a product for the product URL and cost class."""
+    soup = BeautifulSoup(html[1], "html.parser")
+    price = soup.find(attrs={"data-testid": cost_class}).text.strip()
+    if price:
         return price
-    return res.status_code, res.reason
 
 def get_current_price(url: str, cost_class: str, discounted_class: str, headers: dict[str:str]) -> str:
     """Returns the current price of a product from its details."""
-    if is_discounted(url, discounted_class, headers):
-        return scrape_price_discount(url, discounted_class, headers)
-    return scrape_price(url, cost_class, headers)
+    html_text = get_html_text(url, headers)
+    if html_text[0] == 200:
+        if is_discounted(html_text, discounted_class):
+            return scrape_price_discount(html_text, discounted_class)
+        return scrape_price(html_text, cost_class)
+    return html_text
 
-def add_price_to_products(products: dict[str:str], cost_class: str, discounted_class: str, headers: dict[str:str]) -> dict[str:str]:
-    """Adds the current price to the product dict with the key price."""
-    for product in products:
-        product["price"] = get_current_price(product["product_url"],
-                                             cost_class,
-                                             discounted_class,
-                                             headers)
-    return products
 
-def scrape_title(url: str, title_class: str, headers: dict[str:str]) -> str:
-    """Returns the title of a product for the product URL."""
-    res = req.get(url, headers=headers, timeout=5)
-    if res.status_code == 200:
-        soup = BeautifulSoup(res.text, "html.parser")
-        title = soup.find(attrs={"class": title_class}).text.strip()
+def scrape_title(html: str, title_class: str) -> str:
+    """Returns the price of a product for the product URL and cost class."""
+    soup = BeautifulSoup(html[1], "html.parser")
+    title = soup.find(attrs={"class": title_class}).text.strip()
+    if title:
         return title
-    return res.status_code, res.reason
-
+    
 if __name__ == "__main__":
     load_dotenv()
 
@@ -98,9 +116,9 @@ if __name__ == "__main__":
     }
 
     # response = req.get(
-    #     "https://www.next.co.uk/style/su538791/aw0854")
+    #     "https://www.next.co.uk/style/st661976/f82232")
     # soup = BeautifulSoup(response.text, "html.parser")
-    # print(soup.find(attrs={"class": "pdp-css-1b3j8zg"}).text.strip())
+    # print(soup.find(attrs={"class": "pdp-css-ygohde"}).text.strip())
 
     next_cost_class = "pdp-css-ygohde"
     next_discounted_class = "product-now-price"
@@ -110,10 +128,6 @@ if __name__ == "__main__":
 
     next_products = get_products(db_conn)
 
-    next_products = add_price_to_products(next_products,
-                                          next_cost_class,
-                                          next_discounted_class,
-                                          user_agent)
     # og price: https://www.next.co.uk/style/st661976/f82232
     # sale price: https://www.next.co.uk/style/su538791/aw0854
 
