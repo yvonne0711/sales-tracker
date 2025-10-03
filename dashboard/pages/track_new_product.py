@@ -8,8 +8,8 @@ from dotenv import load_dotenv
 from functions_dashboard import (get_db_connection,
                                  select_website_id,
                                  insert_product_details,
-                                 insert_subscription_details)
-from validate_url import is_valid_url
+                                 insert_subscription_details)  # pylint: disable=import-error
+from validate_url import is_valid_url  # pylint: disable=import-error
 
 
 def main():
