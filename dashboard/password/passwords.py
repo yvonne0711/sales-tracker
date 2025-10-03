@@ -1,4 +1,4 @@
-"""Script to encrypt passwords and verify users"""
+"""Script to encrypt passwords and verify users."""
 from os import environ
 from argon2 import PasswordHasher
 import argon2
@@ -19,7 +19,7 @@ def get_db_connection() -> connection:
 
 
 def insert_user(conn: connection, user_name: str, user_email: str, password: str) -> None:
-    """This function hashes the password and adds user details to the database"""
+    """This function hashes the password and adds user details to the database."""
     ph = PasswordHasher()
     hashed = ph.hash(password)
     query = """insert into users (user_name,user_email, password_hash) values (%s,%s,%s)"""
@@ -29,7 +29,7 @@ def insert_user(conn: connection, user_name: str, user_email: str, password: str
 
 
 def verify_user(conn: connection, user_name: str, user_password: str) -> bool:
-    """Function to verify user"""
+    """Function to verify user."""
     ph = PasswordHasher()
     query = """select password_hash from users where user_name = %s"""
     with conn.cursor() as cur:
