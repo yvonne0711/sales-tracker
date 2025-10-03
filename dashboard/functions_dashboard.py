@@ -55,7 +55,7 @@ def select_website_id(conn: connection, website: str) -> dict[str:int]:
     return data
 
 
-def insert_product_details(conn: connection, product_name: str, 
+def insert_product_details(conn: connection, product_name: str,
                            url: str, website_id: int) -> int:
     """Inserts the user inputted product data into the product table and returns its product_id."""
     with conn.cursor() as cur:
@@ -74,7 +74,7 @@ def insert_product_details(conn: connection, product_name: str,
     return product_id
 
 
-def insert_subscription_details(conn: connection, user_id: int, 
+def insert_subscription_details(conn: connection, user_id: int,
                                 product_id: int, desired_price: float) -> None:
     """Inserts the subscription data into the subscription table."""
     with conn.cursor() as cur:
@@ -110,3 +110,24 @@ def add_new_user_to_database(conn: connection, user_email: str, user_name: str) 
     except Error as e:
         st.error(f"Error adding user to database: {e}")
         conn.rollback()
+
+
+def get_a_users_price_changes(conn: connection, user_id: int):
+    """Returns a given users price history on all their subscribed products."""
+    with conn.cursor() as cur:
+        query = """
+                SELECT
+                    product_name,
+                    new_price, 
+                    change_at
+                FROM price_update as pu
+                JOIN product as p
+                ON pu.product_id = p.product_id
+                JOIN subscription as s 
+                ON p.product_id = s.product_id 
+                WHERE s.user_id = %s
+                ORDER BY pu.change_at;
+                """
+        cur.execute(query, (user_id,))
+        result = cur.fetchall()
+        return result
