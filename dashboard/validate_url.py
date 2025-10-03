@@ -2,10 +2,6 @@
 
 import requests as req
 from bs4 import BeautifulSoup
-from dotenv import load_dotenv
-from psycopg2.extensions import connection
-
-from functions_dashboard import get_db_connection
 
 
 def check_response(url: str, headers: dict[str:str]) -> bool:
@@ -26,7 +22,10 @@ def validate_steam(url: str, headers: dict[str:str]) -> bool:
     res = req.get(url, timeout=5, headers=headers)
     if res.status_code == 200:
         soup = BeautifulSoup(res.text, "html.parser")
-        if soup.find(attrs={"class": discounted_class}) is not None or soup.find(attrs={"class": cost_class}):
+        if soup.find(
+            attrs={"class":
+                   discounted_class}) is not None or soup.find(
+                       attrs={"class": cost_class}):
             return True
         return False
     return False
@@ -43,7 +42,6 @@ def is_valid_url(selected_site: str, url: str) -> bool:
         if selected_site == "Steam":
             if validate_steam(url, user_agent):
                 return True
-            else:
-                return False
-    else:
+            return False
         return False
+    return False
