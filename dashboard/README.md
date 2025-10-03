@@ -1,6 +1,6 @@
-# Sales Tracker Dashboard
+# Souper Sales Dashboard
 
-This repository contains the files required to run the Soupy Sales dashboard.
+This repository contains the files required to run the Souper Sales dashboard.
 
 # Files
 
