@@ -22,7 +22,7 @@ def insert_user(conn: connection, user_name: str, user_email: str, password: str
     """This function hashes the password and adds user details to the database"""
     ph = PasswordHasher()
     hashed = ph.hash(password)
-    query = '''insert into users (user_name,user_email, password_hash) values (%s,%s,%s)'''
+    query = """insert into users (user_name,user_email, password_hash) values (%s,%s,%s)"""
     with conn.cursor() as cur:
         cur.execute(query, (user_name, user_email, hashed))
         conn.commit()
