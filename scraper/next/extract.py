@@ -1,4 +1,5 @@
 """Script that gets Next product details from the RDS and scrapes their prices from their respective URLs."""
+
 from os import environ
 import requests as req
 from bs4 import BeautifulSoup
@@ -16,10 +17,10 @@ def get_db_connection() -> connection:
                    database=environ["DB_NAME"],
                    cursor_factory=RealDictCursor)
 
-def query_database(conn: connection, sql: str) -> list[dict]:
+def query_database(conn: connection, query: str) -> list[dict]:
     """Returns the result of a query to the database."""
     with conn.cursor() as cursor:
-        cursor.execute(sql)
+        cursor.execute(query)
         result = cursor.fetchall()
     return result
 
@@ -66,7 +67,7 @@ def get_html_text(url: str, headers: dict[str:str]) -> tuple[int, str]:
     return res.status_code, res.reason
 
 
-def is_discounted(html: str, discounted_class: str) -> bool:
+def is_discounted(html: tuple[int, str], discounted_class: str) -> bool:
     """Checks if the product price_class is present on the webpage."""
     soup = BeautifulSoup(html[1], "html.parser")
     if soup.find(attrs={"data-testid": discounted_class}) is not None:
@@ -74,7 +75,7 @@ def is_discounted(html: str, discounted_class: str) -> bool:
     return False
 
 
-def scrape_price(html: str, cost_class: str) -> str:
+def scrape_price(html: tuple[int, str], cost_class: str) -> str:
     """Returns the price of a product for the product URL and cost class."""
     soup = BeautifulSoup(html[1], "html.parser")
     price = soup.find(attrs={"class": cost_class}).text.strip()
@@ -115,11 +116,6 @@ if __name__ == "__main__":
             like Gecko) Chrome/140.0.0.0 Safari/537.36"
     }
 
-    # response = req.get(
-    #     "https://www.next.co.uk/style/st661976/f82232")
-    # soup = BeautifulSoup(response.text, "html.parser")
-    # print(soup.find(attrs={"class": "pdp-css-ygohde"}).text.strip())
-
     next_cost_class = "pdp-css-ygohde"
     next_discounted_class = "product-now-price"
     next_title_class = "pdp-css-1b3j8zg"
@@ -127,8 +123,5 @@ if __name__ == "__main__":
     db_conn = get_db_connection()
 
     next_products = get_products(db_conn)
-
-    # og price: https://www.next.co.uk/style/st661976/f82232
-    # sale price: https://www.next.co.uk/style/su538791/aw0854
 
     db_conn.close()
