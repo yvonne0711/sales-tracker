@@ -31,7 +31,7 @@ def insert_user(conn: connection, user_name: str, user_email: str, password: str
 def verify_user(conn: connection, user_name: str, user_password: str) -> bool:
     """Function to verify user"""
     ph = PasswordHasher()
-    query = '''select password_hash from users where user_name = %s'''
+    query = """select password_hash from users where user_name = %s"""
     with conn.cursor() as cur:
         cur.execute(query, (user_name,))
         hashed = cur.fetchone()['password_hash']
