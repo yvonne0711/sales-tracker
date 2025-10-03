@@ -1,8 +1,8 @@
 # Sales Tracker Project
 
-Online websites have many different products and associated prices and discounts, but it can be difficult to regularly track when a desired item is on sale, nevermind keeping track of multiple products you might be interested in and at what desired price you would like to buy the product at. All too often, by the time you check, either the discount is gone or the product has sold out altogether!
+Online websites have many different products and associated prices and discounts, but it can be difficult to regularly track when a desired item is on sale, never mind keeping track of multiple products you might be interested in and at what desired price you would like to buy the product at. All too often, by the time you check, either the discount is gone or the product has sold out altogether!
 
-To solve this, we created an automated price tracker pipeline that checks every 3 minutes if an item you're subscribed to is offering the desired price or lower, and alerts the relevant emails the moment it reaches the price you'd like to buy it at.
+To solve this, we created an automated price tracker pipeline that checks every three minutes if an item you're subscribed to is offering the desired price or lower, and alerts the relevant emails the moment it reaches the price you'd like to buy it at.
 
 ## How the pipeline works:
 
@@ -14,7 +14,7 @@ To solve this, we created an automated price tracker pipeline that checks every 
    - Product Name
    - Desired Price
 
-2. Every few minutes, the scraper Lambdas checks the current price.
+2. Every three minutes, the scraper Lambdas checks the current price.
 
 3. Any change in price is recorded in the database, and if the price reaches the desired price or lower, users are immediately notified via email
 
