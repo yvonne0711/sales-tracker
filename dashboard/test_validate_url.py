@@ -51,7 +51,7 @@ def test_validate_steam_4(mock_res):
     assert result is True
 
 
-@patch("validate_url.validate_steam")
+@patch("validate_url.validate_steam_product_url")
 @patch("validate_url.check_response")
 def test_is_valid_url_1(mock_check, mock_validate):
     """Tests that the function returns True if all filters are True."""
