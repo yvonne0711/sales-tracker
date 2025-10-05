@@ -5,7 +5,7 @@ import streamlit as st
 from dotenv import load_dotenv
 
 # Loading in functions
-from functions_dashboard import (get_db_connection,
+from login_functions import (get_db_connection,
                                  select_website_id,
                                  insert_product_details,
                                  insert_subscription_details)  # pylint: disable=import-error
@@ -22,8 +22,8 @@ def main():
         st.stop()
 
     st.set_page_config(
-        page_title="Souper Sales", layout="wide")
-    st.header("Souper Sales: Track New Product")
+        page_title="Souper Saver", layout="wide")
+    st.header("Souper Saver: Track New Product")
 
     # Get user details from session state
     user = st.session_state.user

@@ -1,32 +1,29 @@
-"""Login/Sign up page for Souper Sales dashboard."""
+"""Login/Sign up page for Souper Saver dashboard."""
 
-from os import environ as ENV
-import re
 import time
 
 import streamlit as st
-import psycopg2
-from psycopg2 import Error
-from psycopg2.extras import RealDictCursor
-
 from dotenv import load_dotenv
 
-from functions_dashboard import (get_db_connection,
+from login_functions import (get_db_connection,
                                  get_user_details,
-                                 is_valid_email,
-                                 add_new_user_to_database)
+                                 is_valid_email)
 
+from password.passwords import insert_user, verify_user
 
 def sign_up_form() -> None:
     """Create a sign up form."""
-    st.set_page_config(page_title="Souper Sales Login",
+    st.set_page_config(page_title="Souper Saver Login",
                        layout="centered", initial_sidebar_state="collapsed")
 
     with st.form("Sign up", clear_on_submit=True):
-        st.subheader("Please create an account to get access to Souper Sales!")
+        st.subheader("Please create an account to get access to Souper Saver!")
         username = st.text_input("Please create a username", key="username")
         new_email_input = st.text_input(
             "Please enter your email address", key="user_input_email")
+        new_password_input = st.text_input("Please create a password",
+                                           key="password", type="password")
+
         signup_button = st.form_submit_button("Sign Up")
 
 
@@ -37,6 +34,8 @@ def sign_up_form() -> None:
                 st.error("Please enter an email address")
             if not is_valid_email(new_email_input):
                 st.error("Please enter a valid email address")
+            if not new_password_input:
+                st.error("Please enter a password")
 
             else:
                 conn = get_db_connection()
@@ -49,50 +48,58 @@ def sign_up_form() -> None:
                             "A user with this email already exists. Please log in instead.")
 
                     # Add new user
-                    if add_new_user_to_database(conn, new_email_input, username):
-                        st.success("Successfully signed up! You can now log in.")
+                    if insert_user(conn, username, new_email_input, new_password_input):
+                        st.success("Successfully signed up! Redirecting to login page...")
                         conn.close()
                         # After successful signup, show login form again
+                        time.sleep(2)
                         st.session_state.show_signup = False
                         st.rerun()
 
 
 def login_page() -> None:
     """Login page format."""
-    st.header("Souper Sales Login")
+    st.header("Souper Saver Login")
     st.divider()
 
-    st.set_page_config(page_title="Souper Sales Login",
+    st.set_page_config(page_title="Souper Saver Login",
                        layout="centered", initial_sidebar_state="collapsed")
 
     with st.form("Login"):
         email_input = st.text_input(
             "Please enter your email address", key="user_email")
+        password_input = st.text_input(
+            "Please enter your password", key="user_password", type="password"
+        )
         login_button = st.form_submit_button("Log In")
 
         if login_button:
             if not email_input:
                 st.error("Please enter an email address")
 
+            if not password_input:
+                st.error("Please enter a password")
+
             if not is_valid_email(email_input):
                 st.error("Please enter a valid email address")
-            
+
             else:
                 conn = get_db_connection()
-                user = get_user_details(conn, email_input)
-                conn.close()
+                if verify_user(conn, email_input, password_input):
+                    user = get_user_details(conn, email_input)
+                    conn.close()
 
-                if user:
-                    st.success(f"Welcome back, {user['user_name']}!")
-                    # Store user info in session state
-                    st.session_state.user = user
-                    st.session_state.logged_in = True
-                    st.rerun()
-                st.error("User not found.")
-                st.warning("Redirecting you to the user sign up page...")
-                time.sleep(1)
-                st.session_state.show_signup = True
-                st.rerun()
+                    if user:
+                        st.success(f"Welcome back, {user['user_name']}!")
+                        # Store user info in session state
+                        st.session_state.user = user
+                        st.session_state.logged_in = True
+                        st.rerun()
+                    st.error("Incorrect email or password. Please try again or sign up.")
+
+                else:
+                    st.error("Incorrect password")
+
 
 
 def main() -> None:

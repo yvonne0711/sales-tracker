@@ -1,12 +1,11 @@
-"""Tests for the Souper Sales dashboard."""
+"""Tests for the Souper Saver dashboard functions."""
 
 from unittest.mock import patch, MagicMock
 
 import pytest
 from psycopg2 import Error
 from psycopg2.extras import RealDictCursor
-from functions_dashboard import (get_db_connection,
-                                get_user_details,
+from login_functions import (get_db_connection,
                                 select_website_id,
                                 insert_product_details,
                                 is_valid_email)
@@ -26,13 +25,13 @@ def mock_env_file():
 class TestsDatabaseFunctions:
     """Class for the database connection tests."""
     # Create patch for connection and .env file
-    @patch("login.psycopg2.connect")
+    @patch("login_functions.psycopg2.connect")
     def test_get_db_connection_is_successful(self, mock_connect, mock_env_file):
         """Tests if database connection is successful."""
         mock_conn = MagicMock()
         mock_connect.return_value = mock_conn
 
-        with patch.dict("login.ENV", mock_env_file):
+        with patch.dict("login_functions.ENV", mock_env_file):
             result = get_db_connection()
 
         mock_connect.assert_called_once_with(
@@ -46,62 +45,15 @@ class TestsDatabaseFunctions:
 
         assert result == mock_conn
 
-    @patch("login.psycopg2.connect")
+    @patch("login_functions.psycopg2.connect")
     def test_get_db_connection_when_fails(self, mock_connect, mock_env_file):
         """Tests the connection returns none if unsuccessful."""
         mock_connect.side_effect = Error("Connection Failed")
 
-        with patch.dict("login.ENV", mock_env_file):
+        with patch.dict("login_functions.ENV", mock_env_file):
             result = get_db_connection()
 
         assert result is None
-
-
-class TestUserDetails:
-    """Class for the get user details tests."""
-
-    def test_get_user_details_gives_expected_output(self):
-        """Tests if the get user details function is successful."""
-        mock_conn = MagicMock()
-
-        mock_cursor = mock_conn.cursor.return_value.__enter__.return_value
-
-        expected_data = {"user_id": 1, "user_email": "test_user@sigmalabs.co.uk"}
-        mock_cursor.fetchone.return_value = expected_data
-
-        result = get_user_details(mock_conn, "test_user@sigmalabs.co.uk")
-
-        mock_cursor.execute.assert_called_once_with(
-            """
-                SELECT *
-                FROM users
-                WHERE user_email = (%s);
-                """,
-            ("test_user@sigmalabs.co.uk",)
-        )
-        assert result == expected_data
-
-
-    def test_get_user_details_failed_output(self):
-        """Tests if the get user details returns None for no user found."""
-        mock_conn = MagicMock()
-
-        mock_cursor = mock_conn.cursor.return_value.__enter__.return_value
-
-        mock_cursor.fetchone.return_value = None
-
-        result = get_user_details(mock_conn, "test_user@sigmalabs.co.uk")
-
-        mock_cursor.execute.assert_called_once_with(
-            """
-                SELECT *
-                FROM users
-                WHERE user_email = (%s);
-                """,
-            ("test_user@sigmalabs.co.uk",)
-        )
-        assert result is None
-
 
 
 class TestWebsiteFunctions:

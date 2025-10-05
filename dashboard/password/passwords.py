@@ -1,11 +1,9 @@
 """Script to encrypt passwords and verify users."""
-from os import environ
+
 from argon2 import PasswordHasher
 import argon2
-from psycopg2 import connect
 from psycopg2.extensions import connection
-from psycopg2.extras import RealDictCursor
-from dotenv import load_dotenv
+
 
 
 def insert_user(conn: connection, user_name: str, user_email: str, password: str) -> None:
@@ -23,18 +21,17 @@ def insert_user(conn: connection, user_name: str, user_email: str, password: str
         conn.commit()
 
 
-def verify_user(conn: connection, user_name: str, user_password: str) -> bool:
+def verify_user(conn: connection, user_email: str, user_password: str) -> bool:
     """Function to verify user."""
     password_hasher = PasswordHasher()
     query = """
             SELECT password_hash 
             FROM users 
-            WHERE user_name = %s"""
+            WHERE user_email = %s"""
     with conn.cursor() as cur:
-        cur.execute(query, (user_name,))
+        cur.execute(query, (user_email,))
         hashed = cur.fetchone()["password_hash"]
         try:
             return password_hasher.verify(hashed, user_password)
         except argon2.exceptions.VerifyMismatchError:
             return False
-
