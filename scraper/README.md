@@ -9,7 +9,7 @@ Each e-commerce site has its own directory containing all the files required to 
   Contains functions that convert data to the correct data types and structure it into the required format.
 - **`load.py`**  
   Handles loading price updates into the database and includes the main handler function for running the script as an AWS Lambda.
-- **`Dockerfile`**  
+- **`dockerfile`**  
   Defines the container configuration for the ETL script.
 - **`test_[file_name].py`**  
   Includes unit tests for the corresponding `[file_name]` module.
