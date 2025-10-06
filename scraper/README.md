@@ -42,7 +42,7 @@ pip3 install -r requirements.txt
 python3 load.py
 ```
 
-## Dockerising the Dashboard
+## Dockerising the ETL
 The purpose of the dockerfile is to copy all of the relevant files and containerise them.
 
 ### Building the Docker Image
