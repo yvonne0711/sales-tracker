@@ -4,6 +4,7 @@ Script that transforms the product details into the appropriate datatypes.
 
 from os import environ
 from datetime import datetime
+
 from psycopg2 import connect
 from psycopg2.extensions import connection
 from psycopg2.extras import RealDictCursor
