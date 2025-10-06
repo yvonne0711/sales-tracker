@@ -94,19 +94,3 @@ def is_valid_email(email: str) -> bool:
         return True
     return False
 
-
-def add_new_user_to_database(conn: connection, user_email: str, user_name: str) -> None:
-    """Adds a new user into the user table in the database."""
-    try:
-        with conn.cursor() as cur:
-            query = """
-                    INSERT INTO users
-                        (user_email, user_name)
-                    VALUES
-                        (%s, %s);
-                    """
-            cur.execute(query, (str(user_email), str(user_name)))
-            conn.commit()
-    except Error as e:
-        st.error(f"Error adding user to database: {e}")
-        conn.rollback()

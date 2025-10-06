@@ -1,6 +1,6 @@
-# Souper Sales Dashboard
+# Souper Saver Dashboard
 
-This repository contains the files required to run the Souper Sales dashboard.
+This repository contains the files required to run the Souper Saver dashboard.
 
 # Files
 
