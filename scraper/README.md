@@ -4,15 +4,15 @@ This directory contains the ETL scripts for the e-commerce sites.
 ## Description
 Each e-commerce site has its own directory containing all the files required to scrape that site.
 - **`extract.py`**  
-  Defines functions for retrieving currently tracked products from the database and scraping their current prices.
+Defines functions for retrieving currently tracked products from the database and scraping their current prices.
 - **`transform.py`**  
-  Contains functions that convert data to the correct data types and structure it into the required format.
+Contains functions that convert data to the correct data types and structure it into the required format.
 - **`load.py`**  
-  Handles loading price updates into the database and includes the main handler function for running the script as an AWS Lambda.
+Handles loading price updates into the database and includes the main handler function for running the script as an AWS Lambda.
 - **`dockerfile`**  
-  Defines the container configuration for the ETL script.
+Defines the container configuration for the ETL script.
 - **`test_[file_name].py`**  
-  Includes unit tests for the corresponding `[file_name]` module.
+Includes unit tests for the corresponding `[file_name]` module.
 
 ## Getting Started
 
