@@ -6,10 +6,11 @@ import streamlit as st
 from dotenv import load_dotenv
 
 from login_functions import (get_db_connection,
-                                 get_user_details,
-                                 is_valid_email)
+                             get_user_details,
+                             is_valid_email)
 
 from password.passwords import insert_user, verify_user
+
 
 def sign_up_form() -> None:
     """Create a sign up form."""
@@ -26,35 +27,34 @@ def sign_up_form() -> None:
 
         signup_button = st.form_submit_button("Sign Up")
 
-
         if signup_button:
             if not username:
                 st.error("Please enter a username")
-            if not new_email_input:
+            elif not new_email_input:
                 st.error("Please enter an email address")
-            if not is_valid_email(new_email_input):
+            elif not is_valid_email(new_email_input):
                 st.error("Please enter a valid email address")
-            if not new_password_input:
+            elif not new_password_input:
                 st.error("Please enter a password")
 
             else:
                 conn = get_db_connection()
-                if conn:
-                    # Check if user already exists
-                    existing_user = get_user_details(conn, new_email_input)
-                    if existing_user:
-                        st.write(existing_user)
-                        st.error(
-                            "A user with this email already exists. Please log in instead.")
+                # Check if user already exists
+                existing_user = get_user_details(conn, new_email_input)
+                if existing_user:
+                    st.write(existing_user)
+                    st.error(
+                        "A user with this email already exists. Please log in instead.")
 
-                    # Add new user
-                    if insert_user(conn, username, new_email_input, new_password_input):
-                        st.success("Successfully signed up! Redirecting to login page...")
-                        conn.close()
-                        # After successful signup, show login form again
-                        time.sleep(2)
-                        st.session_state.show_signup = False
-                        st.rerun()
+                # Add new user
+                if insert_user(conn, username, new_email_input, new_password_input):
+                    st.success(
+                        "Successfully signed up! Redirecting to login page...")
+                    conn.close()
+                    # After successful signup, show login form again
+                    time.sleep(2)
+                    st.session_state.show_signup = False
+                    st.rerun()
 
 
 def login_page() -> None:
@@ -95,11 +95,11 @@ def login_page() -> None:
                         st.session_state.user = user
                         st.session_state.logged_in = True
                         st.rerun()
-                    st.error("Incorrect email or password. Please try again or sign up.")
+                    st.error(
+                        "Incorrect email or password. Please try again or sign up.")
 
                 else:
                     st.error("Incorrect password")
-
 
 
 def main() -> None:
@@ -112,7 +112,6 @@ def main() -> None:
     if 'user' not in st.session_state:
         st.session_state.user = None
 
-
     # Check if user is already logged in
     if st.session_state.logged_in:
         pages = [
@@ -120,7 +119,6 @@ def main() -> None:
             st.Page("pages/track_new_product.py",
                     title="Track New Product")
         ]
-
 
         # Add user info and logout to sidebar
         with st.sidebar:
