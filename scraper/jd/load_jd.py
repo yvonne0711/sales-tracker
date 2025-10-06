@@ -69,4 +69,4 @@ def handler(event=None, context=None) -> dict[str:str]:
 
 if __name__ == "__main__":
     load_dotenv()
-    print(handler())
+    handler()
