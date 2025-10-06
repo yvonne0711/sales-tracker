@@ -29,7 +29,6 @@ def sign_up_form() -> None:
             "Please enter your email address", key="user_input_email")
         signup_button = st.form_submit_button("Sign Up")
 
-
         if signup_button:
             if not username:
                 st.error("Please enter a username")
@@ -50,7 +49,8 @@ def sign_up_form() -> None:
 
                     # Add new user
                     if add_new_user_to_database(conn, new_email_input, username):
-                        st.success("Successfully signed up! You can now log in.")
+                        st.success(
+                            "Successfully signed up! You can now log in.")
                         conn.close()
                         # After successful signup, show login form again
                         st.session_state.show_signup = False
@@ -76,7 +76,7 @@ def login_page() -> None:
 
             if not is_valid_email(email_input):
                 st.error("Please enter a valid email address")
-            
+
             else:
                 conn = get_db_connection()
                 user = get_user_details(conn, email_input)
@@ -105,15 +105,14 @@ def main() -> None:
     if 'user' not in st.session_state:
         st.session_state.user = None
 
-
     # Check if user is already logged in
     if st.session_state.logged_in:
         pages = [
             st.Page("pages/home_page.py", title="Home Page"),
             st.Page("pages/track_new_product.py",
-                    title="Track New Product")
+                    title="Track New Product"),
+            st.Page("pages/price_history_page.py", title="Price History")
         ]
-
 
         # Add user info and logout to sidebar
         with st.sidebar:

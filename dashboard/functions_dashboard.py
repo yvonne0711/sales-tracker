@@ -117,9 +117,10 @@ def get_a_users_price_changes(conn: connection, user_id: int):
     with conn.cursor() as cur:
         query = """
                 SELECT
-                    product_name,
-                    new_price, 
-                    change_at
+                    p.product_name,
+                    pu.new_price, 
+                    pu.change_at,
+                    s.desired_price
                 FROM price_update as pu
                 JOIN product as p
                 ON pu.product_id = p.product_id
