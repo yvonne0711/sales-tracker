@@ -34,7 +34,7 @@ DB_NAME=database_name
 ### Install Dependencies
 First, you will need to install the required libraries. You can install them using the following command:
 ```bash
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 ### Running Locally
