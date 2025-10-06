@@ -25,5 +25,4 @@ module "phase_two" {
   DB_PASSWORD           = var.DB_PASSWORD
   DB_PORT               = var.DB_PORT
   DB_HOST               = var.DB_HOST
-  SL_PORT               = var.SL_PORT
 }

@@ -62,6 +62,24 @@ resource "aws_ecr_repository" "c19-sales-tracker-ecr-steam" {
   }
 }
 
+resource "aws_ecr_repository" "c19-sales-tracker-ecr-next" {
+  name                 = "c19-sales-tracker-ecr-next"
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+
+resource "aws_ecr_repository" "c19-sales-tracker-ecr-jd" {
+  name                 = "c19-sales-tracker-ecr-jd"
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+
 resource "aws_ecr_repository" "c19-sales-tracker-subscription" {
   name                 = "c19-sales-tracker-ecr-subscription"
   image_tag_mutability = "MUTABLE"
@@ -73,15 +91,6 @@ resource "aws_ecr_repository" "c19-sales-tracker-subscription" {
 
 resource "aws_ecr_repository" "c19-sales-tracker-email" {
   name                 = "c19-sales-tracker-ecr-email"
-  image_tag_mutability = "MUTABLE"
-
-  image_scanning_configuration {
-    scan_on_push = true
-  }
-}
-
-resource "aws_ecr_repository" "c19-sales-tracker-ecr-next" {
-  name                 = "c19-sales-tracker-ecr-next"
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
