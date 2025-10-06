@@ -19,5 +19,6 @@ RUN pip install -r password/requirements.txt
 
 COPY login.py .
 COPY login_functions.py .
+COPY validate_url.py .
 
 CMD ["streamlit", "run", "login.py", "--server.port=8501", "--server.address=0.0.0.0"]
