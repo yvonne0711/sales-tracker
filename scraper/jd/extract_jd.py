@@ -53,7 +53,3 @@ if __name__ == "__main__":
 
     jd_cost_class = "pri"
     jd_discounted_class = "now"
-
-    print(get_current_price(
-        'https://www.jdsports.co.uk/product/grey-nike-aries-hoodie/19582999/',
-          jd_cost_class, jd_discounted_class, user_agent))
