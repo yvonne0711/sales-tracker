@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 from psycopg2.extensions import connection
 
 from transform_jd import (get_db_connection, get_products,
-                        format_products, get_last_recorded_prices)
+                          format_products, get_last_recorded_prices)
 
 
 def update_price(conn: connection, product: dict) -> None:
