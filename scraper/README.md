@@ -39,7 +39,7 @@ pip3 install -r requirements.txt
 
 ### Running Locally
 ```bash
-python load.py
+python3 load.py
 ```
 
 ## Dockerising the Dashboard
