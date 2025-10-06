@@ -52,7 +52,7 @@ def test_get_current_price_false(mock_html):
     jd_name_class = 'name'
     result = '£59.99'
 
-    assert get_current_price("fake_http", jd_cost_class, jd_discounted_class, jd_name_class, {
+    assert get_current_price("fake_http", jd_cost_class, jd_discounted_class, {
                              "User-Agent": "test"}) == result
 
 
@@ -66,5 +66,5 @@ def test_get_current_price(mock_html):
     jd_name_class = 'name'
     result = '£39.99'
 
-    assert get_current_price("fake_http", jd_cost_class, jd_discounted_class, jd_name_class, headers={
+    assert get_current_price("fake_http", jd_cost_class, jd_discounted_class, headers={
                              "User-Agent": "test"}) == result
