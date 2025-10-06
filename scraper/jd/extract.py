@@ -16,15 +16,6 @@ def get_html_text(url: str, headers: dict[str:str]) -> tuple[int, str]:
     return res.status_code, res.reason
 
 
-def get_name(html: tuple, name_class: str, headers: dict[str:str]) -> str:
-    """Checks if the product itemprop class is present on the webpage to get the name."""
-    soup = BeautifulSoup(html[1], "html.parser")
-    if soup.find(attrs={"itemprop": name_class}) is not None:
-        name = soup.find(attrs={"itemprop": name_class}).text.strip()
-        return name
-    return html
-
-
 def is_discounted(html: str, discounted_class: str) -> bool:
     """Checks if the product price_class is present on the webpage."""
     soup = BeautifulSoup(html[1], "html.parser")
@@ -61,7 +52,6 @@ if __name__ == "__main__":
 
     jd_cost_class = "pri"
     jd_discounted_class = "now"
-    jd_name_class = 'name'
 
     print(get_current_price(
         'https://www.jdsports.co.uk/product/grey-nike-aries-hoodie/19582999/', jd_cost_class, jd_discounted_class, user_agent))
