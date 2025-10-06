@@ -2,9 +2,9 @@
 
 from unittest.mock import patch
 
-from extract import (scrape_price,
-                     is_discounted,
-                     get_current_price)
+from extract_jd import (scrape_price,
+                        is_discounted,
+                        get_current_price)
 
 
 def test_scrape_price():
@@ -39,7 +39,7 @@ def test_is_discounted_false():
     assert is_discounted(html, jd_discounted_class) == False
 
 
-@patch("extract.get_html_text")
+@patch("extract_jd.get_html_text")
 def test_get_current_price_false(mock_html):
     """
     Tests that the functions work together to get the price of the product 
@@ -55,7 +55,7 @@ def test_get_current_price_false(mock_html):
                              "User-Agent": "test"}) == result
 
 
-@patch("extract.get_html_text")
+@patch("extract_jd.get_html_text")
 def test_get_current_price(mock_html):
     """Tests that the functions work together to get the price of the product if discount is true."""
     mock_html.return_value = (200,
