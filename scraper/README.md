@@ -20,13 +20,49 @@ Each e-commerce site has its own directory containing all the files required to 
 Create a `.env` file with the following variables:
 
 ```env
-DB_NAME=
-DB_USERNAME=
-DB_PASSWORD=
-DB_PORT=
-DB_HOST=
+DB_USER=username
+DB_PASSWORD=password
+DB_HOST=host
+DB_PORT=port
+DB_NAME=database_name
 ```
 
 ### Requirements
+- Access to a PostgreSQL [database](../database/README.md).
+- Docker daemon running.
 
-### Running the Setup
+### Install Dependencies
+First, you will need to install the required libraries. You can install them using the following command:
+```bash
+pip install -r requirements.txt
+```
+
+### Running Locally
+```bash
+python load.py
+```
+
+## Dockerising the Dashboard
+The purpose of the dockerfile is to copy all of the relevant files and containerise them.
+
+### Building the Docker Image
+To build the Docker image, use the following command:
+```bash
+docker build -t [APP_NAME] . --platform "Linux/amd64" --provenance false                                        
+```
+
+### Tagging the Image
+To tag the Docker image for pushing to your repository, use the following command:
+```bash
+docker tag [APP_NAME]:latest [ACCOUNT_ID].dkr.ecr.[REGION].amazonaws.com/[ECR_REPOSITORY]:latest
+```
+
+
+### Running the Docker Container
+To push the Docker container, use the following command:
+```bash
+docker push [ACCOUNT_ID].dkr.ecr.[REGION].amazonaws.com/[ECR_REPOSITORY]:latest
+```
+
+#### Note:
+Replace code in `[]` with the relevant information.
