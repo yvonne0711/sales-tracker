@@ -79,3 +79,12 @@ resource "aws_ecr_repository" "c19-sales-tracker-email" {
     scan_on_push = true
   }
 }
+
+resource "aws_ecr_repository" "c19-sales-tracker-ecr-next" {
+  name                 = "c19-sales-tracker-ecr-next"
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
