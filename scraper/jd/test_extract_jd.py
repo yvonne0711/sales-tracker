@@ -12,7 +12,7 @@ def test_scrape_price():
     jd_cost_class = "pri"
     html = (200,
             "<div class='pri' data-price-final='5999'>£59.99</div>")
-    assert scrape_price(html, jd_cost_class) == '£59.99'
+    assert scrape_price(html, jd_cost_class) == "£59.99"
 
 
 def test_scrape_discounted_price():
@@ -20,7 +20,7 @@ def test_scrape_discounted_price():
     jd_discounted_class = "now"
     html = (200,
             "<div class='now'>£39.99</div>")
-    assert scrape_price(html, jd_discounted_class) == '£39.99'
+    assert scrape_price(html, jd_discounted_class) == "£39.99"
 
 
 def test_is_discounted_true():
@@ -49,7 +49,7 @@ def test_get_current_price_false(mock_html):
                               "<div class='pri' data-price-final='5999'>£59.99</div>")
     jd_cost_class = "pri"
     jd_discounted_class = "now"
-    result = '£59.99'
+    result = "£59.99"
 
     assert get_current_price("fake_http", jd_cost_class, jd_discounted_class, {
                              "User-Agent": "test"}) == result
@@ -62,7 +62,7 @@ def test_get_current_price(mock_html):
                               "<div class='now'>£39.99</div>")
     jd_cost_class = "pri"
     jd_discounted_class = "now"
-    result = '£39.99'
+    result = "£39.99"
 
     assert get_current_price("fake_http", jd_cost_class, jd_discounted_class, headers={
                              "User-Agent": "test"}) == result
