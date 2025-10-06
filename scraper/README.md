@@ -1,5 +1,5 @@
 # Scraper
-This directory contains the ETL script for the E-commerce sites.
+This directory contains the ETL scripts for the e-commerce sites.
 
 ## Description
 Each e-commerce site has its own directory containing all the files required to scrape that site.
