@@ -1,9 +1,9 @@
 """Script to encrypt passwords and verify users."""
 
 from argon2 import PasswordHasher
+import psycopg2
 from argon2.exceptions import VerifyMismatchError
 from psycopg2.extensions import connection
-
 
 
 def insert_user(conn: connection, user_name: str, user_email: str, password: str) -> None:
@@ -16,9 +16,12 @@ def insert_user(conn: connection, user_name: str, user_email: str, password: str
             VALUES 
                 (%s,%s,%s)
             """
-    with conn.cursor() as cur:
-        cur.execute(query, (user_name, user_email, hashed))
-        conn.commit()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(query, (user_name, user_email, hashed))
+            conn.commit()
+    except psycopg2.errors.UniqueViolation:
+        return 'Emails already exists try another one'
 
 
 def verify_user(conn: connection, user_email: str, user_password: str) -> bool:
