@@ -10,7 +10,6 @@ from bs4 import BeautifulSoup
 from psycopg2 import connect
 from psycopg2.extensions import connection
 from psycopg2.extras import RealDictCursor
-from dotenv import load_dotenv
 
 
 def get_db_connection() -> connection:
@@ -98,22 +97,3 @@ def get_current_price(url: str, cost_class: str, discounted_class: str, headers:
             return scrape_price(html_text, discounted_class)
         return scrape_price(html_text, cost_class)
     return html_text
-
-
-if __name__ == "__main__":
-    load_dotenv()
-
-    user_agent = {
-        "User-Agent":
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, \
-            like Gecko) Chrome/140.0.0.0 Safari/537.36"
-    }
-
-    steam_cost_class = "game_purchase_price price"
-    steam_discounted_class = "discount_final_price"
-
-    db_conn = get_db_connection()
-
-    steam_products = get_products(db_conn)
-
-    db_conn.close()
