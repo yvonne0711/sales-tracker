@@ -68,7 +68,7 @@ def get_last_recorded_prices(conn: connection) -> list[dict]:
 
 def convert_string_price_to_float(price: str) -> float:
     """Converts the price from a string to a float and returns it."""
-    if '£' in price:
+    if "£" in price:
         currency_symbol_index = price.index('£')
         float_price = float(price[currency_symbol_index+1:])
         return float_price
