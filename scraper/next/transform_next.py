@@ -6,7 +6,7 @@ from datetime import datetime
 
 from dotenv import load_dotenv
 
-from extract import (get_db_connection,
+from scraper.next.extract_next import (get_db_connection,
                      get_products,
                      get_current_price,
                      get_last_recorded_prices)
