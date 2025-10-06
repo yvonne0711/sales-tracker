@@ -10,7 +10,6 @@ from bs4 import BeautifulSoup
 from psycopg2 import connect
 from psycopg2.extensions import connection
 from psycopg2.extras import RealDictCursor
-from dotenv import load_dotenv
 
 
 def get_db_connection() -> connection:
