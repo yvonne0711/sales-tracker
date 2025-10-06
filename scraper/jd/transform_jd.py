@@ -22,10 +22,10 @@ def get_db_connection() -> connection:
                    cursor_factory=RealDictCursor)
 
 
-def query_database(conn: connection, sql: str) -> list[dict]:
+def query_database(conn: connection, sql_query: str) -> list[dict]:
     """Returns the result of a query to the database."""
     with conn.cursor() as cursor:
-        cursor.execute(sql)
+        cursor.execute(sql_query)
         result = cursor.fetchall()
     return result
 
