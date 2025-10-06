@@ -49,7 +49,6 @@ def test_get_current_price_false(mock_html):
                               "<div class='pri' data-price-final='5999'>£59.99</div>")
     jd_cost_class = "pri"
     jd_discounted_class = "now"
-    jd_name_class = 'name'
     result = '£59.99'
 
     assert get_current_price("fake_http", jd_cost_class, jd_discounted_class, {

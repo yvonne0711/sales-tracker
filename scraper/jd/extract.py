@@ -32,7 +32,8 @@ def scrape_price(html: str, cost_class: str) -> str:
         return price
 
 
-def get_current_price(url: str, cost_class: str, discounted_class: str, headers: dict[str:str]) -> tuple:
+def get_current_price(url: str, cost_class: str, discounted_class: str,
+                      headers: dict[str:str]) -> tuple:
     """Returns the current price of a product from its details."""
     html_text = get_html_text(url, headers)
     if html_text[0] == 200:
@@ -54,4 +55,5 @@ if __name__ == "__main__":
     jd_discounted_class = "now"
 
     print(get_current_price(
-        'https://www.jdsports.co.uk/product/grey-nike-aries-hoodie/19582999/', jd_cost_class, jd_discounted_class, user_agent))
+        'https://www.jdsports.co.uk/product/grey-nike-aries-hoodie/19582999/',
+          jd_cost_class, jd_discounted_class, user_agent))
