@@ -60,7 +60,6 @@ def handler(event=None, context=None) -> dict[str:str]:
                                   user_agent,
                                   last_recorded_prices)
     updated_prices = compare_prices(db_conn, jd_products)
-    print(updated_prices)
     db_conn.close()
 
     return {
