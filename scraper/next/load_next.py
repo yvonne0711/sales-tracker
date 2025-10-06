@@ -6,10 +6,10 @@ from dotenv import load_dotenv
 
 from psycopg2.extensions import connection
 
-from extract import (get_db_connection,
+from extract_next import (get_db_connection,
                      get_products,
                      get_last_recorded_prices)
-from transform import format_products
+from transform_next import format_products
 
 
 def update_price(conn: connection, product: dict) -> None:

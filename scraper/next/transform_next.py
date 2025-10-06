@@ -6,14 +6,15 @@ from datetime import datetime
 
 from dotenv import load_dotenv
 
-from extract import (get_db_connection,
+from extract_next import (get_db_connection,
                      get_products,
                      get_current_price,
                      get_last_recorded_prices)
 
 
 def clean_price(price: str) -> float:
-    """Cleans the price and converts the price from a string to a float and returns it e.g. "£13.50" or "Now £13.50"."""
+    """Cleans the price and converts the price from a string to a float 
+    and returns it e.g. "£13.50" or "Now £13.50"."""
     cleaned_price = price.replace("Now", "").replace("£", "").strip()
     float_price = float(cleaned_price)
     return float_price
@@ -80,4 +81,3 @@ if __name__ == "__main__":
                                      last_recorded_prices)
 
     db_conn.close()
-
