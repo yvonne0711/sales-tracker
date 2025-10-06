@@ -42,12 +42,13 @@ def sign_up_form() -> None:
                 # Check if user already exists
                 existing_user = get_user_details(conn, new_email_input)
                 if existing_user:
-                    st.write(existing_user)
                     st.error(
                         "A user with this email already exists. Please log in instead.")
 
                 # Add new user
-                if insert_user(conn, username, new_email_input, new_password_input):
+                else:
+                    insert_user(conn, username, new_email_input,
+                                new_password_input)
                     st.success(
                         "Successfully signed up! Redirecting to login page...")
                     conn.close()
