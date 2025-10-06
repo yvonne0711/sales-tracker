@@ -78,11 +78,8 @@ def login_page() -> None:
             if not email_input:
                 st.error("Please enter an email address")
 
-            if not password_input:
+            elif not password_input:
                 st.error("Please enter a password")
-
-            if not is_valid_email(email_input):
-                st.error("Please enter a valid email address")
 
             else:
                 conn = get_db_connection()
@@ -100,7 +97,8 @@ def login_page() -> None:
                         "Incorrect email or password. Please try again or sign up.")
 
                 else:
-                    st.error("Incorrect password")
+                    st.error(
+                        "Incorrect email or password. Please try again or sign up.")
 
 
 def main() -> None:
