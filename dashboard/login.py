@@ -118,7 +118,9 @@ def main() -> None:
         pages = [
             st.Page("pages/home_page.py", title="Home Page"),
             st.Page("pages/track_new_product.py",
-                    title="Track New Product")
+                    title="Track New Product"),
+            st.Page("pages/subscription.py",
+                    title="Subscribed Products")
         ]
 
         # Add user info and logout to sidebar
