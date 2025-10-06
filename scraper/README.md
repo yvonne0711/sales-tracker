@@ -48,7 +48,7 @@ The purpose of the dockerfile is to copy all of the relevant files and container
 ### Building the Docker Image
 To build the Docker image, use the following command:
 ```bash
-docker build -t [APP_NAME] . --platform "Linux/amd64" --provenance false                                        
+docker buildx build . -t [APP_NAME]:latest --platform "Linux/amd64" --provenance=false                                        
 ```
 
 ### Tagging the Image
