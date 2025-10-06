@@ -120,12 +120,15 @@ def get_a_users_price_changes(conn: connection, user_id: int):
                     p.product_name,
                     pu.new_price, 
                     pu.change_at,
-                    s.desired_price
+                    s.desired_price,
+                    w.website_name
                 FROM price_update as pu
                 JOIN product as p
                 ON pu.product_id = p.product_id
                 JOIN subscription as s 
                 ON p.product_id = s.product_id 
+                JOIN website as w
+                ON p.website_id = w.website_id
                 WHERE s.user_id = %s
                 ORDER BY pu.change_at;
                 """
