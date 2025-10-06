@@ -113,5 +113,3 @@ def format_products(products: dict[str:str], cost_class: str,
     return products
 
 
-if __name__ == "__main__":
-    load_dotenv()
