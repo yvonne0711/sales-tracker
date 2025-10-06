@@ -1,4 +1,5 @@
-"""Script that gets Next product details from the RDS and scrapes their prices from their respective URLs."""
+"""Script that gets Next product details from the RDS 
+and scrapes their prices from their respective URLs."""
 
 from os import environ
 import requests as req
@@ -90,7 +91,8 @@ def scrape_price_discount(html: str, cost_class: str) -> str:
     if price:
         return price
 
-def get_current_price(url: str, cost_class: str, discounted_class: str, headers: dict[str:str]) -> str:
+def get_current_price(url: str, cost_class: str,
+                      discounted_class: str, headers: dict[str:str]) -> str:
     """Returns the current price of a product from its details."""
     response_text = get_response_text(url, headers)
     if response_text[0] == 200:
@@ -106,7 +108,7 @@ def scrape_title(html: str, title_class: str) -> str:
     title = soup.find(attrs={"class": title_class}).text.strip()
     if title:
         return title
-    
+
 if __name__ == "__main__":
     load_dotenv()
 
