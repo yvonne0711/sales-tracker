@@ -1,7 +1,7 @@
 """Script to encrypt passwords and verify users."""
 
 from argon2 import PasswordHasher
-import argon2
+from argon2.exceptions import VerifyMismatchError
 from psycopg2.extensions import connection
 
 
@@ -33,5 +33,5 @@ def verify_user(conn: connection, user_email: str, user_password: str) -> bool:
         hashed = cur.fetchone()["password_hash"]
         try:
             return password_hasher.verify(hashed, user_password)
-        except argon2.exceptions.VerifyMismatchError:
+        except VerifyMismatchError:
             return False
