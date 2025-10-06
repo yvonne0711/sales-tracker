@@ -73,25 +73,25 @@ resource "aws_lambda_function" "c19-sales-tracker-lambda-steam" {
   }
 }
 
-# resource "aws_lambda_function" "c19-sales-tracker-lambda-jd" {
-#   function_name = "c19-sales-tracker-lambda-jd"
-#   role          = aws_iam_role.c19-sales-tracker-lambda-execution-role.arn
-#   package_type  = "Image"
-#   #   image_uri     = ""
-#   memory_size   = 512
-#   timeout       = 30
-#   architectures = ["x86_64"]
+resource "aws_lambda_function" "c19-sales-tracker-lambda-jd" {
+  function_name = "c19-sales-tracker-lambda-jd"
+  role          = aws_iam_role.c19-sales-tracker-lambda-execution-role.arn
+  package_type  = "Image"
+  image_uri     = "129033205317.dkr.ecr.eu-west-2.amazonaws.com/c19-sales-tracker-ecr-jd:latest"
+  memory_size   = 512
+  timeout       = 30
+  architectures = ["x86_64"]
 
-#   environment {
-#     variables = {
-#       DB_HOST     = var.DB_HOST
-#       DB_PORT     = var.DB_PORT
-#       DB_NAME     = var.DB_NAME
-#       DB_USERNAME = var.DB_USERNAME
-#       DB_PASSWORD = var.DB_PASSWORD
-#     }
-#   }
-# }
+  environment {
+    variables = {
+      DB_HOST     = var.DB_HOST
+      DB_PORT     = var.DB_PORT
+      DB_NAME     = var.DB_NAME
+      DB_USERNAME = var.DB_USERNAME
+      DB_PASSWORD = var.DB_PASSWORD
+    }
+  }
+}
 
 resource "aws_lambda_function" "c19-sales-tracker-lambda-next" {
   function_name = "c19-sales-tracker-lambda-next"
@@ -281,8 +281,8 @@ resource "aws_vpc_security_group_ingress_rule" "c19-sales-tracker-access-to-ECS"
   description       = "Allows internet access inbound to ECS to access streamlit dashboard"
 
   ip_protocol = "tcp"
-  to_port     = var.SL_PORT
-  from_port   = var.SL_PORT
+  to_port     = 8501
+  from_port   = 8501
   cidr_ipv4   = "0.0.0.0/0"
 }
 
