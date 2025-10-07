@@ -38,6 +38,23 @@ def main():
     conn.close()
 
     df = pd.DataFrame(price_changes)
+    # Checks if no data present
+    if df.empty:
+        st.error("""
+                 You aren't currently tracking any products.
+                 Please start subscribing to products you wish to track.
+                 """)
+        return
+
+    # Checks if only initial data present and no updates to pricing
+    else:
+        product_counts = df.groupby("product_name").size()
+        for product, count in product_counts.items():
+            if count == 1:
+                st.info(f"""
+                        The product '{product}' has not had any price changes yet.
+                        Please check back later!
+                        """)
 
     df["change_at_date"] = df["change_at"].dt.date
     df["change_at"] = pd.to_datetime(df["change_at"])
@@ -103,7 +120,12 @@ def main():
             st.write(f"Original Price: £{original_price}")
     with col4:
         with st.container(border=True):
-            st.write(f"Current Price: £{current_price}")
+            if current_price > original_price:
+                st.write(f"Current Price: £{current_price} :red[⬆]")
+            elif current_price < original_price:
+                st.write(f"Current Price: £{current_price} :green[⬇]")
+            else:
+                st.write(f"Current Price: £{current_price} -")
 
     st.divider()
 
@@ -111,17 +133,23 @@ def main():
     # Gets the desired price per product tracked
     desired_prices = df[["product_name", "desired_price"]].drop_duplicates()
 
+    # Gets the min and max dates to show on the x axis
+    min_date = df["change_at_date"].min()
+    max_date = df["change_at_date"].max() + timedelta(days=1)
+
     product_df = product_df[(
         product_df["change_at_date"] >= start_date) & (product_df["change_at_date"] <= end_date)]
 
     chart = alt.Chart(product_df).mark_line(point=True).encode(
-        x=alt.X("change_at:T", title="Date", axis=alt.Axis(tickCount=5)),
+        x=alt.X("change_at:T", title="Date (days)", axis=alt.Axis(
+            tickCount="day", format="%d %b"),
+            scale=alt.Scale(domain=[min_date, max_date])),
         y=alt.Y("new_price:Q", title="Price (£)"),
         color=alt.Color("product_name:N", title="Products", legend=None)
     )
 
     desired_prices_line = alt.Chart(desired_prices).mark_rule(
-        color="red", strokeDash=[3, 3]).encode(
+        color="red", strokeDash=[6, 6]).encode(
             y="desired_price:Q"
     )
 
@@ -133,5 +161,3 @@ def main():
 if __name__ == "__main__":
     load_dotenv()
     main()
-
-# fix x axis
