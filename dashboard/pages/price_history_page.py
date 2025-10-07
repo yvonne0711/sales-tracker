@@ -49,6 +49,7 @@ def main():
     df["change_at_date"] = df["change_at"].dt.date
     df["change_at"] = pd.to_datetime(df["change_at"])
     df["new_price"] = pd.to_numeric(df["new_price"])
+    df["desired_price"] = pd.to_numeric(df["desired_price"])
 
     st.divider()
 
@@ -81,7 +82,7 @@ def main():
                 Please check back later!
                 """)
 
-    if not start_date < end_date:
+    if start_date > end_date:
         st.error("Error: End date must fall after start date.")
         return
 
@@ -123,7 +124,7 @@ def main():
             elif current_price < original_price:
                 st.write(f"Current Price: £{current_price} :green[⬇]")
             else:
-                st.write(f"Current Price: £{current_price} -")
+                st.write(f"Current Price: £{current_price} :orange[**–**]")
 
     st.divider()
 
