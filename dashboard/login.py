@@ -47,14 +47,6 @@ def sign_up_form() -> None:
                     st.error(
                         "A user with this email already exists. Please log in instead.")
 
-                    # Add new user
-                    if add_new_user_to_database(conn, new_email_input, username):
-                        st.success(
-                            "Successfully signed up! You can now log in.")
-                        conn.close()
-                        # After successful signup, show login form again
-                        st.session_state.show_signup = False
-                        st.rerun()
                 # Add new user
                 else:
                     insert_user(conn, username, new_email_input,
