@@ -50,13 +50,15 @@ def main():
 
     col1, col2, col3 = st.columns(3)
 
+    # websites
     with col1:
         websites = ["All"] + sorted([name.title() for name in df["website_name"].unique().tolist()])
         selected_website = st.selectbox("Website", websites)
 
+    # current price
     with col2:
         min_price, max_price = st.slider(
-            "Filter by current price (£)",
+            "Current price (£)",
             min_value=float(df["current_price"].min()),
             max_value=float(df["current_price"].max()),
             value=(
@@ -65,6 +67,15 @@ def main():
             ),
         )
 
+    # date added
+    with col3:
+        min_date = df["date_added"].min().date()
+        max_date = df["date_added"].max().date()
+        start_date, end_date = st.date_input("Filter by date added",
+        value=(min_date, max_date),
+            min_value=min_date,
+            max_value=max_date,
+        )
 
 
 
