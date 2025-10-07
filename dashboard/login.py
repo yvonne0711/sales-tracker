@@ -80,9 +80,6 @@ def login_page() -> None:
             if not email_input:
                 st.error("Please enter an email address")
 
-            if not is_valid_email(email_input):
-                st.error("Please enter a valid email address")
-
             elif not password_input:
                 st.error("Please enter a password")
 
