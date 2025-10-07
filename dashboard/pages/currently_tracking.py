@@ -10,7 +10,7 @@ def delete_subscription(conn, subscription_id: int) -> None:
     """Removes a subscription by subscription ID."""
     with conn.cursor() as cur:
         query = "DELETE FROM subscription WHERE subscription_id = %s;"
-        cur.execute(query, (subscription_id,))
+        cur.execute(query, (int(subscription_id),))
         conn.commit()
 
 
