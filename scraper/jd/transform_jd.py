@@ -38,7 +38,7 @@ def get_products(conn: connection) -> list[dict]:
     FROM product
     JOIN website
     USING(website_id)
-    WHERE website_name = 'JD';
+    WHERE website_name = 'jd';
     """
     products = query_database(conn, query)
     return products
@@ -55,7 +55,7 @@ def get_last_recorded_prices(conn: connection) -> list[dict]:
     USING (product_id)
     JOIN website AS w
     USING (website_id)
-    WHERE w.website_name = 'JD'
+    WHERE w.website_name = 'jd'
     AND pu.change_at = (
         SELECT MAX(change_at)
         FROM price_update
@@ -111,5 +111,3 @@ def format_products(products: dict[str:str], cost_class: str,
             product["db_price"] = price_map[product["product_id"]]
         product["check_at"] = datetime.now()
     return products
-
-
