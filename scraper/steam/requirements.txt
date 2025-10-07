@@ -1,6 +1,7 @@
-pylint
-pytest
-requests
-bs4
-psycopg2-binary
-python-dotenv
+pylint==3.3.8
+pytest==8.4.2
+requests==2.32.5
+bs4==0.0.2
+psycopg2-binary==2.9.10
+python-dotenv==1.1.1
+lxml==6.0.2
