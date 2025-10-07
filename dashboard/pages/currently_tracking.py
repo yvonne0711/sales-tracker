@@ -29,8 +29,18 @@ def main():
     user = st.session_state.user
     conn = get_db_connection()
 
+    # list of products for a user
+    products = get_tracked_products(conn, user["user_id"])
+    df = pd.DataFrame(products)
+
+    # no current tracking products
+    if df.empty:
+        st.info("You're not tracking anything yet. Try tracking a product on the 'Track New Product' page.")
+        conn.close()
+        return
 
 
 if __name__ == "__main__":
     load_dotenv()
     main()
+    
