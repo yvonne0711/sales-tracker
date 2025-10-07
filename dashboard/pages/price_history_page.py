@@ -6,8 +6,8 @@ import altair as alt
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
-from functions_dashboard import (get_db_connection,
-                                 get_a_users_price_changes)
+from login_functions import (get_db_connection,
+                             get_a_users_price_changes)
 
 
 def main():
