@@ -46,16 +46,6 @@ def main():
                  """)
         return
 
-    # Checks if only initial data present and no updates to pricing
-    else:
-        product_counts = df.groupby("product_name").size()
-        for product, count in product_counts.items():
-            if count == 1:
-                st.info(f"""
-                        The product '{product}' has not had any price changes yet.
-                        Please check back later!
-                        """)
-
     df["change_at_date"] = df["change_at"].dt.date
     df["change_at"] = pd.to_datetime(df["change_at"])
     df["new_price"] = pd.to_numeric(df["new_price"])
@@ -82,6 +72,14 @@ def main():
                                      value=max_date,
                                      min_value=min_date,
                                      max_value=max_date)
+
+    # Checks if only initial data present and no updates to pricing
+    product_counts = df.groupby("product_name").size()
+    if product_counts.get(selected_product, 0) == 1:
+        st.info(f"""
+                The product '{selected_product}' has not had any price changes yet.
+                Please check back later!
+                """)
 
     if not start_date < end_date:
         st.error("Error: End date must fall after start date.")
