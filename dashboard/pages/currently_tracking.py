@@ -54,6 +54,17 @@ def main():
         websites = ["All"] + sorted([name.title() for name in df["website_name"].unique().tolist()])
         selected_website = st.selectbox("Website", websites)
 
+    with col2:
+        min_price, max_price = st.slider(
+            "Filter by current price (£)",
+            min_value=float(df["current_price"].min()),
+            max_value=float(df["current_price"].max()),
+            value=(
+                float(df["current_price"].min()),
+                float(df["current_price"].max()),
+            ),
+        )
+
 
 
 
