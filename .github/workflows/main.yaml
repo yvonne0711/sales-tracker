@@ -1,7 +1,6 @@
 name: Pylint and Pytest Workflow
 
 on:
-  workflow_dispatch:
   push:
     branches: [main]
     paths:
