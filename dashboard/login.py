@@ -9,7 +9,9 @@ from login_functions import (get_db_connection,
                              get_user_details,
                              is_valid_email)
 
-from password.passwords import insert_user, verify_user
+from password.passwords import (insert_user,
+                                verify_user,
+                                verify_user_password)
 
 
 def sign_up_form() -> None:
@@ -36,6 +38,8 @@ def sign_up_form() -> None:
                 st.error("Please enter a valid email address")
             elif not new_password_input:
                 st.error("Please enter a password")
+            elif not password_checker(new_password_input):
+                pass
 
             else:
                 conn = get_db_connection()
@@ -78,29 +82,55 @@ def login_page() -> None:
             if not email_input:
                 st.error("Please enter an email address")
 
-            if not password_input:
+            elif not password_input:
                 st.error("Please enter a password")
-
-            if not is_valid_email(email_input):
-                st.error("Please enter a valid email address")
 
             else:
                 conn = get_db_connection()
-                if verify_user(conn, email_input, password_input):
-                    user = get_user_details(conn, email_input)
-                    conn.close()
+                if verify_user(conn, email_input):
+                    if verify_user_password(conn, email_input, password_input):
+                        user = get_user_details(conn, email_input)
+                        conn.close()
 
-                    if user:
-                        st.success(f"Welcome back, {user['user_name']}!")
-                        # Store user info in session state
-                        st.session_state.user = user
-                        st.session_state.logged_in = True
-                        st.rerun()
-                    st.error(
-                        "Incorrect email or password. Please try again or sign up.")
+                        if user:
+                            st.success(f"Welcome back, {user['user_name']}!")
+                            # Store user info in session state
+                            st.session_state.user = user
+                            st.session_state.logged_in = True
+                            st.rerun()
+                    else:
+                        st.error(
+                            "Incorrect password.")
 
                 else:
-                    st.error("Incorrect password")
+                    st.error(
+                        "No account found with this email. Please try again or sign up.")
+
+
+def password_checker(password: str) -> bool:
+    '''Checks that user password meets the requirements'''
+    is_valid = True
+
+    if len(password) < 8:
+        st.error('Password must be at least 8 characters long')
+        is_valid = False
+
+    special_characters = '!@£$%&*()'
+    has_special = any(char in special_characters for char in password)
+    has_capital = any(char.isupper() for char in password)
+    has_lower = any(char.islower() for char in password)
+
+    if not has_lower:
+        st.error('At least one character has to be lowercase')
+        is_valid = False
+    if not has_capital:
+        st.error('At least one character has to be uppercase')
+        is_valid = False
+    if not has_special:
+        st.error('At least one character has to be a special character !@£$%&*()')
+        is_valid = False
+
+    return is_valid
 
 
 def main() -> None:
@@ -121,6 +151,7 @@ def main() -> None:
                     title="Track New Product"),
             st.Page("pages/currently_tracking.py",
                     title="Currently Tracking Products")
+            st.Page("pages/price_history_page.py", title="Price History")
         ]
 
         # Add user info and logout to sidebar
