@@ -1,0 +1,15 @@
+FROM public.ecr.aws/lambda/python:3.13
+
+WORKDIR ${LAMBDA_TASK_ROOT}
+
+COPY requirements.txt .
+
+RUN pip install -r requirements.txt
+
+COPY extract_next.py .
+
+COPY transform_next.py .
+
+COPY load_next.py .
+
+CMD [ "load_next.handler" ]

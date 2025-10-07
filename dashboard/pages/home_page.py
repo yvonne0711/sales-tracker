@@ -13,8 +13,8 @@ def main():
         st.stop()
 
     st.set_page_config(
-        page_title="Souper Sales", layout="wide")
-    st.header("Souper Sales")
+        page_title="Souper Saver", layout="wide")
+    st.header("Souper Saver")
     st.subheader("_Insert Cringy Tagline Here_")
 
     # Get user from session state
@@ -26,7 +26,7 @@ def main():
     st.subheader(f"Welcome {user['user_name']}!")
     st.text("Trying to get the best deal but don't have the "\
             "time to idle on websites waiting on a price drop?" \
-                 " Souper Sales has you covered! We check the sites" \
+                 " Souper Saver has you covered! We check the sites" \
                  "and let you know when your favourite products are up " \
                  "for grabs at a deal tailored for you, by you")
 

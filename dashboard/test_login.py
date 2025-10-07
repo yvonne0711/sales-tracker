@@ -1,4 +1,4 @@
-"""Tests for the login page of Souper Sales."""
+"""Tests for the login page of Souper Saver."""
 
 from unittest.mock import MagicMock, patch
 
@@ -12,19 +12,20 @@ class TestSignUpForm:
     def test_sign_up_form_basic(self):
         """Test for sign_up_form to check it flows and signs users up correctly."""
         # Replace streamlit with a mock so no app runs during the tests
-        with patch('login.st') as mock_st:
+        with patch("login.st") as mock_st:
 
             # Mock the form
             mock_form = MagicMock()
-            mock_form.text_input.side_effect = ["test_user", "test_user@sigmalabs.co.uk"]
+            mock_form.text_input.side_effect = [
+                "test_user", "test_user@sigmalabs.co.uk"]
             mock_form.form_submit_button.return_value = True
             mock_st.form.return_value.__enter__.return_value = mock_form
 
             # Mock database functions and is_valid_email as these have already been tested
-            # and confirmed to work (test_functions_login.py)
-            with patch('login.get_db_connection') as mock_db, \
-                    patch('login.get_user_details') as mock_get_user, \
-                    patch('login.is_valid_email') as mock_valid_email:
+            # and confirmed to work (test_login_functions.py)
+            with patch("login.get_db_connection") as mock_db, \
+                    patch("login.get_user_details") as mock_get_user, \
+                    patch("login.is_valid_email") as mock_valid_email:
 
                 # Mock the db connection
                 mock_conn = MagicMock()
@@ -59,10 +60,11 @@ class TestsLoginPage:
             mock_st.form.return_value.__enter__.return_value = mock_form
 
             # Mock database functions and is_valid_email as these have already been tested
-            # and confirmed to work (test_functions_login.py)
-            with patch('login.get_db_connection') as mock_db, \
-                    patch('login.get_user_details') as mock_get_user, \
-                    patch('login.is_valid_email') as mock_valid_email:
+            # and confirmed to work (test_login_functions.py)
+            with patch("login.get_db_connection") as mock_db, \
+                    patch("login.get_user_details") as mock_get_user, \
+                    patch("login.is_valid_email") as mock_valid_email, \
+                    patch("login.verify_user_password") as mock_verify_user:
 
                 # Mock the db connection
                 mock_conn = MagicMock()
@@ -71,7 +73,10 @@ class TestsLoginPage:
                 # Mock a user and set their username
                 mock_user = MagicMock()
                 mock_user.user_name = "test_user"
+
+                # Mock returning a valid and verified user
                 mock_get_user.return_value = mock_user
+                mock_verify_user = True
 
                 # Set the email to be of a valid format
                 mock_valid_email.return_value = True

@@ -5,10 +5,11 @@ import streamlit as st
 from dotenv import load_dotenv
 
 # Loading in functions
-from functions_dashboard import (get_db_connection,
-                                          select_website_id,
-                                          insert_product_details,
-                                          insert_subscription_details)
+from login_functions import (get_db_connection,
+                                 select_website_id,
+                                 insert_product_details,
+                                 insert_subscription_details)  # pylint: disable=import-error
+from validate_url import is_valid_url  # pylint: disable=import-error
 
 
 def main():
@@ -21,8 +22,8 @@ def main():
         st.stop()
 
     st.set_page_config(
-        page_title="Souper Sales", layout="wide")
-    st.header("Souper Sales: Track New Product")
+        page_title="Souper Saver", layout="wide")
+    st.header("Souper Saver: Track New Product")
 
     # Get user details from session state
     user = st.session_state.user
@@ -76,6 +77,8 @@ def main():
             if not desired_price or desired_price <= 0:
                 st.error(
                     "Please enter a valid desired price greater than 0")
+            if not is_valid_url(website, url):
+                st.error(f"Invalid URL for {website}")
             else:
                 conn = get_db_connection()
                 user_id = user["user_id"]
@@ -94,7 +97,6 @@ def main():
                     f"Now tracking **{product_name}** for a price drop to £{desired_price:.2f}"
                     " or below!"
                 )
-
 
     st.divider()
 
