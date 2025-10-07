@@ -38,6 +38,8 @@ def sign_up_form() -> None:
                 st.error("Please enter a valid email address")
             elif not new_password_input:
                 st.error("Please enter a password")
+            elif not password_checker(new_password_input):
+                pass
 
             else:
                 conn = get_db_connection()
@@ -103,6 +105,32 @@ def login_page() -> None:
                 else:
                     st.error(
                         "No account found with this email. Please try again or sign up.")
+
+
+def password_checker(password: str) -> bool:
+    '''Checks that user password meets the requirements'''
+    is_valid = True
+
+    if len(password) < 8:
+        st.error('Password must be at least 8 characters long')
+        is_valid = False
+
+    special_characters = '!@£$%&*()'
+    has_special = any(char in special_characters for char in password)
+    has_capital = any(char.isupper() for char in password)
+    has_lower = any(char.islower() for char in password)
+
+    if not has_lower:
+        st.error('At least one character has to be lowercase')
+        is_valid = False
+    if not has_capital:
+        st.error('At least one character has to be uppercase')
+        is_valid = False
+    if not has_special:
+        st.error('At least one character has to be a special character !@£$%&*()')
+        is_valid = False
+
+    return is_valid
 
 
 def main() -> None:

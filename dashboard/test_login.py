@@ -17,7 +17,7 @@ class TestSignUpForm:
             # Mock the form
             mock_form = MagicMock()
             mock_form.text_input.side_effect = [
-                "test_user", "test_user@sigmalabs.co.uk"]
+                "test_user", "test_user@sigmalabs.co.uk", "Password1!"]
             mock_form.form_submit_button.return_value = True
             mock_st.form.return_value.__enter__.return_value = mock_form
 
@@ -25,7 +25,8 @@ class TestSignUpForm:
             # and confirmed to work (test_login_functions.py)
             with patch("login.get_db_connection") as mock_db, \
                     patch("login.get_user_details") as mock_get_user, \
-                    patch("login.is_valid_email") as mock_valid_email:
+                    patch("login.is_valid_email") as mock_valid_email, \
+                    patch("login.password_checker")as mock_check:
 
                 # Mock the db connection
                 mock_conn = MagicMock()
@@ -37,6 +38,8 @@ class TestSignUpForm:
                 # Mock that the email entered in the sign up was a valid format
                 mock_valid_email.return_value = True
 
+                # Mock the password checker so it returns true
+                mock_check.return_value = True
                 # Run the sign_up_form function
                 sign_up_form()
 
