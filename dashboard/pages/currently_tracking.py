@@ -77,6 +77,21 @@ def main():
             max_value=max_date,
         )
 
+    # apply filters on copy data
+    filtered = df.copy()
+
+    if selected_website != "All":
+        filtered = filtered[filtered["website_name"] == selected_website]
+
+    filtered = filtered[
+        (filtered["current_price"] >= min_price)
+        & (filtered["current_price"] <= max_price)
+        & (filtered["date_added"].dt.date >= start_date)
+        & (filtered["date_added"].dt.date <= end_date)
+    ]
+
+    st.divider()
+
 
 
 if __name__ == "__main__":
