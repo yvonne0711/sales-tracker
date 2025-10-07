@@ -1,4 +1,4 @@
-"""Tests for the transform script."""
+"""Tests for the transform_jd script."""
 
 from transform_jd import (convert_string_price_to_float,
                           get_list_of_product_ids,
