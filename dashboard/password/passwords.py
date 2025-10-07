@@ -20,8 +20,22 @@ def insert_user(conn: connection, user_name: str, user_email: str, password: str
         conn.commit()
 
 
-def verify_user(conn: connection, user_email: str, user_password: str) -> bool:
+def verify_user(conn: connection, user_email: str) -> bool:
     """Function to verify user."""
+    query = """
+            SELECT * 
+            FROM users 
+            WHERE user_email = %s"""
+    with conn.cursor() as cur:
+        cur.execute(query, (user_email,))
+        hashed = cur.fetchone()
+        if hashed is None:
+            return False
+        return True
+
+
+def verify_user_password(conn: connection, user_email: str, user_password: str) -> bool:
+    """Function to verify user password."""
     password_hasher = PasswordHasher()
     query = """
             SELECT password_hash 

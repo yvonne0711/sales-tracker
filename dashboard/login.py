@@ -9,7 +9,9 @@ from login_functions import (get_db_connection,
                              get_user_details,
                              is_valid_email)
 
-from password.passwords import insert_user, verify_user
+from password.passwords import (insert_user,
+                                verify_user,
+                                verify_user_password)
 
 
 def sign_up_form() -> None:
@@ -83,22 +85,24 @@ def login_page() -> None:
 
             else:
                 conn = get_db_connection()
-                if verify_user(conn, email_input, password_input):
-                    user = get_user_details(conn, email_input)
-                    conn.close()
+                if verify_user(conn, email_input):
+                    if verify_user_password(conn, email_input, password_input):
+                        user = get_user_details(conn, email_input)
+                        conn.close()
 
-                    if user:
-                        st.success(f"Welcome back, {user['user_name']}!")
-                        # Store user info in session state
-                        st.session_state.user = user
-                        st.session_state.logged_in = True
-                        st.rerun()
-                    st.error(
-                        "Incorrect email or password. Please try again or sign up.")
+                        if user:
+                            st.success(f"Welcome back, {user['user_name']}!")
+                            # Store user info in session state
+                            st.session_state.user = user
+                            st.session_state.logged_in = True
+                            st.rerun()
+                    else:
+                        st.error(
+                            "Incorrect password.")
 
                 else:
                     st.error(
-                        "Incorrect email or password. Please try again or sign up.")
+                        "No account found with this email. Please try again or sign up.")
 
 
 def main() -> None:
