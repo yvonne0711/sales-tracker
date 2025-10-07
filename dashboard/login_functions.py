@@ -55,7 +55,7 @@ def select_website_id(conn: connection, website: str) -> dict[str:int]:
     return data
 
 
-def insert_product_details(conn: connection, product_name: str, 
+def insert_product_details(conn: connection, product_name: str,
                            url: str, website_id: int) -> int:
     """Inserts the user inputted product data into the product table and returns its product_id."""
     with conn.cursor() as cur:
@@ -74,7 +74,7 @@ def insert_product_details(conn: connection, product_name: str,
     return product_id
 
 
-def insert_subscription_details(conn: connection, user_id: int, 
+def insert_subscription_details(conn: connection, user_id: int,
                                 product_id: int, desired_price: float) -> None:
     """Inserts the subscription data into the subscription table."""
     with conn.cursor() as cur:
@@ -94,3 +94,27 @@ def is_valid_email(email: str) -> bool:
         return True
     return False
 
+
+def get_a_users_price_changes(conn: connection, user_id: int):
+    """Returns a given users price history on all their subscribed products."""
+    with conn.cursor() as cur:
+        query = """
+                SELECT
+                    p.product_name,
+                    pu.new_price, 
+                    pu.change_at,
+                    s.desired_price,
+                    w.website_name
+                FROM price_update as pu
+                JOIN product as p
+                ON pu.product_id = p.product_id
+                JOIN subscription as s 
+                ON p.product_id = s.product_id 
+                JOIN website as w
+                ON p.website_id = w.website_id
+                WHERE s.user_id = %s
+                ORDER BY pu.change_at;
+                """
+        cur.execute(query, (user_id,))
+        result = cur.fetchall()
+        return result
