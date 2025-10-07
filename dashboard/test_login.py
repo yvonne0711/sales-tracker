@@ -16,7 +16,8 @@ class TestSignUpForm:
 
             # Mock the form
             mock_form = MagicMock()
-            mock_form.text_input.side_effect = ["test_user", "test_user@sigmalabs.co.uk"]
+            mock_form.text_input.side_effect = [
+                "test_user", "test_user@sigmalabs.co.uk"]
             mock_form.form_submit_button.return_value = True
             mock_st.form.return_value.__enter__.return_value = mock_form
 
@@ -63,7 +64,7 @@ class TestsLoginPage:
             with patch("login.get_db_connection") as mock_db, \
                     patch("login.get_user_details") as mock_get_user, \
                     patch("login.is_valid_email") as mock_valid_email, \
-                    patch("login.verify_user") as mock_verify_user:
+                    patch("login.verify_user_password") as mock_verify_user:
 
                 # Mock the db connection
                 mock_conn = MagicMock()
