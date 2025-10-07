@@ -26,6 +26,10 @@ def main():
     st.set_page_config(page_title="Souper Saver", layout="wide")
     st.header("My Currently Tracked Products")
 
+    st.caption("""
+             This page shows your currently tracked products.
+             """)
+
     user = st.session_state.user
     conn = get_db_connection()
 
@@ -38,6 +42,19 @@ def main():
         st.info("You're not tracking anything yet. Try tracking a product on the 'Track New Product' page.")
         conn.close()
         return
+
+    st.divider()
+    
+    # filters
+    st.subheader("Filters")
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        websites = ["All"] + sorted([name.title() for name in df["website_name"].unique().tolist()])
+        selected_website = st.selectbox("Website", websites)
+
+
 
 
 if __name__ == "__main__":
