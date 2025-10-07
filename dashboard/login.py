@@ -61,7 +61,7 @@ def sign_up_form() -> None:
 
 
 def password_checker(password: str) -> bool:
-    is_valid = True  # Assume it's valid, then invalidate based on checks
+    is_valid = True
 
     if len(password) < 8:
         st.error('Password must be at least 8 characters long')
