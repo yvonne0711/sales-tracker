@@ -10,7 +10,6 @@ from bs4 import BeautifulSoup
 from psycopg2 import connect
 from psycopg2.extensions import connection
 from psycopg2.extras import RealDictCursor
-from lxml import etree
 
 
 def get_db_connection() -> connection:
@@ -74,7 +73,7 @@ def get_html_text(url: str, headers: dict[str:str]) -> tuple[int, str]:
     return res.status_code, res.reason
 
 
-def is_discounted(html: str, discounted_class: str) -> bool:
+def is_discounted(html: tuple[int, str], discounted_class: str) -> bool:
     """Checks if the product price_class is present on the webpage."""
     soup = BeautifulSoup(html[1], "html.parser")
     if soup.find(attrs={"class": discounted_class}) is not None:
@@ -82,7 +81,7 @@ def is_discounted(html: str, discounted_class: str) -> bool:
     return False
 
 
-def scrape_price(html: str, cost_class: str) -> str:
+def scrape_price(html: tuple[int, str], cost_class: str) -> str:
     """Returns the price of a product for the product URL and cost class."""
     soup = BeautifulSoup(html[1], "html.parser")
     price = soup.find(attrs={"class": cost_class}).text.strip()
@@ -100,14 +99,6 @@ def get_current_price(url: str, cost_class: str, discounted_class: str, headers:
     return html_text
 
 
-def scrape_price_xpath(html: str, xpath: str) -> str:
-    """Returns the price of a product for the product URL and cost class."""
-    soup = BeautifulSoup(html[1], "html.parser")
-    price = soup.find(attrs={"class": xpath}).text.strip()
-    if price:
-        return price
-
-
 if __name__ == "__main__":
     user_agent = {
         "User-Agent":
@@ -116,7 +107,8 @@ if __name__ == "__main__":
     }
     steam_cost_class = "game_purchase_price price"
     steam_discounted_class = "discount_final_price"
+    steam_xpath = '//*[@id="game_area_purchase_section_add_to_cart_415372"]/div[2]/div/div[1]/text()'
     html_text = get_html_text(
-        "https://store.steampowered.com/app/1145360/Hades/",
+        "https://store.steampowered.com/app/881100/Noita/",
         user_agent)
-    print(scrape_price_xpath(html_text, steam_cost_class))
+    print(get_current_price(html_text, steam_xpath))
