@@ -52,7 +52,7 @@ def main():
 
     # websites
     with col1:
-        websites = ["All"] + sorted([name.title() for name in df["website_name"].unique().tolist()])
+        websites = ["All"] + sorted([name for name in df["website_name"].unique().tolist()])
         selected_website = st.selectbox("Website", websites)
 
     # current price
@@ -92,6 +92,43 @@ def main():
 
     st.divider()
 
+    st.subheader("Tracked Products")
+
+    # check products match filter
+    if filtered.empty:
+        st.info("No products match the selected filters.")
+    else:
+
+        # columns
+        cols = st.columns(5)
+        cols[0].write("**Product**")
+        cols[1].write("**Current Price**")
+        cols[2].write("**Desired Price**")
+        cols[3].write("**Date Added**")
+        cols[4].write("")
+
+        # display each product row
+        for row in range(len(filtered)):
+            product = filtered.iloc[row]
+
+            # create a container 
+            with st.container():
+                row_cols = st.columns(5)
+                row_cols[0].write(product["product_name"])
+                row_cols[1].write(f"£{product['current_price']:.2f}")
+                row_cols[2].write(f"£{product['desired_price']:.2f}")
+                row_cols[3].write(product["date_added"].strftime("%Y-%m-%d"))
+
+                # stop tracking button
+                subscription_id = product["subscription_id"]
+
+                if row_cols[4].button("Stop Tracking", key=f"delete_{subscription_id}"):
+                    # delete id from subscription table
+                    delete_subscription(conn, subscription_id)
+                    st.success(f"Stopped tracking {product['product_name']}.")
+                    # refreshes page
+                    st.experimental_rerun()
+    conn.close()
 
 
 if __name__ == "__main__":
