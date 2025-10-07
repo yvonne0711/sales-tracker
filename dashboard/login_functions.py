@@ -96,9 +96,7 @@ def is_valid_email(email: str) -> bool:
 
 
 def get_tracked_products(conn: connection, user_id: int) -> list[dict]:
-    """
-    Gets all products tracked by a user, including current price and desired price.
-    """
+    """Gets all products tracked by a user, including current price and desired price."""
     with conn.cursor() as cur:
         query = """
         SELECT 
@@ -125,5 +123,5 @@ def get_tracked_products(conn: connection, user_id: int) -> list[dict]:
         ORDER BY date_added DESC;
         """
         cur.execute(query, (user_id,))
-    return cur.fetchall()
+        return cur.fetchall()
 
