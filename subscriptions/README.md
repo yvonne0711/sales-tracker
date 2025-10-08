@@ -4,7 +4,7 @@ This directory contains the subscriptions script
 
 ## Description
 - **`subscription.py`**  
-This script gets all the products from the database and gets the latest price from the price update table. It then loops through all users subscribed to the product and compares then users desired price to the product price. If the product price is at o below the desired price it then adds the user details along with the product details to  list. The list of all users to emails is then returned and ready to be sent of to the email script to configure a personalised email.
+This script gets all the products from the database and gets the latest price from the price update table. It then loops through all users subscribed to the product and compares then users desired price to the product price. If the product price is at or below the desired price it then adds the user details along with the product details to  list. The list of all users to emails is then returned and ready to be sent of to the email script to configure a personalised email.
 
 - **`dockerfile`**  
 Defines the container configuration for the subscription script.
