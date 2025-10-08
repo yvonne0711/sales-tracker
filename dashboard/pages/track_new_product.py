@@ -55,7 +55,8 @@ def main():
         url = st.text_input(
             "Please enter the product URL you would like to track.",
             key="URL",
-            placeholder="https://..."
+            placeholder="https://...",
+            icon=":material/link:"
         )
 
         desired_price = st.number_input(
@@ -63,6 +64,7 @@ def main():
             placeholder="Type a price...",
             format="%0.2f",
             min_value=0.00,
+            icon=":material/currency_pound:"
         )
 
         submitted = st.form_submit_button("Track Product", type="primary")
