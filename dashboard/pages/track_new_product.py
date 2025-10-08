@@ -6,10 +6,11 @@ from dotenv import load_dotenv
 
 # Loading in functions
 from login_functions import (get_db_connection,
-                                 select_website_id,
-                                 insert_product_details,
-                                 insert_subscription_details)  # pylint: disable=import-error
+                             select_website_id,
+                             insert_product_details,
+                             insert_subscription_details)  # pylint: disable=import-error
 from validate_url import is_valid_url  # pylint: disable=import-error
+from scraper_functions import get_product_name  # pylint: disable=import-error
 
 
 def main():
@@ -46,12 +47,6 @@ def main():
 
     # Submission form
     with st.form("submission_form", clear_on_submit=True):
-        product_name = st.text_input(
-            "Please enter the product name you would like to track.",
-            key="product_name",
-            placeholder="Enter the name of the product..."
-        )
-
         url = st.text_input(
             "Please enter the product URL you would like to track.",
             key="URL",
@@ -72,8 +67,6 @@ def main():
         if submitted:
             if not website:
                 st.error("Please select a website")
-            if not product_name:
-                st.error("Product name is a required field")
             if not url:
                 st.error("URL is a required field")
             if not desired_price or desired_price <= 0:
@@ -86,6 +79,7 @@ def main():
                 user_id = user["user_id"]
                 website_id = select_website_id(
                     conn, website)["website_id"]
+                product_name = get_product_name(website.lower(), url)
                 product_id = insert_product_details(
                     conn, product_name, url, website_id
                 )
