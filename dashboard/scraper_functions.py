@@ -36,14 +36,16 @@ def get_jd_product_name(url: str, headers: dict[str:str]) -> str:
     return None
 
 
-if __name__ == "__main__":
-    url1 = "https://www.jdsports.co.uk/product/grey-trailberg-triathlon-padded-jacket/19719129/"
-    url2 = "https://www.jdsports.co.uk/product/grey-new-balance-core-logo-full-zip-hoodie/19710966/"
-    url3 = "https://www.jdsports.co.uk/product/grey-nike-air-force-1-07-lv8/19715987/"
-    website = "steam"
+def get_product_name(website: str, url: str) -> str:
+    """Returns the product name from a url for a valid website."""
     user_agent = {
         "User-Agent":
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, \
             like Gecko) Chrome/140.0.0.0 Safari/537.36"
     }
-    print(get_jd_product_name(url3, user_agent))
+    website_functions = {
+        "steam": get_steam_product_name,
+        "next": get_next_product_name,
+        "jd": get_jd_product_name
+    }
+    return website_functions[website](url, user_agent)
