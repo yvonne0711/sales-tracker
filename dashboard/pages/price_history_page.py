@@ -1,9 +1,9 @@
 """Script for dashboard page with visualisations."""
 
+from datetime import timedelta
 import streamlit as st
 import pandas as pd
 import altair as alt
-from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
 from login_functions import (get_db_connection,
@@ -128,7 +128,7 @@ def main():
 
     st.divider()
 
-    # -Chart-
+    # -Pie chart showing the proportion of websites used for tracked products-
     # Gets the desired price per product tracked
     desired_prices = df[["product_name", "desired_price"]].drop_duplicates()
 
