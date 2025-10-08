@@ -72,12 +72,17 @@ def main():
     with col3:
         min_date = df["date_added"].min().date()
         max_date = df["date_added"].max().date()
-        start_date, end_date = st.date_input("Filter by date added",
+        val = st.date_input("Filter by date added",
         value=(min_date, max_date),
             min_value=min_date,
             max_value=max_date,
         )
 
+    try:
+        start_date, end_date = val
+    except ValueError:
+        st.error("Start and end date required.")
+        st.stop()
     # apply filters on copy data
     filtered = df.copy()
 
