@@ -116,10 +116,15 @@ def main():
     chart_df["Proportion"] = chart_df["Proportion Data"].round(
         2).astype(str) + "%"
 
+    colour_scale = alt.Scale(
+        domain=["JD", "Steam", "Next"],
+        range=["#27667B", "#A0C878", "#DDEB9D"]
+    )
+
     st.write("**Proportion of Tracked Products per Site**")
     chart = alt.Chart(chart_df).mark_arc(innerRadius=50).encode(
         theta="Proportion Data:Q",
-        color="Website",
+        color=alt.Color("Website", scale=colour_scale),
         tooltip=["Proportion", "Website"]
     )
     st.altair_chart(chart)

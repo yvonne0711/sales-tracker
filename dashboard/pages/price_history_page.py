@@ -130,8 +130,9 @@ def main():
     st.divider()
 
     # -Chart showing price history-
-    # Gets the desired price per product tracked
-    desired_prices = df[["product_name", "desired_price"]].drop_duplicates()
+    # Gets desired price of selected product
+    desired_price = df.loc[df["product_name"]
+                           == selected_product, "desired_price"].values[0]
 
     # Gets the min and max dates to show on the x axis
     min_date = df["change_at_date"].min()
@@ -148,7 +149,10 @@ def main():
         color=alt.Color("product_name:N", title="Products", legend=None)
     )
 
-    desired_prices_line = alt.Chart(desired_prices).mark_rule(
+    desired_price_dict = {"desired_price": [desired_price]}
+    desired_price_df = pd.DataFrame(desired_price_dict)
+
+    desired_prices_line = alt.Chart(desired_price_df).mark_rule(
         color="red", strokeDash=[6, 6]).encode(
             y="desired_price:Q"
     )
