@@ -14,8 +14,6 @@ COPY pages/track_new_product.py pages
 
 RUN mkdir password
 COPY password/passwords.py password
-COPY password/requirements.txt password
-RUN pip install -r password/requirements.txt
 
 COPY login.py .
 COPY login_functions.py .
