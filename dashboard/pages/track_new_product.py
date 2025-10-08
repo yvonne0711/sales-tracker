@@ -10,7 +10,7 @@ from login_functions import (get_db_connection,
                              insert_product_details,
                              insert_subscription_details)  # pylint: disable=import-error
 from validate_url import is_valid_url  # pylint: disable=import-error
-from scraper_functions import get_product_name
+from scraper_functions import get_product_name  # pylint: disable=import-error
 
 
 def main():
