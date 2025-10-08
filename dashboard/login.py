@@ -20,7 +20,7 @@ def sign_up_form() -> None:
                        layout="centered", initial_sidebar_state="collapsed")
 
     with st.form("Sign up", clear_on_submit=True):
-        col1, mid, col2 = st.columns([20, 1, 100])
+        col1, col2 = st.columns([20, 100])
         with col1:
             st.image("final_logo_with_background.png", width=100)
         with col2:
@@ -68,7 +68,7 @@ def sign_up_form() -> None:
 
 def login_page() -> None:
     """Login page format."""
-    col1, mid, col2 = st.columns([20, 1, 100])
+    col1, col2 = st.columns([20, 100])
     with col1:
         st.image("final_logo_with_background.png", width=100)
     with col2:
