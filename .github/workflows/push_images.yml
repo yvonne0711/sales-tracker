@@ -1,0 +1,89 @@
+name: Pylint and Pytest Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: "pip"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          find . -type f -name "requirements.txt" | sed -e 's/^/-r /' | xargs pip install
+          pip install pylint
+
+      - name: Run pylint
+        run: |
+          for file in $(git ls-files '*.py'); do
+            pylint --fail-under=8.5 "$file"
+          done
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: "pip"
+
+      - name: Install requirements.txt and pytest
+        run: |
+          find . -type f -name "requirements.txt" | sed -e 's/^/-r /' | xargs pip install
+          pip install pytest
+          pip install pytest-cov
+      - name: Run tests
+        run: |
+          pytest --ignore=terraform/ --ignore-glob="**/dockerfile"
+
+      - name: Run pytest coverage
+        run: |
+          pytest --ignore=terraform/ --ignore-glob="**/dockerfile" --cov=. --cov-fail-under=60
+  build:
+    needs: [test,lint]
+    
+    name: Build Image
+    runs-on: ubuntu-latest
+
+   
+    steps:
+
+    - name: Check out code
+      uses: actions/checkout@v2
+    
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build and push multiple Docker images
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      run: |
+        ECR_REPOSITORY=("c19-sales-tracker-ecr-jd" "c19-sales-tracker-ecr-next" "c19-sales-tracker-ecr-steam" "c19-sales-tracker-ecr-email" "c19-sales-tracker-ecr-subscription")
+        DOCKER_DIRS=("scraper/jd" "scraper/next" "scraper/steam" "email" "scraper/subscriptions")
+
+        for i in "${!DOCKER_DIRS[@]}"; do
+          echo "Building and pushing image: ${ECR_REGISTRY[$i]} from directory: ${DOCKER_DIRS[$i]}"
+          docker buildx build -t ${ECR_REPOSITORY[$i]}:latest --platform "Linux/amd64" --provenance=false ${DOCKER_DIRS[$i]}
+          docker tag ${ECR_REPOSITORY[$i]}:latest $ECR_REGISTRY/${ECR_REPOSITORY[$i]}:latest
+          docker push $ECR_REGISTRY/${ECR_REPOSITORY[$i]}:latest
+        done
