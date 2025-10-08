@@ -43,21 +43,21 @@ def main():
              - Currently Tracking 
              - Price History
 
-             The 'Home' page displays the total statistics across all users
+             The **'Home'** page displays the total statistics across all users
              so you can see what websites or products
              are the most popular, along with the overall number of websites we
              support, total users, and the total currently tracked products 
              across all users!
 
-             The 'Track New Product' page enables you to add new products
+             The **'Track New Product'** page enables you to add new products
              you wish to track and the desired price you would like to 
              be alerted at.
 
-             The 'Currently Tracking' page enables you to see all of your
+             The **'Currently Tracking'** page enables you to see all of your
              current tracked products, and manage them by removing subscriptions
              with the click of a button!
 
-             The 'Price History' page enables you to select any of your
+             The **'Price History'** page enables you to select any of your
              subscribed products and see how the price has changed over time,
              so you can decide if you would like to wait for further price drops
              or buy when your desired price has been reached! 
@@ -76,20 +76,21 @@ def main():
     table_df = pd.DataFrame(table_data)
     chart_df = pd.DataFrame(chart_data)
 
-    # -Gets the KPI overview-
+    # -Gets the total stats overview-
     st.write("**Total Stats**")
 
-    # -Gets total stats overview-
     col1, col2, col3 = st.columns(3)
     with col1:
         with st.container(border=True):
-            st.write(f"Users: {kpi_df["user_count"].iloc[0]}")
+            st.write(f"**Users:** {kpi_df["user_count"].iloc[0]}")
     with col2:
         with st.container(border=True):
-            st.write(f"Tracked Products: {kpi_df["product_count"].iloc[0]}")
+            st.write(
+                f"**Tracked Products:** {kpi_df["product_count"].iloc[0]}")
     with col3:
         with st.container(border=True):
-            st.write(f"Compatible Websites: {kpi_df["website_count"].iloc[0]}")
+            st.write(
+                f"**Compatible Websites:** {kpi_df["website_count"].iloc[0]}")
 
     st.divider()
 
@@ -106,7 +107,7 @@ def main():
 
     st.divider()
 
-    # -Chart-
+    # -Pie chart showing the proportion of tracked products per website-
     chart_df.columns = ["Website", "Tracked Products"]
     chart_df["Website"].iloc[0] = chart_df["Website"].iloc[0].upper()
     chart_df["Website"].iloc[1:] = chart_df["Website"].iloc[1:].str.capitalize()
@@ -115,6 +116,7 @@ def main():
     chart_df["Proportion"] = chart_df["Proportion Data"].round(
         2).astype(str) + "%"
 
+    st.write("**Proportion of Tracked Products per Site**")
     chart = alt.Chart(chart_df).mark_arc(innerRadius=50).encode(
         theta="Proportion Data:Q",
         color="Website",
