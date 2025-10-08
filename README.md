@@ -6,7 +6,6 @@ To solve this, we created an automated price tracker pipeline that checks every 
 
 ## Contents
 - [Dashboard](dashboard/README.md)
-   - This is a dashboard
 - [Database](database/README.md)
 - [Diagrams](diagrams/README.md)
 - [Email](email/README.md)
