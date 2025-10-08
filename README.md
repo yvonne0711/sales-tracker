@@ -4,6 +4,15 @@ Online websites have many different products and associated prices and discounts
 
 To solve this, we created an automated price tracker pipeline that checks every three minutes if an item you're subscribed to is offering the desired price or lower, and alerts the relevant emails the moment it reaches the price you'd like to buy it at.
 
+## Contents
+- [Dashboard](dashboard/README.md)
+- [Database](database/README.md)
+- [Diagrams](diagrams/README.md)
+- [Email](email/README.md)
+- [Scraper](scraper/README.md)
+- [Subscriptions](subscriptions/README.md)
+- [Terraform](terraform/README.md)
+
 ## How the pipeline works:
 
 1. Users can securely login to the webpage and can subscribe to any product they are interested in from the three popular websites: 'Steam', 'Next' and 'JD', by adding the following to the webpage:
