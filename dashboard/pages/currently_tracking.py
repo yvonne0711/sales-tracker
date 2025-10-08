@@ -64,7 +64,7 @@ def main():
             max_value=float(df["current_price"].max()),
             value=(
                 float(df["current_price"].min()),
-                float(df["current_price"].max()),
+                float(df["current_price"].max())+1.0,
             ),
         )
 
