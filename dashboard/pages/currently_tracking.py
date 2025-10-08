@@ -3,7 +3,7 @@
 import streamlit as st
 import pandas as pd
 from dotenv import load_dotenv
-from login_functions import get_db_connection, get_tracked_products
+from login_functions import (get_db_connection, get_tracked_products)
 
 
 def delete_subscription(conn, subscription_id: int) -> None:
@@ -39,12 +39,13 @@ def main():
 
     # no current tracking products
     if df.empty:
-        st.info("You're not tracking anything yet. Try tracking a product on the 'Track New Product' page.")
+        st.info("""You're not tracking anything yet.
+                Try tracking a product on the 'Track New Product' page.""")
         conn.close()
         return
 
     st.divider()
-    
+
     # filters
     st.subheader("Filters")
 
@@ -111,7 +112,7 @@ def main():
         for row in range(len(filtered)):
             product = filtered.iloc[row]
 
-            # create a container 
+            # create a container
             with st.container():
                 row_cols = st.columns(5)
                 row_cols[0].write(product["product_name"])
@@ -127,11 +128,10 @@ def main():
                     delete_subscription(conn, subscription_id)
                     st.success(f"Stopped tracking {product['product_name']}.")
                     st.rerun()
-                    
+
     conn.close()
 
 
 if __name__ == "__main__":
     load_dotenv()
     main()
-    
