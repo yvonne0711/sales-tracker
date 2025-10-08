@@ -86,8 +86,8 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
       run: |
-        ECR_REPOSITORY=("c19-sales-tracker-ecr-jd" "c19-sales-tracker-ecr-next" "c19-sales-tracker-ecr-steam" "c19-sales-tracker-ecr-dashboard" "c19-sales-tracker-ecr-email" "c19-sales-tracker-ecr-subscription")
-        DOCKER_DIRS=("scraper/jd" "scraper/next" "scraper/steam" "dashboard" "email" "scraper/subscription")
+        ECR_REPOSITORY=("c19-sales-tracker-ecr-jd" "c19-sales-tracker-ecr-next" "c19-sales-tracker-ecr-steam" "c19-sales-tracker-ecr-email" "c19-sales-tracker-ecr-subscription")
+        DOCKER_DIRS=("scraper/jd" "scraper/next" "scraper/steam" "email" "scraper/subscription")
 
         for i in "${!DOCKER_DIRS[@]}"; do
           echo "Building and pushing image: ${ECR_REGISTRY[$i]} from directory: ${DOCKER_DIRS[$i]}"
