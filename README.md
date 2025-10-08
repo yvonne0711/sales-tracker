@@ -5,6 +5,7 @@ Online websites have many different products and associated prices and discounts
 To solve this, we created an automated price tracker pipeline that checks every three minutes if an item you're subscribed to is offering the desired price or lower, and alerts the relevant emails the moment it reaches the price you'd like to buy it at.
 
 ## Contents
+
 - [Dashboard](dashboard/README.md)
 - [Database](database/README.md)
 - [Diagrams](diagrams/README.md)
@@ -60,7 +61,6 @@ A `.env` file must be created in the root directory of this project, including t
 | AWS_REGION               | Your AWS region                    |
 | VPC_ID                   | Your VPC ID                        |
 | SUBNET_ID                | Your public AWS subnet ID          |
-| SL_PORT                  | Port number for streamlit          |
 
 ## Terraform
 
@@ -88,6 +88,6 @@ Once completed, to run the [phase_two](terraform/phase_two) module, attach this 
 - Pylint fails if any `.py` files are under a score of 8.5.
 - Pytest ignores dockerfiles and the terraform directory and pytest coverage fails if the coverage of the tests is under 60%.
 
-# Docker containers Workflow
+# Docker Images Workflow
 
-To push the docker containers to the ECR, simply push to the repository and the CI/CD workflow will be activated.
+To push the docker images to the ECR, there is a workflow dispatch button which you can simply click and it will automatically push the images to the repository.
