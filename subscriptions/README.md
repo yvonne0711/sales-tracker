@@ -10,7 +10,7 @@ This script gets all the products from the database and gets the latest price fr
 Defines the container configuration for the subscription script.
 
 - **`test_subsciptions.py`**  
-Includes unit tests for the corresponding the file
+Includes unit tests for the corresponding the file.
 
 ## Getting Started
 
