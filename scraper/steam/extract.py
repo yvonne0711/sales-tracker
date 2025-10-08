@@ -79,7 +79,8 @@ def scrape_price(html: tuple[int, str], container_class: str) -> str:
     soup = BeautifulSoup(html[1], "html.parser")
     price_container = soup.find(attrs={"class": container_class})
     divs = price_container.find_all("div")
-    return re.search(r"£\d+(?:\.\d{2})?", divs[-2].text.strip()).group()
+    price = re.search(r"£\d+(?:\.\d{2})?", divs[-2].text.strip()).group()
+    return price
 
 
 def get_current_price(url: str, container_class: str, headers: dict[str:str]) -> str:
