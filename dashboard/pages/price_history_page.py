@@ -27,14 +27,15 @@ def main():
              with the desired prices you set for each, along
              with the preferred date range.
 
-             For ease of use, KPIs above the graph summarise the data
-             so you can compare the original and today's pricing.
+             For ease of use, stats above the graph summarise the data
+             so you can compare the price the product was at when you 
+            first subscribed vs. today's pricing.
              """)
 
     # -Gets user data-
     user = st.session_state.user
     conn = get_db_connection()
-    price_changes = get_a_users_price_changes(conn, user['user_id'])
+    price_changes = get_a_users_price_changes(conn, user["user_id"])
     conn.close()
 
     df = pd.DataFrame(price_changes)
@@ -55,7 +56,7 @@ def main():
 
     # -Gets the box filter-
     st.write("**Filter:**")
-    user_products = df['product_name'].unique()
+    user_products = df["product_name"].unique()
     max_date = df["change_at_date"].max()
     min_date = df["change_at_date"].min()
 
@@ -88,8 +89,8 @@ def main():
 
     st.divider()
 
-    # -Gets KPI overview-
-    st.write("**KPI Overview:**")
+    # -Gets stats overview-
+    st.write("**Stats Overview:**")
 
     # Gets the website name of the selected product
     website_name = df.loc[df["product_name"]
@@ -110,25 +111,25 @@ def main():
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         with st.container(border=True):
-            st.write(f"Website: {website_name.capitalize()}")
+            st.write(f"**Website:** {website_name.capitalize()}")
     with col2:
         with st.container(border=True):
-            st.write(f"Date Added: {first_date}")
+            st.write(f"**Date Added:** {first_date}")
     with col3:
         with st.container(border=True):
-            st.write(f"Original Price: £{original_price}")
+            st.write(f"**Start Price:** £{original_price}")
     with col4:
         with st.container(border=True):
             if current_price > original_price:
-                st.write(f"Current Price: £{current_price} :red[⬆]")
+                st.write(f"**Current Price:** £{current_price} :red[⬆]")
             elif current_price < original_price:
-                st.write(f"Current Price: £{current_price} :green[⬇]")
+                st.write(f"**Current Price:** £{current_price} :green[⬇]")
             else:
-                st.write(f"Current Price: £{current_price} :orange[**–**]")
+                st.write(f"**Current Price:** £{current_price} :orange[**–**]")
 
     st.divider()
 
-    # -Pie chart showing the proportion of websites used for tracked products-
+    # -Chart showing price history-
     # Gets the desired price per product tracked
     desired_prices = df[["product_name", "desired_price"]].drop_duplicates()
 
