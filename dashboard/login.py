@@ -156,6 +156,7 @@ def main() -> None:
 
         # Add user info and logout to sidebar
         with st.sidebar:
+            st.image("final_logo_with_background.png")
             if st.session_state.user:
                 st.write(f"Welcome, {st.session_state.user['user_name']}!")
             if st.button("Logout", key="logout"):
@@ -181,6 +182,7 @@ def main() -> None:
         )
         # If not logged in, show login/signup forms directly
         if st.session_state.show_signup:
+            st.logo("final_logo_with_background.png", size="large")
             sign_up_form()
             st.divider()
             st.write("_Already have an account?_")
@@ -188,6 +190,7 @@ def main() -> None:
                 st.session_state.show_signup = False
                 st.rerun()
         else:
+            st.logo("final_logo_with_background.png", size="large")
             login_page()
             st.divider()
             if st.button("Don't have an account? Sign up"):
