@@ -1,9 +1,9 @@
 """Script for dashboard page with visualisations."""
 
+from datetime import timedelta
 import streamlit as st
 import pandas as pd
 import altair as alt
-from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
 from login_functions import (get_db_connection,
