@@ -51,14 +51,12 @@ def handler(event=None, context=None) -> dict[str:str]:
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, \
             like Gecko) Chrome/140.0.0.0 Safari/537.36"
     }
-    steam_cost_class = "game_purchase_price price"
-    steam_discounted_class = "discount_final_price"
+    steam_container_class = "game_area_purchase_game"
     db_conn = get_db_connection()
     steam_products = get_products(db_conn)
     last_recorded_prices = get_last_recorded_prices(db_conn)
     steam_products = format_products(steam_products,
-                                     steam_cost_class,
-                                     steam_discounted_class,
+                                     steam_container_class,
                                      user_agent,
                                      last_recorded_prices)
     updated_prices = compare_prices(db_conn, steam_products)
