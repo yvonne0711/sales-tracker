@@ -126,8 +126,8 @@ def main():
                     # delete id from subscription table
                     delete_subscription(conn, subscription_id)
                     st.success(f"Stopped tracking {product['product_name']}.")
-                    # refreshes page
-                    st.experimental_rerun()
+                    st.rerun()
+                    
     conn.close()
 
 
