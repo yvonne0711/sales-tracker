@@ -2,6 +2,8 @@
 
 from unittest.mock import MagicMock, patch
 
+import streamlit as st
+
 from login import (sign_up_form,
                    login_page)
 
@@ -20,6 +22,7 @@ class TestSignUpForm:
                 "test_user", "test_user@sigmalabs.co.uk", "Password1!"]
             mock_form.form_submit_button.return_value = True
             mock_st.form.return_value.__enter__.return_value = mock_form
+            mock_st.columns.return_value = (MagicMock(), MagicMock())
 
             # Mock database functions and is_valid_email as these have already been tested
             # and confirmed to work (test_login_functions.py)
@@ -56,11 +59,13 @@ class TestsLoginPage:
         # Replace streamlit with a mock so no app runs during the tests
         with patch('login.st') as mock_st:
 
+
             # Mock the form
             mock_form = MagicMock()
             mock_form.text_input.return_value = "test_user@sigmalabs.co.uk"
             mock_form.form_submit_button.return_value = True
             mock_st.form.return_value.__enter__.return_value = mock_form
+            mock_st.columns.return_value = (MagicMock(), MagicMock())
 
             # Mock database functions and is_valid_email as these have already been tested
             # and confirmed to work (test_login_functions.py)

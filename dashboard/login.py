@@ -70,7 +70,9 @@ def sign_up_form() -> None:
 def login_page() -> None:
     """Login page format."""
     # Format header
-    col1, col2 = st.columns([20, 100])
+    cols = st.columns([20, 100])
+    print(cols)
+    col1, col2 = cols
     with col1:
         st.image("final_logo_with_background.png", width=100)
     with col2:
