@@ -127,7 +127,7 @@ def main():
 
     st.divider()
 
-    # -Chart-
+    # -Pie chart showing the proportion of websites used for tracked products-
     # Gets the desired price per product tracked
     desired_prices = df[["product_name", "desired_price"]].drop_duplicates()
 
