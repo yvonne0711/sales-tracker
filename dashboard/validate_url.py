@@ -31,6 +31,38 @@ def validate_steam_product_url(url: str, headers: dict[str:str]) -> bool:
     return False
 
 
+def validate_jd_product_url(url: str, headers: dict[str:str]) -> bool:
+    """Checks that the price classes steam uses are present."""
+    cost_class = "pri"
+    discounted_class = "now"
+    res = req.get(url, timeout=5, headers=headers)
+    if res.status_code == 200:
+        soup = BeautifulSoup(res.text, "html.parser")
+        if soup.find(
+            attrs={"class":
+                   discounted_class}) is not None or soup.find(
+                       attrs={"class": cost_class}):
+            return True
+        return False
+    return False
+
+
+def validate_next_product_url(url: str, headers: dict[str:str]) -> bool:
+    """Checks that the price classes steam uses are present."""
+    cost_class = "pdp-css-ygohde"
+    discounted_class = "product-now-price"
+    res = req.get(url, timeout=5, headers=headers)
+    if res.status_code == 200:
+        soup = BeautifulSoup(res.text, "html.parser")
+        if soup.find(
+            attrs={"data-testid":
+                   discounted_class}) is not None or soup.find(
+                       attrs={"class": cost_class}):
+            return True
+        return False
+    return False
+
+
 def is_valid_url(selected_site: str, url: str) -> bool:
     """Returns True if the provided product url is valid for the website."""
     user_agent = {
@@ -45,9 +77,9 @@ def is_valid_url(selected_site: str, url: str) -> bool:
             return True
         return False
     elif selected_site == "Next":
-        # Add validation for Next.
-        return True
+        if validate_next_product_url(url, user_agent):
+            return True
     elif selected_site == "JD":
-        # Add validation for JD.
-        return True
+        if validate_jd_product_url(url, user_agent):
+            return True
     return False
