@@ -125,6 +125,7 @@ def get_tracked_products(conn: connection, user_id: int) -> list[dict]:
         cur.execute(query, (user_id,))
         return cur.fetchall()
 
+
 def get_a_users_price_changes(conn: connection, user_id: int):
     """Returns a given users price history on all their subscribed products."""
     with conn.cursor() as cur:
