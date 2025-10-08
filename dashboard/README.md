@@ -1,24 +1,26 @@
-# Souper Saver Dashboard
+# Souper Saver Sales Tracker Dashboard
 
 This repository contains the files required to run the Souper Saver dashboard.
 
 # Files
 
-| Name                     | Description                                                                                     |
-|--------------------------|-------------------------------------------------------------------------------------------------|
-| **`login.py`**           | Contains the code for the login (initial) page of the dashboard.                                |
-| **`pages`**              | Contains the various pages used in the app once the user is logged in.                          |
-| **`functions_dashbaord`**| Contains the functions used throughout the dashboard to perform various tasks.                  |
-| **`test_*.py`**          | Contains pytests for the named files.                                                           |
-| **`requirements.txt`**   | Lists the required libraries for running the code.                                              |
-| **`README.md`**          | This file, providing an overview and instructions for code deployment.                          |
-| **`dockerfile`**         | This file copies all of the relevant code for the dashboard and containerises the dashboard code|
+| Name                     | Description                                                                                            |
+|--------------------------|--------------------------------------------------------------------------------------------------------|
+| **`login.py`**           | Contains the code for the login/signup (initial) page of the dashboard.                                |
+| **`pages`**              | Contains the various pages used in the app once the user is logged in.                                 |
+| **`password`**           | Contains the files for the password verification functions.                                            |
+| **`validate_url`**       | Contains the code for validating that a url is compatible with what we offer on our dashboard.         |
+| **`dockerfile`**         | This file copies all of the relevant code for the dashboard and containerises the dashboard code.      |
+| **`login_functions`**    | Contains the functions used in the login page of the dashboard.                                        |
+| **`test_*.py`**          | Contains pytests for the named files.                                                                  |
+| **`requirements.txt`**   | Lists the required libraries for running the code.                                                     |
+| **`.streamlit`**         | Contains the configuration file for the dashboard theme.                                               |
+| **`README.md`**          | This file, providing an overview and instructions for code deployment.                                 |
 
 
 # Setup
 
-Once a true demo dashboard has been created, this will be populated with full setup instructions for the dashboard.
-The following is a rough start to these instructions.
+The following instructions detail how to set up the Souper Saver Dashboard.
 
 ### Install Dependencies
 
@@ -27,15 +29,6 @@ First, ensure you will need to install the required libraries. You can install t
 ```bash
 pip install -r requirements.txt
 ```
-
-### Running the Dashboard Locally
-
-To run the dashboard locally, you can use the following command:
-
-```bash
-streamlit run skeleton_dashboard.py
-```
-
 
 ## Environment Variables
 
@@ -50,6 +43,15 @@ DB_PORT=port
 DB_NAME=database_name
 ```
 
+
+### Running the Dashboard Locally
+
+To run the dashboard locally, you can use the following command:
+
+```bash
+streamlit run login.py
+```
+
 ## Dockerising the Dashboard
 
 The purpose of the dockerfile is to copy all of the relevant files (listed at the top of this README) and containerise them.
@@ -59,7 +61,7 @@ The purpose of the dockerfile is to copy all of the relevant files (listed at th
 To build the Docker image, use the following command:
 
 ```bash
-docker build -t [ECR NAME] . --platform "Linux/amd64" --provenance false                                        
+docker buildx build . -t {APP_NAME}:latest --platform "Linux/amd64" --provenance=false                                                                              
 ```
 
 ### Tagging the Image
@@ -67,7 +69,7 @@ docker build -t [ECR NAME] . --platform "Linux/amd64" --provenance false
 To tag the Docker image for pushing to your repository, use the following command:
 
 ```bash
-docker tag [ECR NAME]:latest [ACCOUNT ID].dkr.ecr.[REGION].amazonaws.com/c19-sales-tracker-ecr-dashboard:latest
+docker tag {APP_NAME}:latest {ACCOUNT_ID}.dkr.ecr.{REGION}.amazonaws.com/{ECR_REPOSITORY}:latest
 ```
 
 
@@ -76,9 +78,9 @@ docker tag [ECR NAME]:latest [ACCOUNT ID].dkr.ecr.[REGION].amazonaws.com/c19-sal
 To run the Docker container, use the following command:
 
 ```bash
-docker push [ACCOUNT ID].dkr.ecr.[REGION].amazonaws.com/[ECR REPOSITORY]:latest
+docker push {ACCOUNT_ID}.dkr.ecr.{REGION}.amazonaws.com/{ECR_REPOSITORY}:latest
 ```
 
 #### Note:
 
-Replace code in `[]` with the relevant information
+Replace code in `{}` with the relevant information.
