@@ -27,8 +27,9 @@ def create_id_price_map(rows: list[dict]) -> dict[int:float]:
     return price_map
 
 
-def format_products(products: dict[str:str], cost_class: str,
-                    discounted_class: str, headers: dict[str:str],
+def format_products(products: dict[str:str],
+                    container_class: str,
+                    headers: dict[str:str],
                     recorded_prices: list[dict]) -> dict[str:str]:
     """
     Adds the current price, price in database, and
@@ -39,8 +40,7 @@ def format_products(products: dict[str:str], cost_class: str,
     for product in products:
         product["price"] = convert_string_price_to_float(
             get_current_price(product["product_url"],
-                              cost_class,
-                              discounted_class,
+                              container_class,
                               headers))
         if product["product_id"] not in tracked_ids:
             product["db_price"] = "NEW"

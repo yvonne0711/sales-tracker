@@ -3,12 +3,10 @@
 from os import environ as ENV
 import re
 
-import streamlit as st
 import psycopg2
 from psycopg2 import Error
 from psycopg2.extras import RealDictCursor
 from psycopg2.extensions import connection
-from dotenv import load_dotenv
 
 
 def get_db_connection() -> connection:
