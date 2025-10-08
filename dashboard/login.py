@@ -65,6 +65,10 @@ def sign_up_form() -> None:
 def login_page() -> None:
     """Login page format."""
     st.header("Souper Saver Login")
+    st.markdown("""
+                :gray[Welcome to Souper Savers! We make price tracking easy by letting 
+                you know when the products you love are for sale at a deal tailored 
+                to you.]""", unsafe_allow_html=True)
     st.divider()
 
     st.set_page_config(page_title="Souper Saver Login",
@@ -182,7 +186,6 @@ def main() -> None:
         )
         # If not logged in, show login/signup forms directly
         if st.session_state.show_signup:
-            st.logo("final_logo_with_background.png", size="large")
             sign_up_form()
             st.divider()
             st.write("_Already have an account?_")
@@ -190,7 +193,6 @@ def main() -> None:
                 st.session_state.show_signup = False
                 st.rerun()
         else:
-            st.logo("final_logo_with_background.png", size="large")
             login_page()
             st.divider()
             if st.button("Don't have an account? Sign up"):
