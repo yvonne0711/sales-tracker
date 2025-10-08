@@ -150,7 +150,7 @@ def main() -> None:
             st.Page("pages/track_new_product.py",
                     title="Track New Product"),
             st.Page("pages/currently_tracking.py",
-                    title="Currently Tracking Products")
+                    title="Currently Tracking Products"),
             st.Page("pages/price_history_page.py", title="Price History")
         ]
 
