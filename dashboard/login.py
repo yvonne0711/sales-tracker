@@ -19,6 +19,7 @@ def sign_up_form() -> None:
     st.set_page_config(page_title="Souper Saver Login",
                        layout="centered", initial_sidebar_state="collapsed")
 
+    # Format Header
     with st.form("Sign up", clear_on_submit=True):
         col1, col2 = st.columns([20, 100])
         with col1:
@@ -68,11 +69,13 @@ def sign_up_form() -> None:
 
 def login_page() -> None:
     """Login page format."""
+    # Format header
     col1, col2 = st.columns([20, 100])
     with col1:
         st.image("final_logo_with_background.png", width=100)
     with col2:
         st.header("Souper Saver Login")
+
     st.markdown("""
                 :gray[Welcome to Souper Savers! We make price tracking easy by letting 
                 you know when the products you love are for sale at a deal tailored 
