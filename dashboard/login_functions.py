@@ -3,12 +3,10 @@
 from os import environ as ENV
 import re
 
-import streamlit as st
 import psycopg2
 from psycopg2 import Error
 from psycopg2.extras import RealDictCursor
 from psycopg2.extensions import connection
-from dotenv import load_dotenv
 
 
 def get_db_connection() -> connection:
@@ -93,6 +91,37 @@ def is_valid_email(email: str) -> bool:
     if re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
         return True
     return False
+
+
+def get_tracked_products(conn: connection, user_id: int) -> list[dict]:
+    """Gets all products tracked by a user, including current price and desired price."""
+    with conn.cursor() as cur:
+        query = """
+        SELECT 
+            s.subscription_id,
+            w.website_name,
+            p.product_name,
+            p.product_url,
+            s.desired_price,
+            pu.new_price AS current_price,
+            pu.change_at AS date_added
+        FROM subscription s
+        JOIN product p
+            ON s.product_id = p.product_id
+        JOIN website w
+            ON p.website_id = w.website_id
+        LEFT JOIN price_update pu 
+            ON pu.product_id = p.product_id
+            AND pu.change_at = (
+                SELECT MAX(change_at)
+                FROM price_update
+                WHERE product_id = p.product_id
+            )
+        WHERE s.user_id = %s
+        ORDER BY date_added DESC;
+        """
+        cur.execute(query, (user_id,))
+        return cur.fetchall()
 
 
 def get_a_users_price_changes(conn: connection, user_id: int):
