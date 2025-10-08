@@ -1,8 +1,11 @@
 """Currently tracking page that displays all products currently tracked for a user."""
 
+import datetime as datetime
+
 import streamlit as st
 import pandas as pd
 from dotenv import load_dotenv
+
 from login_functions import (get_db_connection, get_tracked_products)
 
 
