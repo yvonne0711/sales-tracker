@@ -20,7 +20,11 @@ def sign_up_form() -> None:
                        layout="centered", initial_sidebar_state="collapsed")
 
     with st.form("Sign up", clear_on_submit=True):
-        st.subheader("Please create an account to get access to Souper Saver!")
+        col1, mid, col2 = st.columns([20, 1, 100])
+        with col1:
+            st.image("final_logo_with_background.png", width=100)
+        with col2:
+            st.subheader("Please create an account to get access to Souper Saver!")
         username = st.text_input("Please create a username", key="username")
         new_email_input = st.text_input(
             "Please enter your email address", key="user_input_email")
@@ -64,7 +68,11 @@ def sign_up_form() -> None:
 
 def login_page() -> None:
     """Login page format."""
-    st.header("Souper Saver Login")
+    col1, mid, col2 = st.columns([20, 1, 100])
+    with col1:
+        st.image("final_logo_with_background.png", width=100)
+    with col2:
+        st.header("Souper Saver Login")
     st.markdown("""
                 :gray[Welcome to Souper Savers! We make price tracking easy by letting 
                 you know when the products you love are for sale at a deal tailored 
@@ -198,6 +206,7 @@ def main() -> None:
             if st.button("Don't have an account? Sign up"):
                 st.session_state.show_signup = True
                 st.rerun()
+
 
 
 if __name__ == "__main__":
