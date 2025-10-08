@@ -2,7 +2,7 @@
 
 from os import environ as ENV
 import re
-
+from dotenv import load_dotenv
 import psycopg2
 from psycopg2 import Error
 from psycopg2.extras import RealDictCursor
@@ -53,9 +53,23 @@ def select_website_id(conn: connection, website: str) -> dict[str:int]:
     return data
 
 
+def product_exists(conn: connection, url: str) -> int:
+    """Checks if the products the user wants is already in the database"""
+    with conn.cursor() as cur:
+        query = """
+                select product_id from product where product_url = %s
+                """
+        cur.execute(query, (url,))
+        result = cur.fetchone()
+        product_id = result["product_id"]
+        return product_id
+
+
 def insert_product_details(conn: connection, product_name: str,
                            url: str, website_id: int) -> int:
     """Inserts the user inputted product data into the product table and returns its product_id."""
+    if product_exists(conn, url):
+        return product_exists(conn, url)
     with conn.cursor() as cur:
         query = """
                 INSERT INTO product
@@ -175,6 +189,7 @@ def get_product_pie_chart_data(conn: connection) -> list[tuple]:
         cur.execute(query)
         result = cur.fetchall()
         return result
+
 
 def get_tracked_products(conn: connection, user_id: int) -> list[dict]:
     """Gets all products tracked by a user, including current price and desired price."""
