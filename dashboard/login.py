@@ -19,7 +19,7 @@ def sign_up_form() -> None:
     st.set_page_config(page_title="Souper Saver Login",
                        layout="centered", initial_sidebar_state="collapsed")
 
-    with st.form("Sign up", clear_on_submit=True):
+    with st.form("Sign up", clear_on_submit=False):
         st.subheader("Please create an account to get access to Souper Saver!")
         username = st.text_input("Please create a username", key="username")
         new_email_input = st.text_input(
