@@ -1,3 +1,4 @@
+pyarrow
 pylint
 pytest
 pytest-cov
