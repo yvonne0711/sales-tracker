@@ -19,7 +19,7 @@ def sign_up_form() -> None:
     st.set_page_config(page_title="Souper Saver Login",
                        layout="centered", initial_sidebar_state="collapsed")
 
-    with st.form("Sign up", clear_on_submit=False):
+    with st.form("Sign up", clear_on_submit=True):
         st.subheader("Please create an account to get access to Souper Saver!")
         username = st.text_input("Please create a username", key="username")
         new_email_input = st.text_input(
@@ -38,8 +38,6 @@ def sign_up_form() -> None:
                 st.error("Please enter a valid email address")
             elif not new_password_input:
                 st.error("Please enter a password")
-            elif not password_checker(new_password_input):
-                pass
 
             else:
                 conn = get_db_connection()
@@ -64,19 +62,7 @@ def sign_up_form() -> None:
 
 def login_page() -> None:
     """Login page format."""
-    # Format header
-    cols = st.columns([20, 100])
-    print(cols)
-    col1, col2 = cols
-    with col1:
-        st.image("final_logo_with_background.png", width=100)
-    with col2:
-        st.header("Souper Saver Login")
-
-    st.markdown("""
-                :gray[Welcome to Souper Savers! We make price tracking easy by letting 
-                you know when the products you love are for sale at a deal tailored 
-                to you.]""", unsafe_allow_html=True)
+    st.header("Souper Saver Login")
     st.divider()
 
     st.set_page_config(page_title="Souper Saver Login",
@@ -119,32 +105,6 @@ def login_page() -> None:
                         "No account found with this email. Please try again or sign up.")
 
 
-def password_checker(password: str) -> bool:
-    '''Checks that user password meets the requirements'''
-    is_valid = True
-
-    if len(password) < 8:
-        st.error('Password must be at least 8 characters long')
-        is_valid = False
-
-    special_characters = '!@£$%&*()'
-    has_special = any(char in special_characters for char in password)
-    has_capital = any(char.isupper() for char in password)
-    has_lower = any(char.islower() for char in password)
-
-    if not has_lower:
-        st.error('At least one character has to be lowercase')
-        is_valid = False
-    if not has_capital:
-        st.error('At least one character has to be uppercase')
-        is_valid = False
-    if not has_special:
-        st.error('At least one character has to be a special character !@£$%&*()')
-        is_valid = False
-
-    return is_valid
-
-
 def main() -> None:
     """Initialise the login page."""
     # Initialize session state
@@ -161,14 +121,11 @@ def main() -> None:
             st.Page("pages/home_page.py", title="Home Page"),
             st.Page("pages/track_new_product.py",
                     title="Track New Product"),
-            st.Page("pages/currently_tracking.py",
-                    title="Currently Tracking Products"),
             st.Page("pages/price_history_page.py", title="Price History")
         ]
 
         # Add user info and logout to sidebar
         with st.sidebar:
-            st.image("final_logo_with_background.png")
             if st.session_state.user:
                 st.write(f"Welcome, {st.session_state.user['user_name']}!")
             if st.button("Logout", key="logout"):
@@ -206,7 +163,6 @@ def main() -> None:
             if st.button("Don't have an account? Sign up"):
                 st.session_state.show_signup = True
                 st.rerun()
-
 
 
 if __name__ == "__main__":

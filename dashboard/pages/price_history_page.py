@@ -146,20 +146,30 @@ def main():
             tickCount="day", format="%d %b"),
             scale=alt.Scale(domain=[min_date, max_date])),
         y=alt.Y("new_price:Q", title="Price (£)"),
-        color=alt.Color("product_name:N", title="Products", legend=None)
-    )
+        color=alt.Color("product_name:N", title="Products",
+                        legend=None))
 
     desired_price_dict = {"desired_price": [desired_price]}
     desired_price_df = pd.DataFrame(desired_price_dict)
 
     desired_prices_line = alt.Chart(desired_price_df).mark_rule(
         color="red", strokeDash=[6, 6]).encode(
-            y="desired_price:Q"
+        y="desired_price:Q"
     )
 
     price_chart = (
         chart + desired_prices_line).properties(title="Historical Price Changes")
-    st.altair_chart(price_chart)
+
+    col1, col2 = st.columns([4, 1], gap="large")
+    with col1:
+        st.altair_chart(price_chart)
+    with col2:
+        st.write("")
+        st.write("")
+        st.write("")
+        st.markdown(
+            "<p style = 'font-size:13px; margin-bottom:0px; >' </p> Desired Price:"
+            "<p style = 'font-size:12px; color:Red; >' </p> – – –", unsafe_allow_html=True)
 
 
 if __name__ == "__main__":
