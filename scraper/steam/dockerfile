@@ -6,10 +6,10 @@ COPY requirements.txt .
 
 RUN pip install -r requirements.txt
 
-COPY extract.py .
+COPY extract_steam.py .
 
-COPY transform.py .
+COPY transform_steam.py .
 
-COPY load.py .
+COPY load_steam.py .
 
 CMD [ "load.handler" ]
