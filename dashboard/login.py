@@ -21,11 +21,23 @@ def sign_up_form() -> None:
 
     with st.form("Sign up", clear_on_submit=False):
         st.subheader("Please create an account to get access to Souper Saver!")
-        username = st.text_input("Please create a username", key="username")
+
+        username = st.text_input("Please create a username", 
+                                 key="username",
+                                 placeholder="Create a username", 
+                                 icon=":material/account_circle:")
+
         new_email_input = st.text_input(
-            "Please enter your email address", key="user_input_email")
+                                "Please enter your email address", 
+                                key="user_input_email",
+                                placeholder="Email", 
+                                icon=":material/alternate_email:")
+
         new_password_input = st.text_input("Please create a password",
-                                           key="password", type="password")
+                                           key="password", 
+                                           type="password",
+                                           placeholder="Create a password", 
+                                           icon=":material/encrypted:")
 
         signup_button = st.form_submit_button("Sign Up")
 
@@ -84,10 +96,17 @@ def login_page() -> None:
 
     with st.form("Login"):
         email_input = st.text_input(
-            "Please enter your email address", key="user_email")
-        password_input = st.text_input(
-            "Please enter your password", key="user_password", type="password"
-        )
+                                "Please enter your email address", 
+                                key="user_input_email",
+                                placeholder="Email", 
+                                icon=":material/alternate_email:")
+
+        password_input = st.text_input("Please create a password",
+                                           key="password", 
+                                           type="password",
+                                           placeholder="Password", 
+                                           icon=":material/encrypted:")
+
         login_button = st.form_submit_button("Log In")
 
         if login_button:
