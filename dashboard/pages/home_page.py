@@ -17,9 +17,16 @@ def main():
         if st.button("Go to Login Page"):
             st.switch_page("login.py")
         st.stop()
-    # To delete once the CSS header is in place!
-    st.header("Home")
-    st.caption("Taste the best deals every time! 🙌")
+
+    # Format header
+    cols = st.columns([20, 100])
+    col1, col2 = cols
+    with col1:
+        st.image("final_logo_with_background.png", width=500)
+    with col2:
+        st.header("Home", divider="grey")
+        st.caption("Taste the best deals every time! 🙌")
+
     # Get user from session state
     user = st.session_state.user
     # Welcome the user using their username
