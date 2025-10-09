@@ -6,15 +6,17 @@ from datetime import datetime
 
 from dotenv import load_dotenv
 
-from extract import (get_db_connection,
+from extract_next import (get_db_connection,
                      get_products,
                      get_current_price,
                      get_last_recorded_prices)
 
 
-def convert_string_price_to_float(price: str) -> float:
-    """Converts the price from a string to a float and returns it."""
-    float_price = float(price[1:])
+def clean_price(price: str) -> float:
+    """Cleans the price and converts the price from a string to a float 
+    and returns it e.g. "£13.50" or "Now £13.50"."""
+    cleaned_price = price.replace("Now", "").replace("£", "").strip()
+    float_price = float(cleaned_price)
     return float_price
 
 
@@ -42,7 +44,7 @@ def format_products(products: dict[str:str], cost_class: str,
     tracked_ids = get_list_of_product_ids(recorded_prices)
     price_map = create_id_price_map(recorded_prices)
     for product in products:
-        product["price"] = convert_string_price_to_float(
+        product["price"] = clean_price(
             get_current_price(product["product_url"],
                               cost_class,
                               discounted_class,
@@ -64,16 +66,17 @@ if __name__ == "__main__":
             like Gecko) Chrome/140.0.0.0 Safari/537.36"
     }
 
-    steam_cost_class = "game_purchase_price price"
-    steam_discounted_class = "discount_final_price"
+    next_cost_class = "pdp-css-ygohde"
+    next_discounted_class = "product-now-price"
+    next_title_class = "pdp-css-1b3j8zg"
 
     db_conn = get_db_connection()
 
-    steam_products = get_products(db_conn)
+    next_products = get_products(db_conn)
     last_recorded_prices = get_last_recorded_prices(db_conn)
-    steam_products = format_products(steam_products,
-                                     steam_cost_class,
-                                     steam_discounted_class,
+    next_products = format_products(next_products,
+                                     next_cost_class,
+                                     next_discounted_class,
                                      user_agent,
                                      last_recorded_prices)
 

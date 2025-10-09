@@ -6,10 +6,6 @@ COPY requirements.txt .
 
 RUN pip install -r requirements.txt
 
-COPY extract_steam.py .
+COPY subscription.py .
 
-COPY transform_steam.py .
-
-COPY load_steam.py .
-
-CMD [ "load.handler" ]
+CMD [ "subscription.handler" ]

@@ -1,5 +1,11 @@
+pyarrow
 pylint
 pytest
+pytest-cov
 streamlit
 psycopg2-binary
 python-dotenv
+requests
+bs4
+argon2-cffi
+pandas

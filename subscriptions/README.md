@@ -1,18 +1,16 @@
-# Scraper
-This directory contains the ETL scripts for the e-commerce sites.
+# Subscriptions
+
+This directory contains the subscriptions script
 
 ## Description
-Each e-commerce site has its own directory containing all the files required to scrape that site.
-- **`extract.py`**  
-Defines functions for retrieving currently tracked products from the database and scraping their current prices.
-- **`transform.py`**  
-Contains functions that convert data to the correct data types and structure it into the required format.
-- **`load.py`**  
-Handles loading price updates into the database and includes the main handler function for running the script as an AWS Lambda.
+- **`subscription.py`**  
+This script gets all the products from the database and gets the latest price from the price update table. It then loops through all users subscribed to the product and compares then users desired price to the product price. If the product price is at or below the desired price it then adds the user details along with the product details to  list. The list of all users to emails is then returned and ready to be sent of to the email script to configure a personalised email.
+
 - **`dockerfile`**  
-Defines the container configuration for the ETL script.
-- **`test_[file_name].py`**  
-Includes unit tests for the corresponding `[file_name]` module.
+Defines the container configuration for the subscription script.
+
+- **`test_subsciptions.py`**  
+Includes unit tests for the corresponding the file.
 
 ## Getting Started
 
@@ -39,10 +37,10 @@ pip3 install -r requirements.txt
 
 ### Running Locally
 ```bash
-python3 load.py
+python3 subscription.py
 ```
 
-## Dockerising the ETL
+## Dockerising the subscription
 The purpose of the dockerfile is to copy all of the relevant files and containerise them.
 
 ### Building the Docker Image

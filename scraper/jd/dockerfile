@@ -6,10 +6,10 @@ COPY requirements.txt .
 
 RUN pip install -r requirements.txt
 
-COPY extract_steam.py .
+COPY extract_jd.py .
 
-COPY transform_steam.py .
+COPY transform_jd.py .
 
-COPY load_steam.py .
+COPY load_jd.py .
 
-CMD [ "load.handler" ]
+CMD [ "load_jd.handler" ]

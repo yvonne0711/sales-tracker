@@ -1,0 +1,31 @@
+FROM python:latest
+
+EXPOSE 8501
+
+WORKDIR /dashboard
+
+COPY final_logo_with_background.png .
+COPY final_logo.png .
+
+COPY requirements.txt .
+
+RUN pip install -r requirements.txt 
+
+RUN mkdir pages
+COPY pages/home_page.py pages
+COPY pages/track_new_product.py pages
+COPY pages/currently_tracking.py pages
+COPY pages/price_history_page.py pages
+
+RUN mkdir password
+COPY password/passwords.py password
+
+RUN mkdir .streamlit
+COPY .streamlit/config.toml .streamlit
+
+COPY login.py .
+COPY login_functions.py .
+COPY validate_url.py .
+COPY scraper_functions.py .
+
+CMD ["streamlit", "run", "login.py", "--server.port=8501", "--server.address=0.0.0.0"]

@@ -1,8 +1,8 @@
-"""Tests for the transform script."""
+"""Tests for the transform_jd script."""
 
-from transform import (convert_string_price_to_float,
-                       get_list_of_product_ids,
-                       create_id_price_map)
+from transform_jd import (convert_string_price_to_float,
+                          get_list_of_product_ids,
+                          create_id_price_map)
 
 
 def test_convert_string_price_to_float_normal():

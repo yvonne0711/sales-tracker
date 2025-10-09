@@ -1,10 +1,7 @@
-"""
-Script that gets Steam product details from the RDS and scrapes their
-prices from their respective URLs.
-"""
+"""Script that gets Next product details from the RDS 
+and scrapes their prices from their respective URLs."""
 
 from os import environ
-
 import requests as req
 from bs4 import BeautifulSoup
 from psycopg2 import connect
@@ -12,9 +9,8 @@ from psycopg2.extensions import connection
 from psycopg2.extras import RealDictCursor
 from dotenv import load_dotenv
 
-
 def get_db_connection() -> connection:
-    """Returns a live connection to the database."""
+    """Returns a live connection from the database."""
     return connect(user=environ["DB_USERNAME"],
                    password=environ["DB_PASSWORD"],
                    host=environ["DB_HOST"],
@@ -22,30 +18,28 @@ def get_db_connection() -> connection:
                    database=environ["DB_NAME"],
                    cursor_factory=RealDictCursor)
 
-
-def query_database(conn: connection, sql: str) -> list[dict]:
+def query_database(conn: connection, query: str) -> list[dict]:
     """Returns the result of a query to the database."""
     with conn.cursor() as cursor:
-        cursor.execute(sql)
+        cursor.execute(query)
         result = cursor.fetchall()
     return result
 
-
 def get_products(conn: connection) -> list[dict]:
-    """Returns all the steam products in the database."""
+    """Returns all the Next products in the database."""
     query = """
     SELECT *
     FROM product
     JOIN website
     USING(website_id)
-    WHERE website_name = 'steam';
+    WHERE website_name = 'next';
     """
     products = query_database(conn, query)
     return products
 
 
 def get_last_recorded_prices(conn: connection) -> list[dict]:
-    """Gets the last recorded price for all steam products."""
+    """Gets the last recorded price for all next products."""
     query = """
     SELECT p.product_id,
         pu.change_at,
@@ -55,7 +49,7 @@ def get_last_recorded_prices(conn: connection) -> list[dict]:
     USING (product_id)
     JOIN website AS w
     USING (website_id)
-    WHERE w.website_name = 'steam'
+    WHERE w.website_name = 'next'
     AND pu.change_at = (
         SELECT MAX(change_at)
         FROM price_update
@@ -66,23 +60,23 @@ def get_last_recorded_prices(conn: connection) -> list[dict]:
     return prices
 
 
-def get_html_text(url: str, headers: dict[str:str]):
-    '''Gets the full text response of the html'''
+def get_response_text(url: str, headers: dict[str:str]) -> tuple[int, str]:
+    """Gets the full text response of the html."""
     res = req.get(url, headers=headers, timeout=5)
     if res.status_code == 200:
         return res.status_code, res.text
     return res.status_code, res.reason
 
 
-def is_discounted(html: str, discounted_class: str) -> bool:
+def is_discounted(html: tuple[int, str], discounted_class: str) -> bool:
     """Checks if the product price_class is present on the webpage."""
     soup = BeautifulSoup(html[1], "html.parser")
-    if soup.find(attrs={"class": discounted_class}) is not None:
+    if soup.find(attrs={"data-testid": discounted_class}) is not None:
         return True
     return False
 
 
-def scrape_price(html: str, cost_class: str) -> str:
+def scrape_price(html: tuple[int, str], cost_class: str) -> str:
     """Returns the price of a product for the product URL and cost class."""
     soup = BeautifulSoup(html[1], "html.parser")
     price = soup.find(attrs={"class": cost_class}).text.strip()
@@ -90,15 +84,30 @@ def scrape_price(html: str, cost_class: str) -> str:
         return price
 
 
-def get_current_price(url: str, cost_class: str, discounted_class: str, headers: dict[str:str]) -> str:
-    """Returns the current price of a product from its details."""
-    html_text = get_html_text(url, headers)
-    if html_text[0] == 200:
-        if is_discounted(html_text, discounted_class):
-            return scrape_price(html_text, discounted_class)
-        return scrape_price(html_text, cost_class)
-    return html_text
+def scrape_price_discount(html: str, cost_class: str) -> str:
+    """Returns the price of a product for the product URL and cost class."""
+    soup = BeautifulSoup(html[1], "html.parser")
+    price = soup.find(attrs={"data-testid": cost_class}).text.strip()
+    if price:
+        return price
 
+def get_current_price(url: str, cost_class: str,
+                      discounted_class: str, headers: dict[str:str]) -> str:
+    """Returns the current price of a product from its details."""
+    response_text = get_response_text(url, headers)
+    if response_text[0] == 200:
+        if is_discounted(response_text, discounted_class):
+            return scrape_price_discount(response_text, discounted_class)
+        return scrape_price(response_text, cost_class)
+    return response_text
+
+
+def scrape_title(html: str, title_class: str) -> str:
+    """Returns the price of a product for the product URL and cost class."""
+    soup = BeautifulSoup(html[1], "html.parser")
+    title = soup.find(attrs={"class": title_class}).text.strip()
+    if title:
+        return title
 
 if __name__ == "__main__":
     load_dotenv()
@@ -109,11 +118,12 @@ if __name__ == "__main__":
             like Gecko) Chrome/140.0.0.0 Safari/537.36"
     }
 
-    steam_cost_class = "game_purchase_price price"
-    steam_discounted_class = "discount_final_price"
+    next_cost_class = "pdp-css-ygohde"
+    next_discounted_class = "product-now-price"
+    next_title_class = "pdp-css-1b3j8zg"
 
     db_conn = get_db_connection()
 
-    steam_products = get_products(db_conn)
+    next_products = get_products(db_conn)
 
     db_conn.close()
