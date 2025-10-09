@@ -30,38 +30,40 @@ def main():
     # Welcome the user using their username
     st.subheader(f"Welcome {user['user_name']}!")
     st.markdown("""
-            Trying to get the best deal but don't have the 
+            Trying to get the best deal but don't have the
             time to idle on websites waiting on a price drop?
             Souper Saver has you covered! We check the sites
-            and let you know when your favourite products are up 
-            for grabs at a deal tailored 
+            and let you know when your favourite products are up
+            for grabs at a deal tailored
             <span style="color:#A0C878">**for you, by you**</span>.
-             
-             This dashboard is split up into the following pages:
-             - Home 
-             - Track New Product 
-             - Currently Tracking 
-             - Price History
 
-             The **'Home'** page displays the total statistics across all users
+             This dashboard is split up into the following pages:""", unsafe_allow_html=True)
+    with st.expander("Home"):
+
+        st.markdown(""" The **'Home'** page displays the total statistics across all users
              so you can see what websites or products
              are the most popular, along with the overall number of websites we
              support, total users, and the total currently tracked products 
-             across all users!
+             across all users!""")
 
-             The **'Track New Product'** page enables you to add new products
+    with st.expander("Track New Product"):
+
+        st.markdown("""The **'Track New Product'** page enables you to add new products
              you wish to track and the desired price you would like to 
-             be alerted at.
+             be alerted at.""")
 
-             The **'Currently Tracking'** page enables you to see all of your
+    with st.expander("Currently Tracking"):
+
+        st.markdown("""The **'Currently Tracking'** page enables you to see all of your
              current tracked products, and manage them by removing subscriptions
-             with the click of a button!
+             with the click of a button!""")
 
-             The **'Price History'** page enables you to select any of your
+    with st.expander("Price History"):
+
+        st.markdown("""The **'Price History'** page enables you to select any of your
              subscribed products and see how the price has changed over time,
              so you can decide if you would like to wait for further price drops
-             or buy when your desired price has been reached! 
-            """, unsafe_allow_html=True)
+             or buy when your desired price has been reached! """)
 
     st.divider()
 
