@@ -57,12 +57,14 @@ def product_exists(conn: connection, url: str) -> int:
     """Checks if the products the user wants is already in the database"""
     with conn.cursor() as cur:
         query = """
-                select product_id from product where product_url = %s
+                SELECT product_id FROM product WHERE product_url = %s
                 """
         cur.execute(query, (url,))
         result = cur.fetchone()
-        product_id = result["product_id"]
-        return product_id
+        if result is not None:
+            product_id = result["product_id"]
+            return product_id
+        return None
 
 
 def insert_product_details(conn: connection, product_name: str,
