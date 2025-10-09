@@ -61,7 +61,7 @@ def product_exists(conn: connection, url: str) -> int:
                 """
         cur.execute(query, (url,))
         result = cur.fetchone()
-        if result:
+        if result is not None:
             product_id = result["product_id"]
             return product_id
         return None
