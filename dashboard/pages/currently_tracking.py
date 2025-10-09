@@ -1,5 +1,6 @@
 """Currently tracking page that displays all products currently tracked for a user."""
 
+import time
 import datetime as datetime
 
 import streamlit as st
@@ -135,6 +136,7 @@ def main():
                     # delete id from subscription table
                     delete_subscription(conn, subscription_id)
                     st.success(f"Stopped tracking {product['product_name']}.")
+                    time.sleep(2)
                     st.rerun()
 
     conn.close()
