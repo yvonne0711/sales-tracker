@@ -16,16 +16,53 @@ def generate_html_report(row: dict) -> str:
     product_url = row["product_url"]
 
     html = f"""
-    <html>
+    <html lang="en">
     <head>
-        <title>New sale! - {today}</title>
+    <meta charset="utf-8">
+    <title>New sale! - {today}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
-    <body>
-        <h2>Hi {user_name},</h2>
-        <p>Good news! The product {product_name} you're subscribed to is on sale.</p>
-        <h3><a href='{product_url}'>{product_name}</a></h3>
-        <p><b>£{desired_price} -> £{new_price}</b></p>
-        <p>Thank you.</p>
+    <body style="margin:0; padding:0; background-color:#f3f4f6; font-family:Arial, Helvetica, sans-serif; color:#111827;">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+        <td align="center" style="padding:30px 15px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="background:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,0.05);">
+            <tr>
+                <td style="background:#6EA9AB; padding:20px; text-align:center;">
+                <img src="http://35.176.110.137:8501/media/38efa70ba7cdb1d1f43ef4e75401e53b2c268120b70ebc89783e428c.png" alt="Company Logo" width="140" style="display:block; margin:0 auto; border:0; outline:none; text-decoration:none;">
+                </td>
+            </tr>
+            <!-- Body -->
+            <tr>
+                <td style="padding:28px 24px;">
+                <h2 style="margin:0 0 16px 0; font-size:20px; color:#111827;">Hi {user_name},</h2>
+                <p style="margin:0 0 18px 0; font-size:16px; line-height:24px; color:#374151;">
+                    Good news! The product you’re subscribed to, <strong>{product_name}</strong>, is now on sale.
+                </p>
+                <div style="margin:20px 0; text-align:center;">
+                    <a href="{product_url}" style="display:inline-block; background:#0A837F; color:#ffffff; text-decoration:none; font-size:16px; font-weight:600; padding:12px 24px; border-radius:6px;">
+                    View {product_name}
+                    </a>
+                </div>
+                <p style="margin:0 0 18px 0; font-size:16px; color:#111827;">
+                    <b style="color:#16a34a;">£{desired_price}</b> → <b style="color:#dc2626;">£{new_price}</b>
+                </p>
+                <p style="margin:20px 0 0 0; font-size:15px; color:#4b5563;">
+                    Thank you,<br>
+                    <strong>Your Souper Saver Team</strong>
+                </p>
+                </td>
+            </tr>
+            <tr>
+                <td style="background:#f9fafb; text-align:center; padding:16px; font-size:13px; color:#6b7280;">
+                © <span id="year">{today}</span> Souper Saver<br>
+                <a href="http://35.176.110.137:8501/" style="color:#6b7280; text-decoration:underline;">Track more products here</a>
+                </td>
+            </tr>
+            </table>
+        </td>
+        </tr>
+    </table>
     </body>
     </html>
     """
@@ -80,8 +117,8 @@ def handler(event: dict, context: None=None) -> dict:
 
 if __name__ == "__main__":
     event = {"email_data": [{
-        "user_name": "Bob",
-        "user_email": "bob12345@example.com",
+        "user_name": "Yvonne",
+        "user_email": "trainee.yvonne.wong@sigmalabs.co.uk",
         "product_name": "Hades II",
         "product_url": "https://store.steampowered.com/app/1145350/Hades_II/",
         "desired_price": 10,
