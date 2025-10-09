@@ -4,7 +4,7 @@ Script that transforms the product details into the appropriate datatypes.
 
 from datetime import datetime
 
-from extract import get_current_price
+from extract_steam import get_current_price
 
 
 def convert_string_price_to_float(price: str) -> float:
