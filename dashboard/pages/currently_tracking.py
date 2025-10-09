@@ -1,5 +1,6 @@
 """Currently tracking page that displays all products currently tracked for a user."""
 
+import time
 import datetime as datetime
 
 import streamlit as st
@@ -56,7 +57,7 @@ def main():
 
     # websites
     with col1:
-        websites = ["All"] + sorted([name for name in df["website_name"].unique().tolist()])
+        websites = ["All"] + sorted([name.capitalize() for name in df["website_name"].unique().tolist()])
         selected_website = st.selectbox("Website", websites)
 
     # current price
@@ -121,7 +122,7 @@ def main():
             product = filtered.iloc[row]
 
             # create a container
-            with st.container():
+            with st.container(border=True):
                 row_cols = st.columns(5)
                 row_cols[0].write(product["product_name"])
                 row_cols[1].write(f"£{product['current_price']:.2f}")
@@ -135,6 +136,7 @@ def main():
                     # delete id from subscription table
                     delete_subscription(conn, subscription_id)
                     st.success(f"Stopped tracking {product['product_name']}.")
+                    time.sleep(2)
                     st.rerun()
 
     conn.close()

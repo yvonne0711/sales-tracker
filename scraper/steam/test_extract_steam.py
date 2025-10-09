@@ -2,8 +2,7 @@
 
 from unittest.mock import patch
 
-from extract import (scrape_price,
-                     get_current_price)
+from extract_steam import (scrape_price, get_current_price)
 
 
 HTML = """    <div class="game_area_purchase_game">
@@ -68,7 +67,7 @@ def test_scrape_price():
     assert result == "£49.99"
 
 
-@patch("extract.get_html_text")
+@patch("extract_steam.get_html_text")
 def test_get_current_price_false(mock_html):
     """
     Tests that the functions work together to get the price of the product 

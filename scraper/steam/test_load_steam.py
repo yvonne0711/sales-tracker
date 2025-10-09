@@ -2,14 +2,14 @@
 
 from unittest.mock import patch, MagicMock
 
-from load import compare_prices
+from load_steam import compare_prices
 
 
 def test_compare_prices_1():
     """Checks if compare_prices returns {id: price}."""
     mock_conn = MagicMock()
 
-    with patch("load.update_price"):
+    with patch("load_steam.update_price"):
         result = compare_prices(mock_conn, [{"db_price": "NEW",
                                             "price": 4.99,
                                              "product_id": 7}])
@@ -20,7 +20,7 @@ def test_compare_prices_2():
     """Checks if compare_prices returns {id: price} for multiple products."""
     mock_conn = MagicMock()
 
-    with patch("load.update_price"):
+    with patch("load_steam.update_price"):
         result = compare_prices(mock_conn, [{"db_price": "NEW",
                                             "price": 4.99,
                                              "product_id": 7},
