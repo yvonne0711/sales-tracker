@@ -22,21 +22,21 @@ def sign_up_form() -> None:
     with st.form("Sign up", clear_on_submit=False):
         st.subheader("Please create an account to get access to Souper Saver!")
 
-        username = st.text_input("Please create a username", 
+        username = st.text_input("Please create a username",
                                  key="username",
-                                 placeholder="Create a username", 
+                                 placeholder="Create a username",
                                  icon=":material/account_circle:")
 
         new_email_input = st.text_input(
-                                "Please enter your email address", 
-                                key="user_input_email",
-                                placeholder="Email", 
-                                icon=":material/alternate_email:")
+            "Please enter your email address",
+            key="user_input_email",
+            placeholder="Email",
+            icon=":material/alternate_email:")
 
         new_password_input = st.text_input("Please create a password",
-                                           key="password", 
+                                           key="password",
                                            type="password",
-                                           placeholder="Create a password", 
+                                           placeholder="Create a password",
                                            icon=":material/encrypted:")
 
         signup_button = st.form_submit_button("Sign Up")
@@ -86,7 +86,7 @@ def login_page() -> None:
         st.header("Souper Saver Login")
 
     st.markdown("""
-                :gray[Welcome to Souper Savers! We make price tracking easy by letting 
+                :gray[Welcome to Souper Saver! We make price tracking easy by letting 
                 you know when the products you love are for sale at a deal tailored 
                 to you.]""", unsafe_allow_html=True)
     st.divider()
@@ -96,16 +96,16 @@ def login_page() -> None:
 
     with st.form("Login"):
         email_input = st.text_input(
-                                "Please enter your email address", 
-                                key="user_input_email",
-                                placeholder="Email", 
-                                icon=":material/alternate_email:")
+            "Please enter your email address",
+            key="user_input_email",
+            placeholder="Email",
+            icon=":material/alternate_email:")
 
         password_input = st.text_input("Please create a password",
-                                           key="password", 
-                                           type="password",
-                                           placeholder="Password", 
-                                           icon=":material/encrypted:")
+                                       key="password",
+                                       type="password",
+                                       placeholder="Password",
+                                       icon=":material/encrypted:")
 
         login_button = st.form_submit_button("Log In")
 
@@ -225,7 +225,6 @@ def main() -> None:
             if st.button("Don't have an account? Sign up"):
                 st.session_state.show_signup = True
                 st.rerun()
-
 
 
 if __name__ == "__main__":
