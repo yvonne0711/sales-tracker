@@ -61,19 +61,19 @@ def main():
     min_date = df["change_at_date"].min()
 
     with st.container(border=True):
-        col1, col2, col3 = st.columns(3)
+        col1, col2 = st.columns(2)
         with col1:
             selected_product = st.selectbox("Product", user_products)
         with col2:
-            start_date = st.date_input("Start Date",
-                                       value=min_date,
+            date_range = st.date_input("Date",
+                                       value=(min_date, max_date),
                                        min_value=min_date,
                                        max_value=max_date)
-        with col3:
-            end_date = st.date_input("End Date",
-                                     value=max_date,
-                                     min_value=min_date,
-                                     max_value=max_date)
+        try:
+            start_date, end_date = date_range
+        except ValueError:
+            st.error("Start and end date is required.")
+            st.stop()
 
     # Checks if only initial data present and no updates to pricing
     product_counts = df.groupby("product_name").size()
