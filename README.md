@@ -72,12 +72,7 @@ The [phase_one](terraform/phase_one) module contains terraform resources that we
 
 ### Phase Two
 
-The [phase_two](terraform/phase_two) module contains terraform resources that were dependent on external configuration yet to be setup e.g., image URIs. The following must be completed before running this module:
-
-- ETL containers for Steam, Next, and JD pushed to the ECR.
-- Subscription container pushed to the ECR.
-- Email container pushed to the ECR.
-- Streamlit container pushed to the ECR.
+The [phase_two](terraform/phase_two) module contains terraform resources that were dependent on external configuration yet to be setup e.g., image URIs. Before running `phase_two`, trigger the GitHub workflow to auto push the docker images to the cloud.
 
 Once completed, to run the [phase_two](terraform/phase_two) module, attach this flag to your command in the root of the terraform directory: `-target=module.phase_two`.
 
