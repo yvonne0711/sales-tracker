@@ -57,8 +57,10 @@ def main():
 
     # websites
     with col1:
-        websites = ["All"] + sorted([name.capitalize() for name in df["website_name"].unique().tolist()])
+        websites = ["All"] + sorted([name.capitalize()
+                                    for name in df["website_name"].unique().tolist()])
         selected_website = st.selectbox("Website", websites)
+        selected_website = selected_website.lower()
 
     # current price
     with col2:
@@ -77,10 +79,10 @@ def main():
         min_date = df["date_added"].min().date()
         max_date = df["date_added"].max().date()
         val = st.date_input("Filter by date added",
-        value=(min_date, max_date),
-            min_value=min_date,
-            max_value=max_date,
-        )
+                            value=(min_date, max_date),
+                            min_value=min_date,
+                            max_value=max_date,
+                            )
 
     try:
         start_date, end_date = val
@@ -90,7 +92,7 @@ def main():
     # apply filters on copy data
     filtered = df.copy()
 
-    if selected_website != "All":
+    if selected_website != "all":
         filtered = filtered[filtered["website_name"] == selected_website]
 
     filtered = filtered[
