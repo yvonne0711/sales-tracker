@@ -56,7 +56,7 @@ def main():
 
     # websites
     with col1:
-        websites = ["All"] + sorted([name for name in df["website_name"].unique().tolist()])
+        websites = ["All"] + sorted([name.capitalize() for name in df["website_name"].unique().tolist()])
         selected_website = st.selectbox("Website", websites)
 
     # current price
@@ -121,7 +121,7 @@ def main():
             product = filtered.iloc[row]
 
             # create a container
-            with st.container():
+            with st.container(border=True):
                 row_cols = st.columns(5)
                 row_cols[0].write(product["product_name"])
                 row_cols[1].write(f"£{product['current_price']:.2f}")
