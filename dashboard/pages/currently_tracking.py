@@ -6,15 +6,33 @@ import datetime as datetime
 import streamlit as st
 import pandas as pd
 from dotenv import load_dotenv
+from psycopg2.extensions import connection
 
 from login_functions import (get_db_connection, get_tracked_products)
 
 
-def delete_subscription(conn, subscription_id: int) -> None:
+def delete_subscription(conn: connection, subscription_id: int) -> None:
     """Removes a subscription by subscription ID."""
     with conn.cursor() as cur:
         query = "DELETE FROM subscription WHERE subscription_id = %s;"
         cur.execute(query, (int(subscription_id),))
+        conn.commit()
+
+
+def get_product_id_from_name(conn: connection, product_name: str) -> int:
+    """Gets the product name from the id"""
+    with conn.cursor() as cur:
+        query = "SELECT product_id from product where product_name = %s;"
+        cur.execute(query, (product_name,))
+        result = cur.fetchone()
+        return result['product_id']
+
+
+def edit_price(conn, price, user_id: int, product_id) -> None:
+    """Updates the desired price using user id and product id"""
+    with conn.cursor() as cur:
+        query = "UPDATE subscription SET desired_price = %s WHERE user_id = %s and product_id = %s"
+        cur.execute(query, (price, user_id, product_id))
         conn.commit()
 
 
@@ -31,7 +49,7 @@ def main():
     st.header("My Currently Tracked Products")
 
     st.caption("""
-             This page shows your currently tracked products.
+             This page shows your currently tracked products and allows you to update their desired prices.
              """)
 
     user = st.session_state.user
@@ -41,6 +59,28 @@ def main():
     products = get_tracked_products(conn, user["user_id"])
     df = pd.DataFrame(products)
 
+    with st.form("Update desired price", clear_on_submit=True):
+        st.subheader("Update desired price")
+        # Edit desired price table
+        chosen = st.selectbox(
+            'Select item', df['product_name'])
+        new_price = st.number_input(
+            "Please enter a new desired price.",
+            placeholder="Type a price...",
+            format="%0.2f",
+            min_value=0.00,
+            icon=":material/currency_pound:"
+        )
+        confirm_button = st.form_submit_button(
+            "Confirm price change", type="primary")
+        if confirm_button:
+            product_id = get_product_id_from_name(conn, chosen)
+            edit_price(conn, new_price, user['user_id'], product_id)
+            st.success('Updated')
+            time.sleep(2)
+            st.rerun()
+    st.divider()
+
     # no current tracking products
     if df.empty:
         st.info("""You're not tracking anything yet.
@@ -48,10 +88,12 @@ def main():
         conn.close()
         return
 
+    st.header("Tracked Products")
+
     st.divider()
 
     # filters
-    st.subheader("Filters")
+    st.subheader("Filter")
 
     col1, col2, col3 = st.columns(3)
 
@@ -104,8 +146,6 @@ def main():
 
     st.divider()
 
-    st.subheader("Tracked Products")
-
     # check products match filter
     if filtered.empty:
         st.info("No products match the selected filters.")
@@ -131,7 +171,6 @@ def main():
                 row_cols[2].write(f"£{product['desired_price']:.2f}")
                 row_cols[3].write(product["date_added"].strftime("%Y-%m-%d"))
 
-                # stop tracking button
                 subscription_id = product["subscription_id"]
 
                 if row_cols[4].button("Stop Tracking", key=f"delete_{subscription_id}"):
