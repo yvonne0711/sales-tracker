@@ -6,20 +6,21 @@ import datetime as datetime
 import streamlit as st
 import pandas as pd
 from dotenv import load_dotenv
+from psycopg2.extensions import connection
 
 from login_functions import (get_db_connection, get_tracked_products)
 
 
-def delete_subscription(conn, subscription_id: int) -> None:
+def delete_subscription(conn: connection, subscription_id: int) -> None:
     """Removes a subscription by subscription ID."""
     with conn.cursor() as cur:
         query = "DELETE FROM subscription WHERE subscription_id = %s;"
         cur.execute(query, (int(subscription_id),))
         conn.commit()
-        return True
 
 
-def get_product_id_from_name(conn, product_name):
+def get_product_id_from_name(conn: connection, product_name: str) -> int:
+    """Gets the product name from the id"""
     with conn.cursor() as cur:
         query = "SELECT product_id from product where product_name = %s;"
         cur.execute(query, (product_name,))
@@ -27,7 +28,8 @@ def get_product_id_from_name(conn, product_name):
         return result['product_id']
 
 
-def edit_price(conn, price, user_id: int, product_id):
+def edit_price(conn, price, user_id: int, product_id) -> None:
+    """Updates the desired price using user id and product id"""
     with conn.cursor() as cur:
         query = "UPDATE subscription SET desired_price = %s WHERE user_id = %s and product_id = %s"
         cur.execute(query, (price, user_id, product_id))
