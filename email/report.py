@@ -28,7 +28,7 @@ def generate_html_report(row: dict) -> str:
             <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="background:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,0.05);">
             <tr>
                 <td style="background:#6EA9AB; padding:20px; text-align:center;">
-                <img src="http://35.176.110.137:8501/media/38efa70ba7cdb1d1f43ef4e75401e53b2c268120b70ebc89783e428c.png" alt="Company Logo" width="140" style="display:block; margin:0 auto; border:0; outline:none; text-decoration:none;">
+                <img src="http://18.130.253.127:8501/media/38efa70ba7cdb1d1f43ef4e75401e53b2c268120b70ebc89783e428c.png" alt="Company Logo" width="140" style="display:block; margin:0 auto; border:0; outline:none; text-decoration:none;">
                 </td>
             </tr>
             <tr>
