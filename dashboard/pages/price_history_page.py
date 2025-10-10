@@ -9,7 +9,7 @@ from login_functions import (get_db_connection,
 
 
 def main():
-    """Initialise the visuals page."""
+    """Initialise the price history page."""
     # -Login check-
     if "logged_in" not in st.session_state:
         st.error("Please login to view this page")
