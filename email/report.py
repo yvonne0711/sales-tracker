@@ -8,7 +8,6 @@ def generate_html_report(row: dict) -> str:
     """Generates a HTML report for a row of user and product."""
     today = datetime.now().date()
 
-    user_email = row["user_email"]
     desired_price = row["desired_price"]
     new_price = row["new_price"]
     user_name = row["user_name"]
@@ -32,20 +31,22 @@ def generate_html_report(row: dict) -> str:
                 <img src="http://35.176.110.137:8501/media/38efa70ba7cdb1d1f43ef4e75401e53b2c268120b70ebc89783e428c.png" alt="Company Logo" width="140" style="display:block; margin:0 auto; border:0; outline:none; text-decoration:none;">
                 </td>
             </tr>
-            <!-- Body -->
             <tr>
                 <td style="padding:28px 24px;">
                 <h2 style="margin:0 0 16px 0; font-size:20px; color:#111827;">Hi {user_name},</h2>
                 <p style="margin:0 0 18px 0; font-size:16px; line-height:24px; color:#374151;">
-                    Good news! The product you’re subscribed to, <strong>{product_name}</strong>, is now on sale.
+                    Good news! The product you're subscribed to, 
+                    <strong>{product_name}</strong>, is now on sale.
                 </p>
                 <div style="margin:20px 0; text-align:center;">
-                    <a href="{product_url}" style="display:inline-block; background:#0A837F; color:#ffffff; text-decoration:none; font-size:16px; font-weight:600; padding:12px 24px; border-radius:6px;">
+                    <a href="{product_url}" style="display:inline-block; background:#0A837F;
+                    color:#ffffff; text-decoration:none; font-size:16px; font-weight:600; padding:12px 24px; border-radius:6px;">
                     View {product_name}
                     </a>
                 </div>
                 <p style="margin:0 0 18px 0; font-size:16px; color:#111827;">
-                    <b style="color:#16a34a;">£{desired_price}</b> → <b style="color:#dc2626;">£{new_price}</b>
+                    <b style="color:#10426F;">£{desired_price}</b> 
+                    → <b style="color:#40A26D;">£{new_price}</b>
                 </p>
                 <p style="margin:20px 0 0 0; font-size:15px; color:#4b5563;">
                     Thank you,<br>
@@ -105,7 +106,7 @@ def handler(event: dict, context: None=None) -> dict:
         sender = "sl-coaches@proton.me"
         response = send_email(subject, html_body, sender, row["user_email"])
         emails.append(response)
-    
+
     return {
         "statusCode": 200,
         "headers": {
@@ -117,7 +118,7 @@ def handler(event: dict, context: None=None) -> dict:
 
 if __name__ == "__main__":
     event = {"email_data": [{
-        "user_name": "Yvonne",
+        "user_name": "Nikki",
         "user_email": "trainee.yvonne.wong@sigmalabs.co.uk",
         "product_name": "Hades II",
         "product_url": "https://store.steampowered.com/app/1145350/Hades_II/",
