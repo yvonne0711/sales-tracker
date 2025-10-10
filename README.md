@@ -32,9 +32,9 @@ To solve this, we created an automated price tracker pipeline that checks every 
 
 ## Team Roles
 
-- Project Manager: @Tristenx
-- Architect: @Zephvv and @b-yacquub
-- Quality Assurance: @nikki-w and @yvonne0711
+- Project Manager: [Tristenx](https://github.com/Tristenx)
+- Architect: [Zephvv](https://github.com/Zephvv) and [b-yacquub](https://github.com/b-yacquub)
+- Quality Assurance: [nikki-w](https://github.com/nikki-w) and [yvonne0711](https://github.com/yvonne0711)
 - Engineer and Analyst: All of the above
 
 ## Deliverables
