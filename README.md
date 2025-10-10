@@ -1,4 +1,4 @@
-# Sales Tracker Project
+# <img src="dashboard/final_logo_with_background.png" alt="drawing" width="100" align="center"/> Souper Saver
 
 Online websites have many different products and associated prices and discounts, but it can be difficult to regularly track when a desired item is on sale, never mind keeping track of multiple products you might be interested in and at what desired price you would like to buy the product at. All too often, by the time you check, either the discount is gone or the product has sold out altogether!
 
